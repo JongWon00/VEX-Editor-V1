@@ -1,0 +1,4446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- 웹 폰트 추가 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400;700&=swap" >
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+    <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/ungveloper/web-fonts/SCoreDream/font-face.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24SsurroundAir/Cafe24SsurroundAir.css" type="text/css"/>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[뷰어 익스텐션] 테마 에디터 V1</title>
+    <style>
+        @font-face {font-family: '리디바탕';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');font-weight: normal;font-style: normal;}
+        @font-face {font-family: '레페리포인트'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-BlackA.woff') format('woff'); font-weight: normal; font-style: normal;}
+        @font-face {font-family: '플렉스';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');}
+        @font-face {font-family: '스위트';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');}
+        @font-face {font-family: '오르빗';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/Orbit-Regular.woff2') format('woff2');}
+        @font-face {font-family: '스쿨오르빗';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2') format('woff2');}
+        @font-face {font-family: '프리티나잇';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff') format('woff');}
+        @font-face {font-family: '리디바탕';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');}
+        @font-face {font-family: '마루부리'; src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot); src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot?#iefix) format("embedded-opentype"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2) format("woff2"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff) format("woff"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.ttf) format("truetype");}
+        @font-face {font-family: '도스고딕';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSGothic.woff') format('woff');}
+        @font-face {font-family: '스타더스트';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/PFStardust.woff') format('woff');}
+        @font-face {font-family: '픽시드시스';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');}
+        @font-face {font-family: '네오둥근모';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff') format('woff');}
+
+        /* 테마 변수 정의 */
+        :root {
+            /* 라이트 모드 기본값 */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e8e8e8;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-color: #4CAF50;
+            --accent-hover: #45a049;
+            --border-color: #dddddd;
+            --input-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --divider-color: #eeeeee;
+            --bg-primary-rgb: 255, 255, 255; /* 흰색의 RGB 값 */
+            --accent-color-rgb: 76, 175, 80; /* 강조색의 RGB 값 */
+        }
+
+        /* 다크 모드 */
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #252525;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --accent-color: #5CBA5C;
+            --accent-hover: #4CAF50;
+            --border-color: #444444;
+            --input-bg: #333333;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --divider-color: #383838;
+            --bg-primary-rgb: 30, 30, 30; /* 다크 모드 배경색의 RGB 값 */
+            --accent-color-rgb: 92, 186, 92; /* 다크 모드 강조색의 RGB 값 */
+        }
+
+        /* 기본 스타일 */
+        body {
+            font-family: 'Pretendard Variable', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .editor-panel {
+            width: 320px;
+            background-color: var(--bg-primary);
+            box-shadow: 0 0 10px var(--shadow-color);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-panel {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--bg-secondary);
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 헤더 영역 */
+        .editor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+        .editor-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+            background-color: var(--bg-tertiary);
+            border-radius: 20px;
+            font-size: 14px;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle i {
+            margin-right: 5px;
+        }
+
+        /* 섹션 스타일 */
+        h3 {
+            margin-top: 22px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--divider-color);
+            padding-bottom: 8px;
+        }
+
+        /* 컬러 피커 개선 */
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s;
+        }
+
+        .color-picker:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .color-picker label {
+            flex: 1;
+            margin-right: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .color-picker input[type="color"] {
+            width: 40px;
+            height: 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        .color-picker input[type="text"] {
+            width: 80px;
+            margin-left: 8px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--text-primary);
+            background-color: var(--input-bg);
+        }
+
+        /* 버튼 스타일 개선 */
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* 프리셋 버튼 */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3열 그리드로 변경 */
+            gap: 8px; /* 버튼 사이 간격 조정 */
+            margin-bottom: 15px;
+        }
+
+        .preset-button {
+            font-size: 12px;
+            padding: 8px 0; /* 상하 패딩 늘림 */
+            text-align: center;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 4px; /* 모서리 라운딩 */
+            transition: all 0.2s ease-in-out; /* 부드러운 호버 효과 */
+            border: 1px solid transparent; /* 투명 테두리 추가 */
+        }
+
+        .preset-button:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px); /* 호버 시 살짝 위로 움직이는 효과 */
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+        }
+
+        /* 사용자 테마 영역 */
+        .theme-save {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 8px;
+        }
+
+        .theme-name-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        /* 저장된 테마 목록 */
+        .saved-themes {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .saved-theme {
+            display: flex;
+            width: 100%;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s, padding 0.15s ease-out;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-height: 36px;
+            align-items: center;
+        }
+
+        .saved-theme:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px var(--shadow-color);
+        }
+
+        .saved-theme-name {
+            /* flex: 3; */ /* 이 줄 제거 또는 주석 처리 */
+            flex-grow: 1; /* 남은 공간을 모두 차지하도록 변경 */
+            padding: 10px 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            color: var(--text-primary);
+            position: relative;
+            min-width: 0; /* flex 아이템이 줄어들 수 있도록 */
+            /* max-width, word-break 등 기존 스타일 유지 */
+            font-size: 14px;
+            text-align: left;
+            display: block;
+        }
+
+        .theme-tooltip {
+            position: absolute !important;
+            left: 0;
+            top: 110% !important; /* 위치 조정 */
+            background-color: rgba(var(--bg-primary-rgb, 30, 30, 30), 0.95); /* 약간 투명하게 */
+            color: var(--accent-color); /* 강조색으로 텍스트 색상 변경 */
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 1px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(5px);
+            transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+            z-index: 1000 !important; /* 높은 z-index 값 */
+            pointer-events: none;
+            border: 1px solid var(--accent-color);
+            margin-top: 10px;
+            letter-spacing: 0.3px;
+            /* !important 사용해 확실히 스타일 적용 */
+        }
+
+        .saved-theme-name:hover > .theme-tooltip {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+
+        /* 툴팁 화살표 추가 */
+        .theme-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -6px; /* 화살표 위치 조정 */
+            left: 15px;
+            width: 12px;
+            height: 12px;
+            background-color: inherit;
+            border-left: 1px solid var(--accent-color);
+            border-top: 1px solid var(--accent-color);
+            transform: rotate(45deg); /* 45도 회전시켜 화살표 모양 만들기 */
+            z-index: -1;
+        }
+
+        .saved-theme-preview {
+            display: flex;
+            /* height: 100%; */ /* 부모 높이 상속 대신 명시적 높이 사용 */
+            height: 34px; /* 부모 min-height(36px) - 상하 border(2px) */
+            border-left: 1px solid var(--border-color);
+            /* flex: 0 0 60px; */ /* flex 속성 대신 width 사용 */
+            width: 60px; /* 너비 명시적 지정 */
+            flex-shrink: 0; /* 크기 줄어들지 않도록 유지 */
+            /* min-width: 60px; */ /* width 사용 시 불필요 */
+            overflow: hidden; /* 내부 요소가 넘치지 않도록 */
+        }
+
+        .preview-color {
+            height: 100%; /* 부모(.saved-theme-preview)의 명시적 높이 상속 */
+            flex-grow: 1; /* 사용 가능한 공간을 균등하게 채움 */
+            /* width 제거 또는 주석 처리됨 (flex-grow가 너비 결정) */
+        }
+
+        .theme-delete {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 0 10px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .theme-delete:hover {
+            background: #ff0000;
+        }
+
+        .no-themes {
+            padding: 12px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        /* 버전 선택 버튼 */
+        .version-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .version-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .version-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* 이미지 관련 스타일 */
+        .height-control {
+            margin: 12px 0;
+        }
+
+        .height-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .height-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background-color: var(--bg-tertiary);
+            border-radius: 3px;
+            -webkit-appearance: none;
+        }
+
+        .height-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .image-container {
+            width: 95%;
+            height: 250px; /* 기본값 설정 */
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            background-color: var(--bg-tertiary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 그림자 */
+            transition: background-color 0.3s, height 0.3s, box-shadow 0.3s;
+        }
+
+        /* 다크 모드일 때 그림자가 더 은은하게 보이도록 조정 */
+        [data-theme="dark"] .preview-panel .image-container {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* hover 효과 추가 (선택 사항) */
+        .preview-panel .image-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* 호버 시 그림자 강화 */
+        }
+
+        /* 이미지 내부 요소 조정 (필요 시) */
+        .preview-panel .image-container img {
+            display: block;
+            width: 100%; /* 컨테이너에 맞추기 */
+            min-height: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: move;
+            user-select: none;
+            -webkit-user-drag: none;
+            transition: top 0.1s ease-out;
+        }
+
+        /* 코드 표시 영역 */
+        .code-display {
+            background-color: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            display: none;
+            border: 1px solid var (--border-color);
+            overflow-x: auto;
+        }
+
+        /* 디스플레이 패널의 버전 버튼 스타일 */
+        .version-info .version-btn {
+            padding: 6px 15px;
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary); /* 비활성화 상태일 때 색상을 좀 더 흐리게 변경 */
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease; /* 부드러운 전환 효과 */
+            user-select: none;
+            border: 1px solid var(--border-color);
+            white-space: nowrap; /* 버튼 내 텍스트 줄바꿈 방지 */
+            flex-shrink: 0; /* 버튼 크기 유지 */
+        }
+
+        /* 활성화된 버튼 스타일 강화 */
+        .version-info .version-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+            transform: translateY(-1px); /* 살짝 위로 올라오는 효과 */
+        }
+
+        /* 마우스 호버 효과 */
+        .version-info .version-btn:hover:not(.active) {
+            background-color: var(--bg-tertiary);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* 버튼 클릭(액티브) 효과 */
+        .version-info .version-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 스크롤바 스타일 개선 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* 모바일 반응형 지원 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+            
+            .editor-panel {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+            }
+            
+            .preview-panel {
+                height: auto;
+            }
+        }
+
+        /* 액션 버튼 영역 */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+        }
+
+        /* 코드 표시 영역 제목 */
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .code-title {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .copy-button {
+            font-size: 12px;
+            padding: 4px 8px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* --- 미리보기 패널 기본 스타일 복구 --- */
+        .preview-panel .GH_VEX_Div_U,
+        .preview-panel .GH_VEX_Div_C {
+            padding: 20px; /* 내부 여백 추가 */
+            border: 1px solid var(--border-color); /* 테두리 추가 (테마 색상 반영) */
+            border-radius: 15px;
+            margin-bottom: 20px; /* 아래쪽 여백 */
+            line-height: 1.5; /* 줄 간격 조정 */
+            background-color: var(--bg-primary); /* 기본 배경색 (JS가 덮어쓸 수 있음) */
+            color: var(--text-primary); /* 기본 텍스트 색상 (JS가 덮어쓸 수 있음) */
+            transition: background-color 0.3s, border-color 0.3s; /* 부드러운 전환 */
+        }
+
+        .preview-panel .GH_VEX_Text_U,
+        .preview-panel .GH_VEX_Text_C {
+            padding-left: 15px;
+            margin-left: 5px;
+            border-left: 1.5px solid var(--hrColor, var(--border-color)); /* 기본 구분선 색상 (JS가 덮어씀) */
+            transition: border-left-color 0.3s;
+        }
+
+        .preview-panel hr {
+            height: 1px;
+            border: 0;
+            margin: 20px 0; /* 상하 여백 조정 */
+            background-color: var(--hrColor, var(--divider-color)); /* 기본 구분선 색상 (JS가 덮어씀) */
+            transition: background-color 0.3s;
+        }
+
+        .preview-panel .GH_VEX_Head_U2,
+        .preview-panel .GH_VEX_Head_C2 {
+            font-family: 'Pretendard Variable', sans-serif;
+            font-weight: 800;
+            padding: 2px 0; /* 상하 패딩 조정 */
+            letter-spacing: 2px;
+            font-size: 27px;
+            margin-bottom: 15px; /* 제목 아래 여백 */
+            color: var(--headerColor, var(--text-primary)); /* 기본 제목 색상 (JS가 덮어씀) */
+            transition: color 0.3s;
+            text-align: center; /* 중앙 정렬 추가 */
+        }
+
+        .preview-panel p,
+        .preview-panel li {
+            margin-bottom: 12px; /* 문단 간격 조정 */
+            color: var(--textColor, var(--text-primary)); /* 기본 텍스트 색상 (JS가 덮어씀) */
+            transition: color 0.3s;
+        }
+        .preview-panel p:last-child {
+            margin-bottom: 0; /* 마지막 문단 여백 제거 */
+        }
+
+
+        .preview-panel em {
+            font-style: italic;
+            color: var(--emColor, var(--text-primary)); /* 기본 이탤릭 색상 (JS가 덮어씀) */
+            transition: color 0.3s;
+        }
+
+        .preview-panel strong,
+        .preview-panel h1,
+        .preview-panel h2,
+        .preview-panel h3 {
+            font-weight: bold;
+            color: var(--strongColor, var (--text-primary)); /* 기본 강조 색상 (JS가 덮어씀) */
+            transition: color 0.3s;
+        }
+
+        .preview-panel .quote1 {
+            /* 인용 스타일 추가 -> 이탤릭 제거 */
+            padding: 2px 4px; /* 약간의 여백 */
+            border-radius: 3px;
+            color: var(--quote1Color, var(--text-secondary)); /* 기본 인용1 색상 (JS가 덮어씀) */
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .preview-panel .quote2 {
+            /* 기본 스타일 - 생성될 CSS와 유사하게 */
+            font-weight: bold;
+            display: inline; /* inline-block 대신 inline 사용 */
+            position: relative; /* 생성될 CSS에 맞춰 추가 */
+            color: var(--quote2Color, var(--text-primary)); /* JS가 덮어씀 */
+            transition: color 0.3s, background-color 0.3s, border-left-color 0.3s, padding 0.3s, margin-left 0.3s; /* 전환 효과 추가 */
+
+            /* 배경 ON 상태 (기본) */
+            background-color: var(--quote2BgColor, var(--bg-secondary)); /* JS가 덮어씀 */
+
+            /* 테두리 ON 상태 (기본) */
+            padding: 2px 5px; /* 생성될 CSS에 맞춤 */
+            border-left: 3px solid var(--quote2BorderColor, var(--accent-color)); /* 생성될 CSS에 맞춤 */
+            margin-left: 10px; /* 생성될 CSS에 맞춤 */
+        }
+
+        /* quote2 스타일 변형 */
+        .quote2.no-bg {
+            background-color: transparent !important;
+        }
+
+        .quote2.no-border {
+            border-left: none !important;
+            padding: 2px 0 !important; /* 테두리 없을 때 패딩 */
+            margin-left: 0 !important;
+        }
+
+        /* 이미지 컨테이너 및 관련 요소 스타일 */
+        .preview-panel .image-container {
+            width: 100%;
+            height: 250px; /* 기본값 설정 */
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            background-color: var(--bg-tertiary); /* 이미지 로딩 전 배경 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 그림자 */
+            transition: background-color 0.3s, height 0.3s, box-shadow 0.3s; /* 높이 변경 시 애니메이션 효과 */
+        }
+
+        /* 다크 모드일 때 그림자가 더 은은하게 보이도록 조정 */
+        [data-theme="dark"] .preview-panel .image-container {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* hover 효과 추가 */
+        .preview-panel .image-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* 호버 시 그림자 강화 */
+        }
+
+        .preview-panel .image-container img {
+            display: block;
+            width: 100%;
+            min-height: 100%; /* 컨테이너를 채우도록 */
+            height: auto; /* 가로 비율에 맞춰 자동 높이 */
+            position: absolute; /* 드래그를 위해 absolute 사용 */
+            top: 0; /* JS로 위치 조정됨 */
+            left: 0;
+            cursor: move;
+            user-select: none;
+            -webkit-user-drag: none;
+            transition: top 0.1s ease-out; /* 부드러운 이동 효과 */
+        }
+
+        .preview-panel .image-container img.dragging {
+            transition: none; /* 드래그 중에는 전환 효과 제거 */
+        }
+
+        .preview-panel .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* 약간 더 어둡게 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 5px; /* 컨테이너와 동일하게 */
+            pointer-events: none; /* 마우스 이벤트 비활성화 */
+        }
+
+        .preview-panel .image-container:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .preview-panel .image-overlay-text {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            display: none;
+        }
+
+        /* 파일 입력 숨기기 */
+        .file-input {
+            display: none;
+        }
+
+        /* 이미지 높이 조절 컨트롤 */
+        .preview-panel .image-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px; /* 여백 조정 */
+            align-items: center;
+        }
+
+        .preview-panel .height-control {
+            flex-grow: 1; /* 가능한 많은 공간 차지 */
+            display: flex;
+            align-items: center;
+            margin-right: 10px; /* 오른쪽 컨트롤과의 간격 */
+        }
+
+        .preview-panel .height-control label {
+            margin-right: 10px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .preview-panel .height-control input[type="range"] {
+            flex-grow: 1; /* 슬라이더가 남은 공간 차지 */
+        }
+
+        .preview-panel .height-control input[type="number"] {
+            width: 60px;
+            margin-left: 10px;
+            text-align: center;
+            padding: 4px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .preview-panel .image-position-help {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: -5px; /* 컨트롤과의 간격 조정 */
+            margin-bottom: 15px; /* 아래 요소와의 간격 */
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* --- 미리보기 패널 레이아웃 스타일 --- */
+
+        /* 기본 (와이드 모드) */
+        .preview-panel .layout-wide .preview-content {
+            /* 와이드 모드에서는 특별한 flex 설정 불필요 */
+        }
+        .preview-panel .layout-wide .image-container {
+            width: 97%; /* 기존 스타일 유지 */
+            height: 250px; /* JS로 제어됨 */
+            margin-bottom: 20px; /* 기존 스타일 유지 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .preview-panel .layout-wide .text-content {
+            /* 와이드 모드 텍스트 컨텐츠 스타일 (필요 시 추가) */
+        }
+        .preview-panel .layout-wide .GH_VEX_Text_U,
+        .preview-panel .layout-wide .GH_VEX_Text_C {
+            padding-left: 5px;
+            margin-left: 5px;
+            padding-right: 5px;
+            margin-right: 5px;
+            border-left: none;
+        }
+
+        /* 버티컬 모드 */
+        .preview-panel .layout-vertical .preview-content {
+            display: flex;
+            align-items: stretch; /* 세로 정렬 */
+            gap: 20px; /* 이미지와 텍스트 사이 간격 */
+        }
+
+        .preview-panel .layout-vertical .image-container {
+            width: 200px; /* 버티컬 모드 이미지 너비 (조정 가능) */
+            height: auto;
+            margin: 0; /* 와이드 모드 마진 제거 */
+            flex-shrink: 0; /* 너비 줄어들지 않도록 */
+            overflow: hidden; /* 비율 유지를 위해 필요 */
+            position: relative; /* 내부 img 포지셔닝 기준 */
+        }
+
+        .preview-panel .layout-vertical .image-container img {
+            position: absolute; /* 컨테이너 기준 */
+            width: 100%; /* 컨테이너 너비에 맞춤 */
+            height: 100%; /* 컨테이너 높이에 맞춤 */
+            object-fit: cover; /* 비율 유지하며 채우기 */
+            top: 0; /* JS 드래그 위치 적용 */
+            left: 0;
+            cursor: move;
+        }
+
+        .preview-panel .layout-vertical .text-content {
+            flex-grow: 1; /* 남은 공간 차지 */
+            border-left: 1.5px solid var(--hrColor, var(--border-color)); /* 구분선 */
+            padding-left: 20px; /* 구분선과 텍스트 사이 간격 */
+        }
+
+        /* 버티컬 모드에서는 텍스트 왼쪽 테두리 제거 */
+        .preview-panel .layout-vertical .GH_VEX_Text_U,
+        .preview-panel .layout-vertical .GH_VEX_Text_C {
+            border-left: none;
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        /* 모바일 반응형 지원 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+            
+            .editor-panel {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+            }
+            
+            .preview-panel {
+                height: auto;
+            }
+        }
+
+        /* 와이드 모드에서 이미지 숨김 시 스타일 추가 */
+        .preview-panel .layout-wide.wide-no-image .image-container {
+            display: none !important; /* 확실하게 숨김 */
+        }
+
+        /* 와이드 모드에서 이미지 숨김 시 텍스트 컨텐츠 조정 (선택 사항) */
+        .preview-panel .layout-wide.wide-no-image .text-content {
+            /* 예를 들어, 이미지와의 간격을 위해 추가된 패딩/마진이 있다면 제거 */
+            /* padding-top: 0; */
+            /* margin-top: 0; */
+        }
+        .preview-panel .layout-wide.wide-no-image .GH_VEX_Text_U,
+        .preview-panel .layout-wide.wide-no-image .GH_VEX_Text_C {
+            /* 이미지 없을 때 왼쪽 테두리나 패딩 조정이 필요하면 여기에 추가 */
+        }
+
+        .preview-panel .title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 타이틀과 라인들을 중앙 정렬 */
+            margin-bottom: 15px; /* 기존 타이틀의 하단 마진 유지 */
+            /* --headerLineColor 변수를 여기서 사용 */
+            --headerLineColor: var(--headerColor); /* 기본값은 제목 색상 */
+        }
+
+        .preview-panel .title-wrapper::before,
+        .preview-panel .title-wrapper::after {
+            content: '';
+            flex-grow: 1; /* 양쪽 라인이 남는 공간 차지 */
+            height: 1px; /* 라인 두께 */
+            background-color: var(--headerLineColor); /* 변수 사용 */
+            margin: 0 13px; /* 라인과 타이틀 사이 간격 */
+            transition: background-color 0.3s;
+        }
+
+        .preview-panel .GH_VEX_Head_U2,
+        .preview-panel .GH_VEX_Head_C2 {
+            /* ... 기존 스타일 ... */
+            margin-bottom: 0; /* 하단 마진은 wrapper로 이동 */
+            /* text-align: center; 는 flex 중앙 정렬로 대체 가능하나 유지 */
+            white-space: nowrap; /* 타이틀 줄바꿈 방지 */
+            flex-shrink: 0; /* 타이틀이 줄어들지 않도록 */
+        }
+
+        /* ... 나머지 CSS ... */
+
+        /* 스타일 토글 버튼 */
+        .style-options {
+            display: flex;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .style-toggle {
+            flex: 1;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            background-color: var(--bg-secondary);
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .toggle-label:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .toggle-label input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-color);
+        }
+
+        .toggle-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* quote2 스타일 변형 */
+        .quote2.no-bg {
+            background-color: transparent !important;
+        }
+
+        .quote2.no-border {
+            border-left: none !important;
+            padding: 2px 0 !important; /* 테두리 없을 때 패딩 */
+            margin-left: 0 !important;
+        }
+
+        .height-control {
+            margin: 12px 0;
+        }
+
+        .height-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .height-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .height-input-group input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background-color: var(--bg-tertiary);
+            border-radius: 3px;
+            -webkit-appearance: none;
+        }
+
+        .height-input-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .height-input-group input[type="text"] {
+            width: 60px; /* 고정 너비로 설정 */
+            flex: 0 0 60px; /* 고정 너비 유지 (성장x, 축소x, 60px) */
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .height-input-group .unit {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* 테마 관리 버튼 스타일 */
+        .theme-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .small-button {
+            padding: 6px 10px;
+            font-size: 12px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .small-button:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        /* 테마 이름 편집 모드 스타일 */
+        .saved-theme-name.editing {
+            padding: 0;
+            flex: 3;
+            min-width: 0;
+            display: flex; /* 입력 필드를 감싸는 컨테이너로 flex 유지 */
+            align-items: center; /* 세로 중앙 정렬 유지 */
+        }
+
+        .saved-theme-name input {
+            width: 100%;
+            height: 100%; /* 높이를 부모에 맞춤 */
+            padding: 8px 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: inherit;
+            outline: none;
+            min-width: 0;
+            text-align: left; /* 입력 필드는 항상 좌측 정렬 */
+        }
+
+        /* 테마 항목 액션 버튼 */
+        .theme-actions-btn {
+            display: flex;
+            /* margin-left: auto; */ /* 이 줄 제거 또는 주석 처리 */
+            border-left: 1px solid var(--border-color);
+            background-color: var(--bg-tertiary);
+            flex-shrink: 0; /* 크기 고정 */
+        }
+
+        .theme-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 0 6px;
+            margin: 0;
+            font-size: 14px;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px; /* 버튼 최소 너비 설정 */
+        }
+
+        .theme-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .theme-rename {
+            font-size: 12px;
+        }
+
+        .theme-delete {
+            font-weight: bold;
+            color: #ff5252;
+            padding: 0 8px;
+        }
+
+        .preset-button.active {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            border: 1px solid var(--accent-hover); /* 테두리 추가 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+        }
+
+        .custom-preset {
+            border: 2px dashed var(--accent-color);
+        }
+
+        .import-section {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .import-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .import-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .import-actions button {
+            flex: 1;
+        }
+
+        .reset-button {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .reset-button:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .import-status {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .status-error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid #F44336;
+        }
+
+        .preview-action-buttons {
+            display: flex;
+            flex-direction: row; /* 가로 방향 정렬 명시 */
+            gap: 10px;
+            flex-shrink: 0; /* 크기 유지 */
+            margin-left: auto; /* 오른쪽 정렬 */
+            flex-wrap: nowrap; /* 줄바꿈 방지 */
+            align-items: center; /* 버튼 세로 중앙 정렬 */
+        }
+
+        .preview-action-buttons button {
+            padding: 6px 12px;
+            font-size: 13px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .preview-action-buttons button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* 버전 정보 영역 스타일 강화 */
+
+        .version-selector {
+            display: flex;
+            flex-direction: row; /* 가로 방향으로 정렬되도록 명시적 설정 */
+            gap: 10px;
+            flex-shrink: 0; 
+            margin-right: 10px; /* 오른쪽 버튼과의 간격 */
+            align-items: center; /* 수직 중앙 정렬 */
+        }
+
+        .version-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 5px 0;
+            width: 100%;
+        }
+
+        /* 섹션 헤더 스타일 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 22px; /* 기존 h3의 margin-top */
+            margin-bottom: 12px; /* 기존 h3의 margin-bottom */
+            border-bottom: 1px solid var(--divider-color);
+            padding-bottom: 8px; /* 기존 h3의 padding-bottom */
+        }
+
+        .section-header h3 {
+            margin: 0;
+            padding: 0; 
+            border: none; 
+        }
+
+        /* 토글 버튼 컨테이너 스타일 */
+        .toggle-button-container {
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+        /* 토글 버튼 텍스트 추가에 따른 스타일 조정 */
+        .toggle-section-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px; /* 텍스트 크기 조정 */
+            padding: 5px 0; /* 패딩 조정 */
+            color: var(--text-secondary);
+            display: flex; /* 아이콘과 텍스트 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+        }
+
+        .toggle-section-btn span {
+            margin-right: 5px; /* 아이콘과 텍스트 간격 */
+            font-size: 16px; /* 아이콘 크기는 유지 */
+            display: inline-block;
+            width: 16px; /* 아이콘 너비 고정 */
+            text-align: center;
+        }
+
+        .toggle-section-btn:hover {
+            color: var(--accent-color);
+        }
+
+        /* 저장된 테마 내용 숨김 스타일 (래퍼에 적용) */
+        #savedThemesContent.collapsed {
+            display: none;
+        }
+ 
+        .saved-theme.dragging {
+            opacity: 0.5;
+            background-color: var(--bg-tertiary);
+            box-shadow: 0 0 10px var(--shadow-color);
+            z-index: 10;
+            position: relative;
+        }
+
+        /* 드롭 위치 표시 스타일 - 위쪽 드롭 */
+        .saved-theme.drag-over-top {
+            border-top: 3px solid var(--accent-color);
+            padding-top: 15px; /* 상단 간격 확대 */
+            position: relative; /* position 추가 */
+            transition: padding 0.15s ease-out; /* 부드러운 효과 */
+        }
+
+        /* 위쪽 드롭을 위한 표시선 추가 */
+        .saved-theme.drag-over-top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--accent-color);
+            z-index: 2;
+        }
+
+        /* 드롭 위치 표시 스타일 - 아래쪽 드롭 */
+        .saved-theme.drag-over-bottom {
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 15px; /* 하단 간격 확대 */
+            position: relative; /* position 추가 */
+            transition: padding 0.15s ease-out; /* 부드러운 효과 */
+        }
+
+        /* 아래쪽 드롭을 위한 표시선 추가 */
+        .saved-theme.drag-over-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--accent-color);
+            z-index: 2;
+        }
+
+        /* 드래그 중에는 포인터 이벤트 비활성화 */
+        .saved-theme.dragging * {
+            pointer-events: none;
+        }
+
+        .font-selector {
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s;
+        }
+
+        .font-selector:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .font-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .font-selector select {
+            width: 100%;
+            padding: 0 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 14px; /* 필요시 글꼴 크기 조정 */
+            height: 38px; /* 고정 높이 설정 (필요에 따라 조정) */
+            line-height: 38px; /* 높이와 동일하게 설정하여 세로 중앙 정렬 시도 */
+            box-sizing: border-box; /* 패딩과 테두리를 높이에 포함 */
+            /* 텍스트가 넘칠 경우 처리 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* 글꼴 크기 및 줄간격 컨트롤 스타일 */
+        .font-size-control,
+        .line-height-control {
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+
+        .font-size-control label,
+        .line-height-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .slider-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slider-input-group input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background-color: var(--bg-tertiary); /* 기본 트랙 색상 */
+            border-radius: 3px;
+            -webkit-appearance: none;
+            transition: background-color 0.2s;
+        }
+
+        /* 트랙 색상 강화 - Chrome/Safari */
+        .slider-input-group input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 3px;
+            background-color: var(--border-color); /* 더 명확한 색상으로 변경 */
+        }
+
+        /* 호버 시 트랙 색상 변경 (Chrome/Safari) */
+        .font-selector:hover .slider-input-group input[type="range"]::-webkit-slider-runnable-track {
+            background-color: var(--accent-color); /* 강조색으로 유지 */
+        }
+
+        /* Firefox용 트랙 스타일 */
+        .slider-input-group input[type="range"]::-moz-range-track {
+            height: 6px;
+            border-radius: 3px;
+            background-color: var(--border-color); /* 더 명확한 색상으로 변경 */
+        }
+
+        /* Firefox용 호버 스타일 */
+        .font-selector:hover .slider-input-group input[type="range"]::-moz-range-track {
+            background-color: var(--accent-color);
+        }
+
+        /* Edge/IE용 트랙 스타일 */
+        .slider-input-group input[type="range"]::-ms-track {
+            height: 6px;
+            border-radius: 3px;
+            background-color: var(--border-color);
+            border-color: transparent;
+            color: transparent;
+        }
+
+        /* Edge/IE용 호버 스타일 */
+        .font-selector:hover .slider-input-group input[type="range"]::-ms-track {
+            background-color: var(--accent-color);
+        }
+
+        /* Thumb(핸들) 스타일은 유지 */
+        .slider-input-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -5px; /* thumb 위치 조정 */
+            transition: background-color 0.2s;
+        }
+
+        /* 글꼴 설정 칸 호버 시 슬라이더 thumb 색상 변경 (기존 유지 또는 조정) */
+        .font-selector:hover .slider-input-group input[type="range"]::-webkit-slider-thumb {
+            background-color: var(--text-primary);
+        }
+
+        /* Firefox용 thumb 스타일 */
+        .slider-input-group input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+
+        .font-selector:hover .slider-input-group input[type="range"]::-moz-range-thumb {
+            background-color: var(--text-primary);
+        }
+
+        /* MS Edge/IE용 thumb 스타일 */
+        .slider-input-group input[type="range"]::-ms-thumb {
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            margin-top: 0; /* IE/Edge는 margin-top 불필요 */
+        }
+
+        .font-selector:hover .slider-input-group input[type="range"]::-ms-thumb {
+            background-color: var(--text-primary);
+        }
+
+        .slider-input-group input[type="text"] {
+            width: 50px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .slider-input-group .unit {
+            font-size: 14px;
+            color: var(--text-secondary);
+            min-width: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="editor-panel">
+        <div class="editor-header">
+            <h2 class="editor-title">테마 에디터 V1</h2>
+            <div class="theme-toggle" onclick="toggleEditorTheme()">
+                <span id="themeToggleIcon">🌙</span>
+                <span id="themeToggleText">다크 모드</span>
+            </div>
+        </div>
+
+        <h3>글꼴 설정</h3>
+        <div class="font-selector">
+            <label for="fontFamily">디스플레이 패널 글꼴:</label>
+            <select id="fontFamily" onchange="updateFont(this.value)">
+                <option value="'Pretendard Variable', 'Segoe UI', sans-serif">프리텐다드 (기본)</option>
+                <option value="'Nanum Gothic', sans-serif">나눔고딕</option>
+                <option value="'Nanum Myeongjo', serif">나눔명조</option>
+                <option value="'NanumSquareNeo', serif">나눔스퀘어네오</option>
+                <option value="'Gowun Batang', serif">고운바탕</option>
+                <option value="'Gowun Dodum', serif">고운돋음</option>
+                <option value="'리디바탕', serif">리디바탕</option>
+                <option value="'SCoreDream', serif">에스코어드림</option>
+                <option value="'레페리포인트, serif">레페리포인트</option>
+                <option value="'플렉스', serif">플렉스</option>
+                <option value="'스위트', serif">스위트</option>
+                <option value="'오르빗', serif">오르빗</option>
+                <option value="'프리티나잇', serif">프리티나잇</option>
+                <option value="'Cafe24SsurroundAir', serif">써라운드에어</option>
+                <option value="'마루부리', serif">마루부리</option>
+                <option value="'도스고딕', serif">도스고딕</option>
+                <option value="'스타더스트', serif">스타더스트</option>
+                <option value="'픽시드시스', serif">픽시드시스</option>
+                <option value="'네오둥근모', serif">네오둥근모</option>
+            </select>
+            
+            <!-- 글꼴 크기 설정 추가 -->
+            <div class="font-size-control">
+                <label for="fontSize">글꼴 크기:</label>
+                <div class="slider-input-group">
+                    <input type="range" id="fontSizeSlider" min="12" max="24" value="16" step="1" oninput="updateFontSize(this.value)">
+                    <input type="text" id="fontSizeInput" value="16" 
+                          oninput="updateFontSizeFromInput(this.value)"
+                          onblur="validateFontSize()">
+                    <span class="unit">px</span>
+                </div>
+            </div>
+            
+            <!-- 줄간격 설정 추가 -->
+            <div class="line-height-control">
+                <label for="lineHeight">줄간격:</label>
+                <div class="slider-input-group">
+                    <input type="range" id="lineHeightSlider" min="1.0" max="2.5" value="1.5" step="0.1" oninput="updateLineHeight(this.value)">
+                    <input type="text" id="lineHeightInput" value="1.5"
+                          oninput="updateLineHeightFromInput(this.value)"
+                          onblur="validateLineHeight()">
+                </div>
+            </div>
+        </div>
+
+        <h3>프리셋 테마</h3>
+        <div class="preset-buttons">
+            <button class="preset-button" onclick="applyPreset('original')">기본 테마</button>
+            <button class="preset-button" onclick="applyPreset('dark')">다크 테마</button>
+            <button class="preset-button" onclick="applyPreset('light')">라이트 테마</button>
+            <button class="preset-button" onclick="applyPreset('aqua')">아쿠아 테마</button>
+            <button class="preset-button" onclick="applyPreset('forest')">포레스트 테마</button>
+            <button class="preset-button" onclick="applyPreset('coral')">코랄 테마</button>
+            <button class="preset-button" onclick="applyPreset('cute')">하이큐트 테마</button>
+            <button class="preset-button" onclick="applyPreset('cyber')">사이버 테마</button>
+            <button class="preset-button custom-preset" onclick="applyPreset('custom')">커스텀 테마</button>
+        </div>
+
+        <div class="section-header"> <!-- 헤더 래퍼 추가 -->
+            <h3>사용자 테마</h3>
+        </div>
+
+        <div class="theme-save">
+            <input type="text" id="themeName" placeholder="테마 이름 입력" class="theme-name-input">
+            <!-- onclick 함수 이름 수정: saveCurrentThemeWithDebug -> saveCurrentTheme -->
+            <button onclick="saveCurrentTheme()">저장</button>
+        </div>
+
+        <div class="toggle-button-container"> <!-- 새 컨테이너 -->
+            <button id="toggleSavedThemesBtn" class="toggle-section-btn" onclick="toggleSavedThemes()">
+                <span id="toggleSavedThemesIcon">▲</span> 저장 목록 접기/펼치기
+            </button>
+        </div>
+        <div id="savedThemesContent"> <!-- 내용 래퍼 추가 -->
+            <div class="theme-actions">
+                <button class="small-button" onclick="deleteAllThemes()">전체 삭제</button>
+            </div>
+            <div id="savedThemes" class="saved-themes">
+                <!-- 저장된 테마가 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+
+        <h3>레이아웃 모드</h3>
+        <div class="layout-toggle version-toggle">
+            <div class="version-btn active" id="layoutWide" onclick="switchLayoutMode('wide')">와이드 모드</div>
+            <div class="version-btn" id="layoutVertical" onclick="switchLayoutMode('vertical')">버티컬 모드</div>
+        </div>
+
+        <!-- 와이드 모드 전용 이미지 토글 -->
+        <div id="wideImageToggleContainer" style="display: none; margin-top: -10px; margin-bottom: 15px;">
+            <div class="style-options">
+                <div class="style-toggle">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="wideModeImageToggle" checked onchange="toggleWideModeImage()">
+                        <span class="toggle-text">와이드 모드에서 이미지 표시</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <h3>이미지 설정</h3>
+        <button onclick="document.getElementById('imageUpload').click()">이미지 업로드</button>
+        <input type="file" id="imageUpload" class="file-input" accept="image/*" onchange="uploadImage(this)">
+        <div class="height-control" id="imageHeightControl"> <!-- ID 추가: imageHeightControl -->
+            <label for="imageHeightSlider">이미지 높이:</label>
+            <div class="height-input-group">
+                <input type="range" id="imageHeightSlider" min="50" max="600" value="250" oninput="updateImageHeight(this.value)">
+                <input type="text" id="imageHeightInput" value="250"
+                       oninput="updateImageHeightFromInput(this.value)"
+                       onblur="validateImageHeight()"
+                       onkeydown="handleImageHeightKeydown(event)">
+                <span class="unit">px</span>
+            </div>
+        </div>
+
+        <h3>배경 및 기본 색상</h3>
+        <div class="style-options">
+            <div class="style-toggle">
+                <label class="toggle-label">
+                    <input type="checkbox" id="gradientToggle" onchange="toggleGradient()">
+                    <span class="toggle-text">그라데이션 사용</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 기본 배경색 (시작 색상) -->
+        <div class="color-picker">
+            <label id="backgroundColorLabel">배경색 (단독/시작)</label> <!-- ID 추가 -->
+            <input type="color" id="backgroundColor" value="#151e24" oninput="updateColor('backgroundColor')">
+            <input type="text" id="backgroundColorText" value="#151e24" oninput="updateColorFromText('backgroundColor')">
+        </div>
+
+        <!-- 그라데이션 종료 색상 (그라데이션 사용 시만 활성화) -->
+        <div class="color-picker gradient-end" id="gradientEndContainer">
+            <label>배경색 (끝)</label>
+            <input type="color" id="backgroundColorEnd" value="#2a3b47" oninput="updateColor('backgroundColorEnd')">
+            <input type="text" id="backgroundColorEndText" value="#2a3b47" oninput="updateColorFromText('backgroundColorEnd')">
+        </div>
+
+        <!-- 그라데이션 각도 조절 (그라데이션 사용 시만 활성화) -->
+        <div class="height-control gradient-angle" id="gradientAngleContainer">
+            <label for="gradientAngleSlider">그라데이션 각도:</label>
+            <div class="height-input-group">
+                <input type="range" id="gradientAngleSlider" min="0" max="360" value="135" oninput="updateGradientAngle(this.value)">
+                <input type="text" id="gradientAngleInput" value="135"
+                       oninput="updateGradientAngleFromInput(this.value)"
+                       onblur="validateGradientAngle()"
+                       onkeydown="handleGradientAngleKeydown(event)"> <!-- 이 줄 추가 -->
+                <span class="unit">°</span>
+            </div>
+        </div>
+
+        <!-- ... (기존 Color Pickers 유지) ... -->
+        <div class="color-picker"> <label>구분선 색상</label> <input type="color" id="hrColor" value="#8a795d" oninput="updateColor('hrColor')"> <input type="text" id="hrColorText" value="#8a795d" oninput="updateColorFromText('hrColor')"> </div>
+
+        <h3>텍스트 색상</h3>
+        <div class="color-picker"> <label>제목 색상</label> <input type="color" id="headerColor" value="#8a795d" oninput="updateColor('headerColor')"> <input type="text" id="headerColorText" value="#8a795d" oninput="updateColorFromText('headerColor')"> </div>
+        <div class="color-picker"> <label>제목 라인 색상</label> <input type="color" id="headerLineColor" value="#8a795d" oninput="updateColor('headerLineColor')"> <input type="text" id="headerLineColorText" value="#8a795d" oninput="updateColorFromText('headerLineColor')"> </div>
+        <div class="color-picker"> <label>기본 텍스트</label> <input type="color" id="textColor" value="#a08e6c" oninput="updateColor('textColor')"> <input type="text" id="textColorText" value="#a08e6c" oninput="updateColorFromText('textColor')"> </div>
+        <div class="color-picker"> <label>강조 텍스트</label> <input type="color" id="strongColor" value="#d0a053" oninput="updateColor('strongColor')"> <input type="text" id="strongColorText" value="#d0a053" oninput="updateColorFromText('strongColor')"> </div>
+        <div class="color-picker"> <label>이탤릭 텍스트</label> <input type="color" id="emColor" value="#aa7b5c" oninput="updateColor('emColor')"> <input type="text" id="emColorText" value="#aa7b5c" oninput="updateColorFromText('emColor')"> </div>
+
+        <!-- 인용 스타일 섹션 수정 -->
+        <h3>인용 스타일</h3>
+            <div class="color-picker"> <label>'인용1' 색상</label> <input type="color" id="quote1Color" value="#3d6670" oninput="updateColor('quote1Color')"> <input type="text" id="quote1ColorText" value="#3d6670" oninput="updateColorFromText('quote1Color')"> </div>
+            <div class="color-picker"> <label>"인용2" 색상</label> <input type="color" id="quote2Color" value="#d0a053" oninput="updateColor('quote2Color')"> <input type="text" id="quote2ColorText" value="#d0a053" oninput="updateColorFromText('quote2Color')"> </div>
+
+            <!-- 인용2 배경 및 테두리 설정 -->
+            <div class="style-options">
+                <div class="style-toggle">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="quote2BgToggle" checked onchange="toggleQuote2Style('bg')">
+                        <span class="toggle-text">배경 사용</span>
+                    </label>
+                </div>
+                <div class="style-toggle">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="quote2BorderToggle" checked onchange="toggleQuote2Style('border')">
+                        <span class="toggle-text">테두리 사용</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="color-picker"> <label>인용2 배경</label> <input type="color" id="quote2BgColor" value="#293136" oninput="updateColor('quote2BgColor')"> <input type="text" id="quote2BgColorText" value="#293136" oninput="updateColorFromText('quote2BgColor')"> </div>
+            <div class="color-picker"> <label>인용2 테두리</label> <input type="color" id="quote2BorderColor" value="#8a795d" oninput="updateColor('quote2BorderColor')"> <input type="text" id="quote2BorderColorText" value="#8a795d" oninput="updateColorFromText('quote2BorderColor')"> </div>
+
+        <div class="action-buttons">
+            <button onclick="generateCSSAndShowButton()">CSS 코드 생성</button>
+            <button onclick="resetColors()">초기화</button>
+        </div>
+
+        <div class="code-display" id="cssCode"></div>
+
+        <h3>CSS 코드 임포트</h3>
+        <div class="import-section">
+            <textarea id="cssImportArea" placeholder="뷰어익스텐션 CSS 코드를 여기에 붙여넣으세요..." class="import-textarea"></textarea>
+            <div class="import-actions">
+                <button onclick="importCSS()">CSS 코드 임포트</button>
+                <button class="reset-button" onclick="clearImportArea()">지우기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <div class="version-info">
+            <div class="version-selector">
+                <div class="version-btn active" id="versionU" onclick="switchVersion('U')">User (U)</div>
+                <div class="version-btn" id="versionC" onclick="switchVersion('C')">Char (C)</div>
+            </div>
+            <div class="preview-action-buttons">
+            </div>
+        </div>
+
+        <div class="GH_VEX_Div_U layout-wide"> <!-- layout-wide 클래스 추가 -->
+            <div class="title-wrapper">
+                <div class="GH_VEX_Head_U2">Title</div>
+            </div>
+            <!-- preview-content 래퍼 추가 -->
+            <div class="preview-content">
+                <div class="image-container" id="imageContainerU">
+                    <img src="https://picsum.photos/650/250" alt="커버 이미지" id="previewImage" draggable="false">
+                </div>
+                <!-- text-content 래퍼 추가 -->
+                <div class="text-content">
+                    <div class="GH_VEX_Text_U"> 
+                        <p><span class="quote2">"The colors you choose can transform everything,"</span> she explained, gazing at the canvas. <span class="quote2">"They speak when words cannot."</span></p> 
+                        
+                        <p>The studio was bathed in afternoon light. She'd been working on this piece for <span class="quote1">'seven straight days'</span>, barely sleeping, completely absorbed in her creative process.</p> 
+                        
+                        <p><span class="quote1">'Remember what I told you before,'</span> she smiled, <span class="quote2">"Art isn't about perfection—it's about finding that one moment when everything feels right."</span></p> 
+                        
+                        <p>With a final <strong>bold stroke of color</strong>, she stepped back and nodded. <em>This was that moment.</em></p> 
+                    </div> 
+                    
+                    <hr> 
+                    
+                    <p>이 테마를 사용하면 다양한 스타일의 텍스트를 강조할 수 있습니다.</p> 
+                    
+                    <p><em>이탤릭</em>과 <strong>굵은 글씨</strong>를 사용해 보세요. <span class="quote1">'작은따옴표'</span>로 감싸진 단어들에 인용1 스타일, <span class="quote2">"큰따옴표"</span>로 감싸진 단어들에 인용2 스타일이 적용됩니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="GH_VEX_Div_C layout-wide" style="display:none;"> <!-- layout-wide 클래스 추가 -->
+            <div class="title-wrapper">
+                <div class="GH_VEX_Head_C2">Title</div>
+            </div>
+            <!-- preview-content 래퍼 추가 -->
+            <div class="preview-content">
+                <div class="image-container" id="imageContainerC">
+                    <img src="https://picsum.photos/650/250" alt="커버 이미지" id="previewImageC" draggable="false">
+                    <div class="image-overlay">
+                        <div class="image-overlay-text">이미지 변경하기</div>
+                    </div>
+                </div>
+                <!-- text-content 래퍼 추가 -->
+                <div class="GH_VEX_Text_C"> 
+                    <p><span class="quote2">"The colors you choose can transform everything,"</span> she explained, gazing at the canvas. <span class="quote2">"They speak when words cannot."</span></p> 
+                    
+                    <p>The studio was bathed in afternoon light. She'd been working on this piece for <span class="quote1">'seven straight days'</span>, barely sleeping, completely absorbed in her creative process.</p> 
+                    
+                    <p><span class="quote1">'Remember what I told you before,'</span> she smiled, <span class="quote2">"Art isn't about perfection—it's about finding that one moment when everything feels right."</span></p> 
+                    
+                    <p>With a final <strong>bold stroke of color</strong>, she stepped back and nodded. <em>This was that moment.</em></p> 
+                </div> 
+                
+                <hr> 
+                
+                <p>이 테마를 사용하면 다양한 스타일의 텍스트를 강조할 수 있습니다.</p> 
+                
+                <p><em>이탤릭</em>과 <strong>굵은 글씨</strong>를 사용해 보세요. <span class="quote1">'작은따옴표'</span>로 감싸진 단어들에 인용1 스타일, <span class="quote2">"큰따옴표"</span>로 감싸진 단어들에 인용2 스타일이 적용됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 현재 선택된 버전
+        let currentVersion = "U";
+        let currentImageTopOffset = 0; // 현재 이미지의 top 오프셋 저장 (와이드 모드용)
+        let currentImageLeftOffset = 0; // 현재 이미지의 left 오프셋 저장 (버티컬 모드용)
+        let currentLayoutMode = "wide";
+        let startX = 0;
+        let startY = 0;
+        let initialLeft = 0;
+        let initialTop = 0; 
+        let isAlertActive = false;
+        let globalFontFamily = "'Pretendard Variable', 'Segoe UI', sans-serif";
+        let globalFontSize = '16px';
+        let globalLineHeight = '1.5';
+        let imagePositions = {
+        wide: { top: 0, left: 0 },
+        vertical: { top: 0, left: 0 }
+    };
+
+    let presetStates = {};
+    let draggedItem = null;
+
+        // 디바운스 함수 - 빠른 연속 호출 방지
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+        // 색상 데이터 객체
+        const colorData = { backgroundColor: '#F5F7FA', backgroundColorEnd: '#EEF2F6', useGradient: true, gradientAngle: 170, hrColor: '#91A8D0', headerColor: '#132742', headerLineColor: '#91A8D0', textColor: '#2A4A73', strongColor: '#6B89B0', emColor: '#6B89B0', quote1Color: '#8B82B3', quote2Color: '#132742', quote2BgColor: '#E6ECF5', quote2BorderColor: '#91A8D0', useQuote2Bg: true, useQuote2Border: true, fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" };
+
+        // 프리셋 테마
+        const presets = { 
+            original: { 
+                backgroundColor: '#f7f5f2', 
+                backgroundColorEnd: '#e5e0d5', 
+                useGradient: false, 
+                gradientAngle: 135, 
+                hrColor: '#c9b9a8', 
+                headerColor: '#7d6e5d', 
+                headerLineColor: '#c9b9a8', 
+                textColor: '#5a4d3f', 
+                strongColor: '#96704c', 
+                emColor: '#7e9f8b', 
+                quote1Color: '#6b8e9e', 
+                quote2Color: '#a76e51', 
+                quote2BgColor: '#f1ece4', 
+                quote2BorderColor: '#c9b9a8', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            }, 
+            dark: { 
+                backgroundColor: '#0d1117', 
+                backgroundColorEnd: '#1f2937', 
+                useGradient: true, 
+                gradientAngle: 135, 
+                hrColor: '#6e5c73', 
+                headerColor: '#9d8fa3', 
+                headerLineColor: '#6e5c73', 
+                textColor: '#b4aab8', 
+                strongColor: '#d4b4e8', 
+                emColor: '#c792ea', 
+                quote1Color: '#7fdbca', 
+                quote2Color: '#82aaff', 
+                quote2BgColor: '#1d2230', 
+                quote2BorderColor: '#6e5c73', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            }, 
+            light: { 
+                backgroundColor: '#f8fafc', 
+                backgroundColorEnd: '#e2e8f0', 
+                useGradient: true, 
+                gradientAngle: 160, 
+                hrColor: '#cbd5e1', 
+                headerColor: '#1e40af', 
+                headerLineColor: '#94a3b8', 
+                textColor: '#334155', 
+                strongColor: '#3b82f6', 
+                emColor: '#64748b', 
+                quote1Color: '#047857', 
+                quote2Color: '#9333ea', 
+                quote2BgColor: '#f1f5f9', 
+                quote2BorderColor: '#a5b4fc', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            },
+            aqua: { 
+                backgroundColor: '#e0f7fa', 
+                backgroundColorEnd: '#bbdefb', 
+                useGradient: true, 
+                gradientAngle: 170, 
+                hrColor: '#4fc3f7', 
+                headerColor: '#0288d1', 
+                headerLineColor: '#4fc3f7', 
+                textColor: '#263238', 
+                strongColor: '#0288d1', 
+                emColor: '#0288d1', 
+                quote1Color: '#0097a7', 
+                quote2Color: '#01579b', 
+                quote2BgColor: '#e1f5fe', 
+                quote2BorderColor: '#4fc3f7', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            }, 
+            forest: { 
+                backgroundColor: '#1e2b20', 
+                backgroundColorEnd: '#2a3b47', 
+                useGradient: true, 
+                gradientAngle: 135, 
+                hrColor: '#8fb996', 
+                headerColor: '#a7c4a0', 
+                headerLineColor: '#8fb996', 
+                textColor: '#cfe0c3', 
+                strongColor: '#c3ef92', 
+                emColor: '#6b9080', 
+                quote1Color: '#6b9080', 
+                quote2Color: '#c3ef92', 
+                quote2BgColor: '#2d3a2e', 
+                quote2BorderColor: '#8fb996', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            },
+            coral: { 
+                backgroundColor: '#2b2d42', 
+                backgroundColorEnd: '#2b2d42', 
+                useGradient: false, 
+                gradientAngle: 135, 
+                hrColor: '#ef476f', 
+                headerColor: '#f78c6b', 
+                headerLineColor: '#ef476f', 
+                textColor: '#edf2f4', 
+                strongColor: '#ffd166', 
+                emColor: '#06d6a0', 
+                quote1Color: '#06d6a0', 
+                quote2Color: '#ffd166', 
+                quote2BgColor: '#3a3d57', 
+                quote2BorderColor: '#ef476f', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            },
+            cute: { 
+                backgroundColor: '#ffbae5', 
+                backgroundColorEnd: '#ffcfd8', 
+                useGradient: true, 
+                gradientAngle: 135, 
+                hrColor: '#ff85c2', 
+                headerColor: '#893168', 
+                headerLineColor: '#ff85c2', 
+                textColor: '#712258', 
+                strongColor: '#a83e80', 
+                emColor: '#a83e80', 
+                quote1Color: '#ff64b5', 
+                quote2Color: '#893168', 
+                quote2BgColor: '#ffe6f1', 
+                quote2BorderColor: '#ff85c2', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            },
+            cyber: { 
+                backgroundColor: '#0d1117', 
+                backgroundColorEnd: '#0d1117', 
+                useGradient: false, 
+                gradientAngle: 135, 
+                hrColor: '#00ff8c', 
+                headerColor: '#00e5ff', 
+                headerLineColor: '#00ff8c', 
+                textColor: '#c8d3f5', 
+                strongColor: '#ff007a', 
+                emColor: '#bf9af7', 
+                quote1Color: '#ffcc66', 
+                quote2Color: '#ff007a', 
+                quote2BgColor: '#16192b', 
+                quote2BorderColor: '#00ff8c', 
+                useQuote2Bg: true, 
+                useQuote2Border: true,
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif" 
+            },
+            custom: { 
+                backgroundColor: '#F5F7FA', 
+                backgroundColorEnd: '#EEF2F6', 
+                useGradient: true, 
+                gradientAngle: 170, 
+                hrColor: '#91A8D0', 
+                headerColor: '#132742', 
+                headerLineColor: '#91A8D0', 
+                textColor: '#2A4A73', 
+                strongColor: '#6B89B0', 
+                emColor: '#6B89B0', 
+                quote1Color: '#8B82B3', 
+                quote2Color: '#132742', 
+                quote2BgColor: '#E6ECF5', 
+                quote2BorderColor: '#91A8D0', 
+                useQuote2Bg: true, 
+                useQuote2Border: true, 
+                fontFamily: "'Pretendard Variable', 'Segoe UI', sans-serif"
+            }
+        };
+
+        // --- DOM 요소 참조 ---
+        const previewImageU = document.getElementById('previewImage');
+        const previewImageC = document.getElementById('previewImageC');
+        const imageContainerU = document.getElementById('imageContainerU');
+        const imageContainerC = document.getElementById('imageContainerC');
+        const imageHeightSlider = document.getElementById('imageHeightSlider');
+        const imageHeightValue = document.getElementById('imageHeightValue');
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.themeName);
+            setTimeout(() => this.classList.add('dragging'), 0);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault(); // 필수
+            e.dataTransfer.dropEffect = 'move';
+            
+            // 드래그 오버 시 위치를 계속 추적하여 스타일 업데이트
+            if (this !== draggedItem) {
+                const rect = this.getBoundingClientRect();
+                const midpoint = rect.top + rect.height / 2;
+                
+                if (e.clientY < midpoint) {
+                    this.classList.add('drag-over-top');
+                    this.classList.remove('drag-over-bottom');
+                } else {
+                    this.classList.add('drag-over-bottom');
+                    this.classList.remove('drag-over-top');
+                }
+            }
+            
+            return false;
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            // 자기 자신 위는 제외
+            if (this === draggedItem) return;
+
+            // 다른 모든 요소에서 드래그 관련 클래스 제거
+            document.querySelectorAll('.saved-theme').forEach(el => {
+                if (el !== this && el !== draggedItem) {
+                    el.classList.remove('drag-over-top', 'drag-over-bottom');
+                }
+            });
+
+            // 마우스 위치 기반으로 클래스 추가
+            const rect = this.getBoundingClientRect();
+            const midpoint = rect.top + rect.height / 2;
+
+            if (e.clientY < midpoint) {
+                this.classList.add('drag-over-top');
+                this.classList.remove('drag-over-bottom');
+            } else {
+                this.classList.add('drag-over-bottom');
+                this.classList.remove('drag-over-top');
+            }
+        }
+
+        function handleDragLeave(e) {
+            // 정확한 드래그 리브 감지를 위한 추가 검사
+            // 마우스가 자식 요소로 이동할 때 리브 이벤트가 발생하는 것 방지
+            const rect = this.getBoundingClientRect();
+            const isStillInside = 
+                e.clientX >= rect.left && 
+                e.clientX <= rect.right && 
+                e.clientY >= rect.top && 
+                e.clientY <= rect.bottom;
+            
+            if (!isStillInside) {
+                this.classList.remove('drag-over-top', 'drag-over-bottom');
+            }
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation(); // 필수
+            
+            // 드롭 위치 클래스 제거
+            this.classList.remove('drag-over-top', 'drag-over-bottom');
+
+            if (this !== draggedItem) {
+                const container = document.getElementById('savedThemes');
+                
+                // 드롭 시점의 마우스 위치로 최종 삽입 위치 결정
+                const rect = this.getBoundingClientRect();
+                const midpoint = rect.top + rect.height / 2;
+
+                if (e.clientY < midpoint) {
+                    // 위쪽 절반에 드롭: 대상 요소 앞에 삽입
+                    container.insertBefore(draggedItem, this);
+                } else {
+                    // 아래쪽 절반에 드롭: 대상 요소 다음에 삽입
+                    container.insertBefore(draggedItem, this.nextSibling);
+                }
+
+                // localStorage 순서 업데이트
+                updateSavedThemesOrderInStorage();
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            // 모든 드래그 관련 클래스 정리
+            this.classList.remove('dragging');
+            document.querySelectorAll('.saved-theme').forEach(el => {
+                el.classList.remove('drag-over-top', 'drag-over-bottom');
+            });
+            draggedItem = null; // 드래그 아이템 참조 초기화
+        }
+
+        // localStorage 순서 업데이트 함수
+        function updateSavedThemesOrderInStorage() {
+            const container = document.getElementById('savedThemes');
+            const orderedThemeNames = Array.from(container.children).map(item => item.dataset.themeName);
+            const savedThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+            const newOrderedThemes = {};
+
+            orderedThemeNames.forEach(name => {
+                if (savedThemes[name]) {
+                    newOrderedThemes[name] = savedThemes[name];
+                }
+            });
+
+            localStorage.setItem('userThemes', JSON.stringify(newOrderedThemes));
+            console.log("Saved themes order updated in localStorage.");
+        }
+
+        // 배경색 라벨 업데이트 함수
+        function updateBackgroundColorLabel() {
+            const label = document.getElementById('backgroundColorLabel');
+            if (label) {
+                label.textContent = colorData.useGradient ? '배경색 (시작)' : '배경색';
+            }
+        }
+
+        // 그라데이션 토글 기능 수정
+        function toggleGradient() {
+            const useGradient = document.getElementById('gradientToggle').checked;
+            colorData.useGradient = useGradient;
+
+            // 관련 UI 요소 활성화/비활성화
+            document.getElementById('gradientEndContainer').style.display = useGradient ? 'flex' : 'none';
+            document.getElementById('gradientAngleContainer').style.display = useGradient ? 'block' : 'none';
+
+            updateBackgroundColorLabel(); // 라벨 업데이트 함수 호출
+            applyColors(); // 미리보기 업데이트
+            updatePresetState();
+        }
+
+        // 그라데이션 각도 업데이트
+        function updateGradientAngle(value) {
+            const angle = parseInt(value);
+            if (!isNaN(angle)) {
+                colorData.gradientAngle = angle;
+                document.getElementById('gradientAngleInput').value = angle;
+                document.getElementById('gradientAngleSlider').value = angle;
+                applyColors(); // 미리보기 업데이트
+                updatePresetState();
+            }
+        }
+
+        // 텍스트 입력에서 그라데이션 각도 업데이트
+        function updateGradientAngleFromInput(value) {
+            const angle = parseInt(value);
+            if (!isNaN(angle) && angle >= 0 && angle <= 360) {
+                updateGradientAngle(angle);
+            }
+        }
+
+        // 각도 유효성 검사
+        function validateGradientAngle() {
+            const input = document.getElementById('gradientAngleInput');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value) || value < 0 || value > 360) {
+                input.value = colorData.gradientAngle; // 기존 값으로 복원
+            }
+        }
+
+        function applyPreset(presetName) {
+        const presetDefault = presets[presetName];
+        if (!presetDefault) {
+            console.error(`Preset "${presetName}" not found.`);
+            return;
+        }
+
+        // 1. 현재 작업 중이던 프리셋의 상태 저장
+        updatePresetState();
+
+        console.log(`Switching to preset "${presetName}".`);
+
+        // 2. 적용할 상태 결정: 저장된 상태가 있으면 사용, 없으면 기본값 사용
+        let stateToApply;
+        if (presetStates[presetName]) {
+            stateToApply = presetStates[presetName];
+            console.log(`Applying saved state for "${presetName}".`);
+        } else {
+            stateToApply = presetDefault;
+            presetStates[presetName] = { ...presetDefault }; // 기본값을 상태로 저장
+            console.log(`Applying default state for "${presetName}" and saving it.`);
+        }
+
+        // 3. 결정된 상태를 colorData에 로드
+        Object.keys(stateToApply).forEach(property => {
+            if (colorData.hasOwnProperty(property)) {
+                colorData[property] = stateToApply[property];
+            }
+        });
+
+        // 4. UI 컨트롤 업데이트 (colorData 기준 - 기존 로직과 동일)
+        Object.keys(colorData).forEach(property => {
+            const valueToSet = colorData[property];
+            const element = document.getElementById(property);
+            const textElement = document.getElementById(property + 'Text');
+            // ... (UI 업데이트 로직: boolean, number, string 처리 - 이전 답변의 applyPreset 내부 로직 참고) ...
+             if (typeof valueToSet === 'boolean') {
+                if (element && element.type === 'checkbox') element.checked = valueToSet;
+            } else if (typeof valueToSet === 'number') {
+                if (element && (element.type === 'range' || element.type === 'text' || element.type === 'number')) element.value = valueToSet;
+                const inputElement = document.getElementById(property + 'Input');
+                if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number')) inputElement.value = valueToSet;
+            } else { // string (color) or null
+                if (element && element.type === 'color') element.value = valueToSet && /^#[0-9a-f]{6}$/i.test(valueToSet) ? valueToSet : '#000000';
+                if (textElement && textElement.type === 'text') textElement.value = valueToSet || '';
+            }
+        });
+
+        // 5. UI 상태 업데이트 (토글, 비활성화 등 - 기존 로직과 동일)
+        // 인용2 관련
+        const useQuote2Bg = colorData.useQuote2Bg;
+        const useQuote2Border = colorData.useQuote2Border;
+        document.getElementById('quote2BgToggle').checked = useQuote2Bg;
+        document.getElementById('quote2BorderToggle').checked = useQuote2Border;
+        // ... (disabled 속성 설정) ...
+        document.getElementById('quote2BgColor').disabled = !useQuote2Bg;
+        document.getElementById('quote2BgColorText').disabled = !useQuote2Bg;
+        document.getElementById('quote2BorderColor').disabled = !useQuote2Border;
+        document.getElementById('quote2BorderColorText').disabled = !useQuote2Border;
+
+        // 그라데이션 관련
+        const useGradient = colorData.useGradient;
+        document.getElementById('gradientToggle').checked = useGradient;
+        // ... (display 속성 설정) ...
+        document.getElementById('gradientEndContainer').style.display = useGradient ? 'flex' : 'none';
+        document.getElementById('gradientAngleContainer').style.display = useGradient ? 'block' : 'none';
+        updateBackgroundColorLabel();
+
+        // 6. 미리보기 업데이트
+        applyColors();
+
+        // 7. 활성 버튼 UI 업데이트 (기존 로직과 동일)
+        document.querySelectorAll('.preset-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const activeButton = document.querySelector(`.preset-button[onclick*="applyPreset('${presetName}')"], .preset-button[onclick*='applyPreset("${presetName}")']`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+
+        // 8. 현재 선택된 프리셋 이름 저장
+        localStorage.setItem('currentPreset', presetName);
+    }
+
+        function switchVersion(version) {
+        currentVersion = version;
+        const isU = (version === "U");
+
+        document.querySelector(".GH_VEX_Div_U").style.display = isU ? "block" : "none";
+        document.querySelector(".GH_VEX_Div_C").style.display = isU ? "none" : "block";
+        
+        // 버전 버튼 활성화 상태 업데이트
+        document.getElementById("versionU").classList.toggle("active", isU);
+        document.getElementById("versionC").classList.toggle("active", !isU);
+
+        // 이전 currentVersionLabel을 사용하지 않음
+        // document.getElementById("currentVersionLabel").textContent = isU ? "User (U) 버전" : "Char (C) 버전";
+
+        applyColors(); // 색상 재적용
+        // 버전 전환 시 이미지 위치가 이상할 수 있으므로 재조정
+        adjustImagePosition(isU ? previewImageU : previewImageC);
+    }
+
+        function switchLayoutMode(mode) {
+            console.log(`Switching layout mode from ${currentLayoutMode} to ${mode}`);
+
+            // 현재 모드를 먼저 업데이트
+            currentLayoutMode = mode;
+            
+            const isWide = (mode === "wide");
+            const isVertical = (mode === "vertical");
+
+            // 와이드 모드 이미지 토글 컨테이너 표시/숨김
+            document.getElementById('wideImageToggleContainer').style.display = isWide ? 'block' : 'none';
+
+            // 모든 미리보기 컨테이너에 레이아웃 클래스 적용/제거
+            document.querySelectorAll('.GH_VEX_Div_U, .GH_VEX_Div_C').forEach(div => {
+                div.classList.toggle('layout-wide', isWide);
+                div.classList.toggle('layout-vertical', isVertical);
+            });
+
+            // 레이아웃 버튼 활성화 상태 업데이트
+            document.getElementById('layoutWide').classList.toggle('active', isWide);
+            document.getElementById('layoutVertical').classList.toggle('active', isVertical);
+
+            // 인라인 높이 설정/제거 (와이드 vs 버티컬)
+            if (isVertical) { // 버티컬 모드
+                if (imageContainerU) imageContainerU.style.removeProperty('height');
+                if (imageContainerC) imageContainerC.style.removeProperty('height');
+                if (imageContainerU) imageContainerU.style.removeProperty('min-height');
+                if (imageContainerC) imageContainerC.style.removeProperty('min-height');
+            }
+
+            // 이미지 뷰 및 컨트롤 상태 업데이트 (currentLayoutMode가 업데이트된 후 호출됨)
+            updateImageViewAndControls();
+
+            localStorage.setItem('editorLayoutMode', mode); // 변경 시 저장
+            console.log(`Layout mode switched to: ${mode}`);
+        }
+
+        // 와이드 모드 이미지 토글 처리
+        function toggleWideModeImage() {
+            showImageInWideMode = document.getElementById('wideModeImageToggle').checked;
+            localStorage.setItem('showImageInWideMode', showImageInWideMode); // 상태 저장
+            updateImageViewAndControls(); // 뷰 및 컨트롤 상태 업데이트
+        }
+
+        // 이미지 뷰 및 관련 컨트롤 상태 업데이트 함수
+        function updateImageViewAndControls() {
+            const isWide = currentLayoutMode === 'wide';
+            const isVertical = currentLayoutMode === 'vertical'; // 버티컬 모드 여부 확인
+            const shouldShowImage = (isWide && showImageInWideMode) || isVertical; // 버티컬 모드에서는 항상 이미지 표시
+            const displayStyle = shouldShowImage ? 'block' : 'none';
+
+            console.log(`updateImageViewAndControls: Mode=${currentLayoutMode}, isVertical=${isVertical}, showImageInWideMode=${showImageInWideMode}`); // 디버깅 로그 추가
+
+            // 이미지 컨테이너 표시/숨김
+            if (imageContainerU) imageContainerU.style.display = displayStyle;
+            if (imageContainerC) imageContainerC.style.display = displayStyle;
+
+            // 이미지 관련 컨트롤 활성화/비활성화 및 표시/숨김
+            const controlsDisabled = isWide && !showImageInWideMode; // 와이드 모드 + 이미지 숨김 상태일 때 비활성화
+
+            // 이미지 업로드 버튼
+            const uploadButton = document.querySelector('button[onclick*="imageUpload"]');
+            if (uploadButton) uploadButton.disabled = controlsDisabled;
+
+            // 이미지 높이 컨트롤 요소 참조
+            const heightControlDiv = document.getElementById('imageHeightControl');
+            const imageHeightSlider = document.getElementById('imageHeightSlider'); // 슬라이더 참조 확인
+            const imageHeightInput = document.getElementById('imageHeightInput'); // 입력 필드 참조 확인
+            
+            // 이미지 높이 컨트롤 전체(div)의 표시/숨김 결정
+            let heightControlDisplayStyle = 'block'; // 기본값: 표시
+
+            // --- 추가된 로그 ---
+            console.log(`[updateImageViewAndControls] Checking mode: currentLayoutMode = "${currentLayoutMode}"`);
+            // --- 로그 끝 ---
+            
+            if (isVertical) { // isVertical 변수 직접 확인
+                heightControlDisplayStyle = 'none';
+                // --- 추가된 로그 ---
+                console.log(`[updateImageViewAndControls] Condition isVertical is TRUE. Setting display to 'none'.`);
+                // --- 로그 끝 ---
+            } else if (isWide) {
+                heightControlDisplayStyle = showImageInWideMode ? 'block' : 'none';
+                // --- 추가된 로그 ---
+                console.log(`[updateImageViewAndControls] Condition isWide is TRUE. showImageInWideMode: ${showImageInWideMode}. Setting display to '${heightControlDisplayStyle}'.`);
+                // --- 로그 끝 ---
+            } else {
+                 // 이 경우는 발생하지 않아야 함
+                 console.warn(`[updateImageViewAndControls] Unexpected layout mode: "${currentLayoutMode}". Defaulting display to 'block'.`);
+                 heightControlDisplayStyle = 'block';
+            }
+            
+            if (heightControlDiv) {
+                // --- 로그 수정 ---
+                console.log(`[updateImageViewAndControls] Applying style display: ${heightControlDisplayStyle} to #imageHeightControl`);
+                // --- 로그 끝 ---
+                heightControlDiv.style.display = heightControlDisplayStyle;
+            } else {
+                // --- 로그 수정 ---
+                console.warn('[updateImageViewAndControls] #imageHeightControl element NOT FOUND!');
+                // --- 로그 끝 ---
+            }
+
+             // 슬라이더 및 입력 필드 활성화/비활성화
+            if (imageHeightSlider) imageHeightSlider.disabled = controlsDisabled;
+            if (imageHeightInput) imageHeightInput.disabled = controlsDisabled;
+
+
+            // 메인 미리보기 div에 클래스 추가/제거 (CSS 스타일링용)
+            document.querySelectorAll('.GH_VEX_Div_U, .GH_VEX_Div_C').forEach(div => {
+                div.classList.toggle('wide-no-image', isWide && !showImageInWideMode);
+            });
+
+            // 이미지가 표시될 때만 위치 조정
+            if (shouldShowImage) {
+                setTimeout(() => {
+                    const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
+                    if (activeImage) adjustImagePosition(activeImage);
+                }, 0);
+            }
+        }
+        
+        // --- 이미지 높이 조절 ---
+        function updateImageHeight(value) {
+            // 와이드 모드에서 이미지가 숨겨져 있으면 실행 중단
+            if (currentLayoutMode === 'wide' && !showImageInWideMode) {
+                console.log("Image height update skipped: Image hidden in wide mode.");
+                return;
+            }
+
+            // 숫자로 변환
+            const height = parseInt(value);
+            if (isNaN(height)) {
+                console.log("Image height update skipped: Invalid value.");
+                return; // 숫자가 아니면 중단
+            }
+
+            // 입력 필드와 슬라이더 참조
+            const imageHeightInput = document.getElementById('imageHeightInput');
+            const imageHeightSlider = document.getElementById('imageHeightSlider');
+
+            // 이미지 컨테이너에 적용할 유효 높이 계산 (50 ~ 600)
+            const validHeight = Math.min(Math.max(height, 50), 600);
+
+            // UI 요소 업데이트
+            if (imageHeightInput) {
+                imageHeightInput.value = height; // 입력 필드에는 원본 값 표시 (범위 초과 가능)
+                imageHeightInput.setAttribute('data-last-valid', validHeight); // 유효값 저장
+            }
+            if (imageHeightSlider) {
+                // 슬라이더는 범위 내 값으로 설정
+                imageHeightSlider.value = validHeight;
+            }
+
+            // --- 레이아웃 모드 확인 및 컨테이너 높이 설정 ---
+            if (currentLayoutMode === 'wide') { // 와이드 모드일 때만 높이 직접 설정
+                if (imageContainerU) imageContainerU.style.height = `${validHeight}px`;
+                if (imageContainerC) imageContainerC.style.height = `${validHeight}px`;
+                if (imageContainerU) imageContainerU.style.minHeight = `${validHeight}px`; // min-height도 설정
+                if (imageContainerC) imageContainerC.style.minHeight = `${validHeight}px`;
+            } else { // 버티컬 모드일 때는 인라인 height 제거 (CSS에 맡김)
+                if (imageContainerU) imageContainerU.style.removeProperty('height');
+                if (imageContainerC) imageContainerC.style.removeProperty('height');
+                if (imageContainerU) imageContainerU.style.removeProperty('min-height');
+                if (imageContainerC) imageContainerC.style.removeProperty('min-height');
+            }
+            // --- 레이아웃 모드 확인 끝 ---
+
+            // 높이 변경 시 이미지 위치 재조정 (adjustImagePosition 내부에서 표시 여부 확인)
+            if (previewImageU) adjustImagePosition(previewImageU);
+            if (previewImageC) adjustImagePosition(previewImageC);
+
+            console.log(`Image height updated: value=${value}, validHeight=${validHeight}`);
+        }
+
+        // 숫자 입력 필드에서 높이 업데이트 (새 함수 추가)
+        function updateImageHeightFromInput(value) {
+            const height = parseInt(value);
+            // 숫자가 아니거나 빈 문자열이면 업데이트하지 않음 (blur 시 validateImageHeight에서 처리)
+            if (!isNaN(height)) {
+                updateImageHeight(height);
+            }
+        }
+
+
+        function validateImageHeight() {
+            const input = document.getElementById('imageHeightInput');
+            if (!input) return;
+            
+            const currentValue = input.value.trim();
+            
+            // 빈 값이면 마지막 유효값 사용
+            if (currentValue === '') {
+                const lastValid = input.getAttribute('data-last-valid') || 250;
+                input.value = lastValid;
+                updateImageHeight(lastValid);
+                return;
+            }
+            
+            // 숫자가 아니면 마지막 유효값 사용
+            const height = parseInt(currentValue);
+            if (isNaN(height)) {
+                const lastValid = input.getAttribute('data-last-valid') || 250;
+                input.value = lastValid;
+                updateImageHeight(lastValid);
+                return;
+            }
+            
+            // 범위를 벗어나는 경우 조정 (50-600)
+            if (height < 50 || height > 600) {
+                const validHeight = Math.min(Math.max(height, 50), 600);
+                input.value = validHeight;
+                updateImageHeight(validHeight);
+            } else {
+                // 범위 내의 값은 그대로 사용
+                updateImageHeight(height);
+            }
+        }
+
+            // 이미지 높이 입력 필드 엔터키 처리 함수
+            function handleImageHeightKeydown(event) {
+                // 엔터키가 눌렸을 때
+                if (event.key === 'Enter') {
+                event.preventDefault(); // 폼 제출 방지
+                validateImageHeight(); // 값 검증 및 적용
+                event.target.blur(); // 포커스 제거
+            }
+        }
+
+        // --- 그라데이션 각도 입력 필드 엔터키 처리 함수 추가 ---
+        function handleGradientAngleKeydown(event) {
+            // 엔터키가 눌렸을 때
+            if (event.key === 'Enter') {
+                event.preventDefault(); // 폼 제출 방지
+                validateGradientAngle(); // 값 검증 및 적용
+                event.target.blur(); // 포커스 제거
+            }
+        }
+
+        // --- 이미지 업로드 ---
+        function uploadImage(input) {
+            // 와이드 모드에서 이미지가 숨겨져 있으면 업로드 차단
+            if (currentLayoutMode === 'wide' && !showImageInWideMode) {
+                alert("현재 와이드 모드에서 이미지가 숨김 상태입니다. 이미지를 표시하도록 설정을 변경 후 업로드해주세요.");
+                input.value = ''; // 파일 선택 취소
+                return;
+            }
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    console.log("FileReader onload triggered."); // 디버그 로그
+                    const dataUrl = e.target.result;
+
+                    // 이미지 로드 완료 후 위치 조정하도록 변경
+                    const adjustOnLoad = function() {
+                        console.log(`Image loaded: ${this.id}`); // 디버그 로그
+                        // 'this'는 로드된 이미지 요소를 가리킴
+                        adjustImagePosition(this);
+                        // 로드 핸들러는 한 번만 필요하므로 제거
+                        this.onload = null;
+                    };
+
+                    if (previewImageU) {
+                        // 이미지 요소의 onload 이벤트 핸들러 설정
+                        previewImageU.onload = adjustOnLoad;
+                        // src 설정 (이후 onload 이벤트 발생)
+                        previewImageU.src = dataUrl;
+                        console.log("Set src for previewImageU"); // 디버그 로그
+                    }
+                    if (previewImageC) {
+                        // 다른 이미지 요소에도 동일하게 적용
+                        previewImageC.onload = adjustOnLoad;
+                        previewImageC.src = dataUrl;
+                        console.log("Set src for previewImageC"); // 디버그 로그
+                    }
+                }
+
+                reader.onerror = function(e) {
+                    console.error("FileReader error:", e); // 오류 디버그 로그
+                    alert("이미지 파일을 읽는 중 오류가 발생했습니다.");
+                }
+
+                reader.readAsDataURL(file);
+                console.log("FileReader readAsDataURL called."); // 디버그 로그
+            } else {
+                console.log("No file selected."); // 디버그 로그
+            }
+        }
+
+        // --- 이미지 드래그 로직 ---
+        let isDragging = false;
+        let draggedImage = null; // 현재 드래그 중인 이미지 요소
+
+        function startDrag(e) {
+            draggedImage = e.target; // 드래그 시작된 이미지
+            if (!draggedImage || draggedImage.tagName !== 'IMG') return;
+
+            isDragging = true;
+            draggedImage.classList.add('dragging');
+            
+            // 세로/가로 방향 모두 시작점 저장
+            startY = e.pageY || e.touches[0].pageY;
+            startX = e.pageX || e.touches[0].pageX;
+
+            // 세로/가로 방향 모두 초기 위치 저장
+            initialTop = parseFloat(draggedImage.style.top) || 0;
+            initialLeft = parseFloat(draggedImage.style.left) || 0;
+
+            // 이벤트 리스너 추가...
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+
+            e.preventDefault();
+        }
+
+        // onDrag: 레이아웃 모드에 따라 드래그 방향 처리
+        function onDrag(e) {
+            if (!isDragging || !draggedImage) return;
+
+            e.preventDefault(); // 스크롤 등 기본 동작 방지
+
+            const currentY = e.pageY || e.touches[0].pageY;
+            const currentX = e.pageX || e.touches[0].pageX;
+            
+            let deltaY = currentY - startY;
+            let deltaX = currentX - startX;
+            
+            const container = draggedImage.parentElement;
+            const containerHeight = container.clientHeight;
+            const containerWidth = container.clientWidth;
+            const imageHeight = draggedImage.clientHeight;
+            const imageWidth = draggedImage.clientWidth;
+            
+            // 레이아웃 모드에 따라 드래그 방향 결정
+            if (currentLayoutMode === 'vertical') {
+                // 버티컬 모드에서는 좌우 드래그만 허용
+                let newLeft = initialLeft + deltaX;
+                
+                // 이미지가 컨테이너보다 넓을 때만 좌우 이동 제한
+                if (imageWidth > containerWidth) {
+                    const minLeft = containerWidth - imageWidth; // 최대 왼쪽으로 이동 가능한 값 (음수)
+                    const maxLeft = 0; // 최대 오른쪽으로 이동 가능한 값
+                    newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
+                } else {
+                    newLeft = 0; // 이미지가 컨테이너보다 작거나 같으면 이동 없음
+                }
+                
+                draggedImage.style.left = `${newLeft}px`;
+                currentImageLeftOffset = newLeft; // 현재 가로 위치 저장
+                
+                // 세로 위치는 그대로 유지
+                draggedImage.style.top = `${initialTop}px`;
+            } else {
+                // 와이드 모드에서는 상하 드래그만 허용 (기존 로직)
+                let newTop = initialTop + deltaY;
+                
+                // 이미지가 컨테이너보다 클 때만 수직 이동 가능
+                if (imageHeight > containerHeight) {
+                    const minTop = containerHeight - imageHeight; // 최대 내릴 수 있는 값 (음수)
+                    const maxTop = 0; // 최대 올릴 수 있는 값
+                    newTop = Math.max(minTop, Math.min(maxTop, newTop));
+                } else {
+                    newTop = 0; // 이미지가 컨테이너보다 작거나 같으면 이동 없음
+                }
+                
+                draggedImage.style.top = `${newTop}px`;
+                currentImageTopOffset = newTop; // 현재 세로 위치 저장
+                
+                // 가로 위치는 그대로 유지
+                draggedImage.style.left = `${initialLeft}px`;
+            }
+            
+            // 다른 버전의 이미지도 동기화
+            const otherImage = (draggedImage === previewImageU) ? previewImageC : previewImageU;
+            if (otherImage) {
+                otherImage.style.top = draggedImage.style.top;
+                otherImage.style.left = draggedImage.style.left;
+            }
+        }
+
+            function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            if(draggedImage) {
+                draggedImage.classList.remove('dragging');
+
+                // --- 현재 모드에 맞는 위치 저장 ---
+                const currentMode = currentLayoutMode; // 'wide' or 'vertical'
+                imagePositions[currentMode].top = parseFloat(draggedImage.style.top) || 0;
+                imagePositions[currentMode].left = parseFloat(draggedImage.style.left) || 0;
+                console.log(`Saved position for ${currentMode}:`, imagePositions[currentMode]); // 디버그 로그
+
+                // LocalStorage에도 저장 (페이지 새로고침 대비)
+                localStorage.setItem('imagePositions', JSON.stringify(imagePositions));
+            }
+            draggedImage = null;
+
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchend', endDrag);
+        }
+
+        // 이미지 위치 조정 (컨테이너 크기 변경 시 호출)
+        function adjustImagePosition(imgElement) {
+        // 이미지가 표시되어야 하는지 확인
+        const shouldShowImage = (currentLayoutMode === 'wide' && showImageInWideMode) || currentLayoutMode === 'vertical';
+        if (!shouldShowImage || !imgElement) return;
+
+        const container = imgElement.parentElement;
+        // 컨테이너가 숨겨져 있으면 중단
+        if (!container || container.style.display === 'none') return;
+
+        // display:none 상태면 계산 불가하므로 잠시 block으로 변경 후 되돌림
+        const parentDiv = container.closest('.GH_VEX_Div_U, .GH_VEX_Div_C');
+        const wasHidden = parentDiv && parentDiv.style.display === 'none';
+        if (wasHidden) parentDiv.style.display = 'block';
+
+        const containerStyle = window.getComputedStyle(container);
+        const containerHeight = parseFloat(containerStyle.height);
+        const containerWidth = parseFloat(containerStyle.width);
+        const imgHeight = imgElement.naturalHeight;
+        const imgWidth = imgElement.naturalWidth;
+
+        // --- 현재 모드에 저장된 위치 불러오기 ---
+        const savedPosition = imagePositions[currentLayoutMode] || { top: 0, left: 0 };
+        let currentTop = savedPosition.top; // 저장된 top 값으로 시작
+        let currentLeft = savedPosition.left; // 저장된 left 값으로 시작
+        // --- 불러오기 끝 ---
+
+        if (!imgWidth || !imgHeight || !containerWidth || !containerHeight) { // 이미지 로드 안됐거나 컨테이너 크기 0이면 기본값
+            imgElement.style.top = '0px';
+            imgElement.style.left = '0px';
+            imgElement.style.width = '100%';
+            imgElement.style.height = '100%';
+            if (wasHidden) parentDiv.style.display = 'none'; // 원래대로 복구
+            return;
+        }
+
+        // --- scale, finalWidth, finalHeight 계산 로직을 여기로 이동 ---
+        let scale = 1;
+        let finalWidth, finalHeight;
+
+        // 이미지 비율과 컨테이너 비율 계산
+        const imgRatio = imgWidth / imgHeight;
+        const containerRatio = containerWidth / containerHeight;
+
+        // 컨테이너에 맞춰 이미지 크기 조정 (cover 효과 유사)
+        if (currentLayoutMode === 'vertical') {
+             // 버티컬: 너비 기준 or 높이 기준 중 더 크게 확대되는 쪽 선택
+             if (imgRatio > containerRatio) { // 이미지가 컨테이너보다 가로로 넓으면 높이 기준
+                 scale = containerHeight / imgHeight;
+             } else { // 이미지가 컨테이너보다 세로로 길거나 같으면 너비 기준
+                 scale = containerWidth / imgWidth;
+             }
+        } else { // 와이드 모드: 너비 기준 or 높이 기준 중 더 크게 확대되는 쪽 선택
+             if (imgRatio > containerRatio) { // 이미지가 컨테이너보다 가로로 넓으면 높이 기준
+                 scale = containerHeight / imgHeight;
+             } else { // 이미지가 컨테이너보다 세로로 길거나 같으면 너비 기준
+                 scale = containerWidth / imgWidth;
+             }
+             // 와이드 모드는 최소 높이를 보장해야 함
+             scale = Math.max(scale, containerHeight / imgHeight);
+             // 와이드 모드는 최소 너비도 보장해야 함 (컨테이너 너비에 맞춤)
+             scale = Math.max(scale, containerWidth / imgWidth);
+        }
+
+        finalWidth = imgWidth * scale;
+        finalHeight = imgHeight * scale;
+
+        // 계산된 크기 적용
+        imgElement.style.width = `${finalWidth}px`;
+        imgElement.style.height = `${finalHeight}px`;
+        // --- 계산 로직 이동 끝 ---
+
+
+        if (currentLayoutMode === 'vertical') {
+            // 버티컬 모드 위치 조정
+            // 세로 위치 조정 (저장된 currentTop 기반으로 제한)
+            if (finalHeight > containerHeight) {
+                 const minTop = containerHeight - finalHeight;
+                 currentTop = Math.max(minTop, Math.min(0, currentTop)); // 범위 제한
+            } else {
+                 currentTop = (containerHeight - finalHeight) / 2; // 세로 중앙 정렬
+            }
+             imgElement.style.top = `${currentTop}px`;
+
+            // 가로 위치 조정 (저장된 currentLeft 기반으로 제한)
+            if (finalWidth > containerWidth) {
+                const minLeft = containerWidth - finalWidth;
+                currentLeft = Math.max(minLeft, Math.min(0, currentLeft)); // 범위 제한
+            } else {
+                currentLeft = (containerWidth - finalWidth) / 2; // 가로 중앙 정렬
+            }
+            imgElement.style.left = `${currentLeft}px`;
+
+        } else { // 와이드 모드
+            // 와이드 모드 위치 조정
+            // 가로 중앙 정렬 (저장된 currentLeft는 사용하지 않음, 와이드 모드는 가로 중앙 정렬 고정)
+            currentLeft = (containerWidth - finalWidth) / 2;
+            imgElement.style.left = `${currentLeft}px`;
+
+            // 세로 위치 조정 (저장된 currentTop 기반으로 제한)
+            if (finalHeight <= containerHeight) {
+                currentTop = (containerHeight - finalHeight) / 2; // 세로 중앙 정렬
+            } else {
+                const minTop = containerHeight - finalHeight;
+                currentTop = Math.max(minTop, Math.min(0, currentTop)); // 범위 제한
+            }
+            imgElement.style.top = `${currentTop}px`;
+        }
+
+        // 다른 이미지도 동기화
+        const otherImage = (imgElement === previewImageU) ? previewImageC : previewImageU;
+        if (otherImage) {
+            otherImage.style.width = imgElement.style.width;
+            otherImage.style.height = imgElement.style.height;
+            otherImage.style.left = imgElement.style.left;
+            otherImage.style.top = imgElement.style.top;
+        }
+
+        if (wasHidden) parentDiv.style.display = 'none'; // 원래대로 복구
+    }
+
+        // 각 이미지에 드래그 시작 이벤트 리스너 추가
+        previewImageU.addEventListener('mousedown', startDrag);
+        previewImageU.addEventListener('touchstart', startDrag, { passive: false });
+        previewImageC.addEventListener('mousedown', startDrag);
+        previewImageC.addEventListener('touchstart', startDrag, { passive: false });
+
+
+        function updateColor(property) { 
+            const colorPicker = document.getElementById(property); 
+            const colorText = document.getElementById(property + 'Text'); colorData[property] = colorPicker.value; 
+            colorText.value = colorPicker.value; applyColors(); 
+        
+            saveCustomPreset();    
+            applyColors();
+            updatePresetState();
+        }
+
+        function updateColorFromText(property) {
+            const colorPicker = document.getElementById(property);
+            const colorText = document.getElementById(property + 'Text');
+            if (/^#[0-9A-F]{6}$/i.test(colorText.value)) {
+                colorData[property] = colorText.value;
+                colorPicker.value = colorText.value;
+                
+                saveCustomPreset();               
+                applyColors();
+                updatePresetState();
+            }
+        }
+
+        function applyColors() {
+            ['U', 'C'].forEach(suffix => {
+                const rootSelector = `.GH_VEX_Div_${suffix}`;
+                const root = document.querySelector(rootSelector);
+                if (!root) return;
+
+                // 글꼴 스타일 적용 (패밀리, 크기, 줄간격)
+                root.style.fontFamily = globalFontFamily;
+                root.style.fontSize = globalFontSize;
+                root.style.lineHeight = globalLineHeight;
+
+                // 배경색 적용 - 그라데이션 지원
+                if (colorData.useGradient) {
+                    root.style.background = `linear-gradient(${colorData.gradientAngle}deg, ${colorData.backgroundColor}, ${colorData.backgroundColorEnd})`;
+                    root.style.backgroundColor = ''; // 기존 배경색 제거
+                } else {
+                    root.style.background = ''; // 그라데이션 제거
+                    root.style.backgroundColor = colorData.backgroundColor;
+                }
+
+                root.style.backgroundColor = colorData.backgroundColor;
+                root.style.setProperty('--hrColor', colorData.hrColor);
+                // title-wrapper에 CSS 변수 설정
+                const titleWrapper = root.querySelector('.title-wrapper');
+                if (titleWrapper) {
+                    titleWrapper.style.setProperty('--headerLineColor', colorData.headerLineColor);
+                }
+                // 나머지 색상 적용 (기존과 동일)
+                const header = document.querySelector(`.GH_VEX_Head_${suffix}2`);
+                if (header) header.style.color = colorData.headerColor;
+                document.querySelectorAll(`${rootSelector} p, ${rootSelector} li`).forEach(el => el.style.color = colorData.textColor);
+                document.querySelectorAll(`${rootSelector} strong, ${rootSelector} h1, ${rootSelector} h2, ${rootSelector} h3`).forEach(el => el.style.color = colorData.strongColor);
+                document.querySelectorAll(`${rootSelector} em`).forEach(el => el.style.color = colorData.emColor);
+                document.querySelectorAll(`${rootSelector} .quote1`).forEach(el => el.style.color = colorData.quote1Color);
+                document.querySelectorAll(`${rootSelector} .quote2`).forEach(el => {
+                    el.style.color = colorData.quote2Color;
+
+                // 배경 토글 상태에 따라 적용
+                el.classList.toggle('no-bg', !colorData.useQuote2Bg);
+                if (colorData.useQuote2Bg) {
+                        el.style.backgroundColor = colorData.quote2BgColor;
+                }
+
+                // 테두리 토글 상태에 따라 적용
+                el.classList.toggle('no-border', !colorData.useQuote2Border);
+                if (colorData.useQuote2Border) {
+                    el.style.borderLeftColor = colorData.quote2BorderColor;
+                }
+            });
+        });
+    }
+
+            function updateFont(fontFamily) {
+            // 글로벌 폰트 변수 업데이트
+            globalFontFamily = fontFamily;
+            
+            // localStorage에 저장
+            localStorage.setItem('globalFontFamily', fontFamily);
+            
+            // --- select 요소 자체에 폰트 적용 ---
+            const fontSelectElement = document.getElementById('fontFamily');
+            if (fontSelectElement) {
+                fontSelectElement.style.fontFamily = fontFamily;
+            }
+            
+            // 모든 글꼴 스타일 적용 (미리보기 패널 등)
+            applyFontStyles();
+        }
+
+        function updateFontSize(value) {
+            // 숫자 값으로 변환
+            const sizeValue = parseInt(value);
+            if (isNaN(sizeValue)) return;
+            
+            // 유효 범위 확인 (12px ~ 24px)
+            const validSize = Math.min(Math.max(sizeValue, 12), 24);
+            
+            // 전역 변수에 저장
+            globalFontSize = validSize + 'px';
+            
+            // localStorage에 저장
+            localStorage.setItem('globalFontSize', globalFontSize);
+            
+            // UI 업데이트
+            document.getElementById('fontSizeSlider').value = validSize;
+            document.getElementById('fontSizeInput').value = validSize;
+            
+            // 디스플레이 패널에 적용
+            applyFontStyles();
+        }
+
+        // 글꼴 크기 입력 필드에서 업데이트
+        function updateFontSizeFromInput(value) {
+            const size = parseInt(value);
+            if (!isNaN(size)) {
+                updateFontSize(size);
+            }
+        }
+
+        // 글꼴 크기 유효성 검사
+        function validateFontSize() {
+            const input = document.getElementById('fontSizeInput');
+            const value = parseInt(input.value);
+            
+            if (isNaN(value) || value < 12 || value > 24) {
+                // 현재 전역 설정에서 숫자만 추출
+                const currentSize = parseInt(globalFontSize);
+                input.value = isNaN(currentSize) ? 16 : currentSize;
+            }
+        }
+
+        // 줄간격 업데이트 함수
+        function updateLineHeight(value) {
+            // 숫자 값으로 변환 (소수점 1자리까지)
+            const heightValue = parseFloat(parseFloat(value).toFixed(1));
+            if (isNaN(heightValue)) return;
+            
+            // 유효 범위 확인 (1.0 ~ 2.5)
+            const validHeight = Math.min(Math.max(heightValue, 1.0), 2.5);
+            
+            // 전역 변수에 저장
+            globalLineHeight = validHeight.toString();
+            
+            // localStorage에 저장
+            localStorage.setItem('globalLineHeight', globalLineHeight);
+            
+            // UI 업데이트
+            document.getElementById('lineHeightSlider').value = validHeight;
+            document.getElementById('lineHeightInput').value = validHeight;
+            
+            // 디스플레이 패널에 적용
+            applyFontStyles();
+        }
+
+        // 줄간격 입력 필드에서 업데이트
+        function updateLineHeightFromInput(value) {
+            const height = parseFloat(value);
+            if (!isNaN(height)) {
+                updateLineHeight(height);
+            }
+        }
+
+        // 줄간격 유효성 검사
+        function validateLineHeight() {
+            const input = document.getElementById('lineHeightInput');
+            const value = parseFloat(input.value);
+            
+            if (isNaN(value) || value < 1.0 || value > 2.5) {
+                // 현재 전역 설정에서 복원
+                input.value = globalLineHeight || "1.5";
+            }
+        }
+
+        function updatePresetState() {
+        const currentPresetName = localStorage.getItem('currentPreset');
+        if (currentPresetName) {
+            presetStates[currentPresetName] = { ...colorData }; // 현재 colorData 복사해서 저장
+            console.log(`State saved for preset: ${currentPresetName}`);
+        }
+    }
+
+        // 폰트 선택 옵션에 스타일 적용 함수
+        function applyFontStylesToOptions() {
+            const fontSelect = document.getElementById('fontFamily');
+            if (!fontSelect) return;
+
+            for (let i = 0; i < fontSelect.options.length; i++) {
+                const option = fontSelect.options[i];
+                const fontFamilyValue = option.value; // <option>의 value 속성 값 (font-family 문자열)
+                
+                // 각 옵션의 style 속성에 font-family 적용
+                option.style.fontFamily = fontFamilyValue;
+                
+                // (선택 사항) 기본 글꼴 크기 적용 (가독성 향상)
+                option.style.fontSize = '16px'; 
+            }
+            console.log("Applied font styles to select options.");
+        }
+
+        // 모든 글꼴 스타일을 디스플레이 패널에 적용하는 함수
+        function applyFontStyles() {
+            document.querySelectorAll('.GH_VEX_Div_U, .GH_VEX_Div_C').forEach(div => {
+                div.style.fontFamily = globalFontFamily;
+                div.style.fontSize = globalFontSize;
+                div.style.lineHeight = globalLineHeight;
+            });
+            
+            // 헤더(타이틀) 폰트 패밀리만 업데이트 (크기와 줄간격은 별도 스타일 유지)
+            document.querySelectorAll('.GH_VEX_Head_U2, .GH_VEX_Head_C2').forEach(header => {
+                header.style.fontFamily = globalFontFamily;
+            });
+            
+            console.log(`Font styles updated: family=${globalFontFamily}, size=${globalFontSize}, lineHeight=${globalLineHeight}`);
+        }
+
+        function resetColors() {
+            const currentPresetName = localStorage.getItem('currentPreset') || 'original';
+            const presetDefault = presets[currentPresetName];
+
+        if (presetDefault) {
+            console.log(`Resetting preset "${currentPresetName}" to defaults.`);
+
+            // 1. 기본값을 colorData에 로드
+            Object.keys(presetDefault).forEach(property => {
+                if (colorData.hasOwnProperty(property)) {
+                    colorData[property] = presetDefault[property];
+                }
+            });
+
+            // 2. presetStates에서 해당 상태 삭제
+            delete presetStates[currentPresetName];
+            console.log(`Saved state for "${currentPresetName}" deleted.`);
+
+            // 3. UI 컨트롤 업데이트 (colorData 기준 - applyPreset 내부 로직과 동일)
+            Object.keys(colorData).forEach(property => {
+                const valueToSet = colorData[property];
+                const element = document.getElementById(property);
+                const textElement = document.getElementById(property + 'Text');
+                // ... (UI 업데이트 로직 복사) ...
+                 if (typeof valueToSet === 'boolean') {
+                    if (element && element.type === 'checkbox') element.checked = valueToSet;
+                } else if (typeof valueToSet === 'number') {
+                    if (element && (element.type === 'range' || element.type === 'text' || element.type === 'number')) element.value = valueToSet;
+                    const inputElement = document.getElementById(property + 'Input');
+                    if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number')) inputElement.value = valueToSet;
+                } else { // string (color) or null
+                    if (element && element.type === 'color') element.value = valueToSet && /^#[0-9a-f]{6}$/i.test(valueToSet) ? valueToSet : '#000000';
+                    if (textElement && textElement.type === 'text') textElement.value = valueToSet || '';
+                }
+            });
+
+            // 4. UI 상태 업데이트 (토글 등 - applyPreset 내부 로직과 동일)
+            const useQuote2Bg = colorData.useQuote2Bg;
+            const useQuote2Border = colorData.useQuote2Border;
+            document.getElementById('quote2BgToggle').checked = useQuote2Bg;
+            document.getElementById('quote2BorderToggle').checked = useQuote2Border;
+            // ... (disabled 속성 설정) ...
+            document.getElementById('quote2BgColor').disabled = !useQuote2Bg;
+            document.getElementById('quote2BgColorText').disabled = !useQuote2Bg;
+            document.getElementById('quote2BorderColor').disabled = !useQuote2Border;
+            document.getElementById('quote2BorderColorText').disabled = !useQuote2Border;
+            const useGradient = colorData.useGradient;
+            document.getElementById('gradientToggle').checked = useGradient;
+            // ... (display 속성 설정) ...
+            document.getElementById('gradientEndContainer').style.display = useGradient ? 'flex' : 'none';
+            document.getElementById('gradientAngleContainer').style.display = useGradient ? 'block' : 'none';
+            updateBackgroundColorLabel();
+
+            // 5. 미리보기 업데이트
+            applyColors();
+
+            // 6. 활성 버튼 상태는 유지 (현재 프리셋 버튼은 계속 활성 상태)
+        }
+    }
+
+            function generateCSS() {
+            const cssCodeElement = document.getElementById('cssCode');
+            const version = currentVersion; // 'U' or 'C'
+            const versionType = version === 'U' ? 'User' : 'Char';
+            const versionComment = version === 'U' ? '유저' : '캐릭터';
+
+            let cssCode = `/* ──────────[ GH_VEX ${versionType} 컬러 스타일 ]────────── */\n`;
+            // 배경색 - 그라데이션 지원
+            if (colorData.useGradient) {
+                cssCode += `/* ${versionComment} - 채팅창 배경 */ .GH_VEX_Div_${version} { background: linear-gradient(${colorData.gradientAngle}deg, ${colorData.backgroundColor}, ${colorData.backgroundColorEnd}); }\n`;
+            } else {
+                cssCode += `/* ${versionComment} - 채팅창 배경 */ .GH_VEX_Div_${version} { background-color: ${colorData.backgroundColor}; }\n`;
+            }
+            // 옆줄 - 조건부 블록 포함
+            cssCode += `/* ${versionComment} - 채팅창 옆줄 */ {{#if {{? {{getvar::GH_VEX_XT}} = 1 }} }}.GH_VEX_Text_${version} { border-left: 1.5px solid ${colorData.hrColor}; }{{/if}}\n`;
+            // 타이틀 라인 (밑줄) - GH_VEX_Head_...1 사용
+            cssCode += `/* ${versionComment} - 타이틀 밑줄 */ .GH_VEX_Head_${version}1::before, .GH_VEX_Head_${version}1::after, .GH_VEX_Head_G${version === 'U' ? '2' : '1'}::before, .GH_VEX_Head_G${version === 'U' ? '2' : '1'}::after${version === 'C' ? ', .GH_VEX_FT' : ''} { background-color: ${colorData.headerLineColor}; }\n`; // G1/G2 및 FT 조건부 포함
+            // 타이틀 제목
+            cssCode += `/* ${versionComment} - 타이틀 제목 */ .GH_VEX_Head_${version}2 { color: ${colorData.headerColor}; }\n`; // 기본 색상만 지정
+            // 구분선 - background-color 사용 (gradient 미지원)
+            cssCode += `/* ${versionComment} - 구분선 */ .GH_VEX_Div_${version} hr { height: 1px; border: 0px; background-color: ${colorData.hrColor}; }\n`;
+            // 일반 문장
+            cssCode += `/* ${versionComment} - 일반 문장 */ .GH_VEX_Div_${version} p, .GH_VEX_Div_${version} li { color: ${colorData.textColor}; }\n`;
+            
+            cssCode += `/* ${versionComment} - 이탤릭 문장 */ .GH_VEX_Div_${version} em { color: ${colorData.emColor}; }\n`;
+            cssCode += `/* ${versionComment} - 볼드체 문장 */ .GH_VEX_Div_${version} strong, .GH_VEX_Div_${version} h1, .GH_VEX_Div_${version} h2, .GH_VEX_Div_${version} h3 { color: ${colorData.strongColor}; }\n`;
+            
+            // 생각 문장 - mark 선택자 사용
+            cssCode += `/* ${versionComment} - 생각 문장 */ .GH_VEX_Div_${version} mark[risu-mark="quote1"] { color: ${colorData.quote1Color}; }\n`;
+            // 대사 문장 - mark 선택자 사용 및 토글 반영
+            cssCode += `/* ${versionComment} - 대사 문장 */ .GH_VEX_Div_${version} mark[risu-mark="quote2"] { color: ${colorData.quote2Color};`;
+            if (colorData.useQuote2Bg) {
+                cssCode += ` background-color: ${colorData.quote2BgColor};`;
+            }
+            if (colorData.useQuote2Border) {
+                // 제공된 예시 코드의 스타일 적용
+                cssCode += ` font-weight: bold; display: inline; padding: 2px 5px; border-left: 3px solid ${colorData.quote2BorderColor}; margin-left: 10px; position: relative;`;
+            } else {
+                // 테두리 없을 때 기본 스타일 (필요시 조정)
+                cssCode += ` font-weight: bold; display: inline; padding: 2px 0;`; // 패딩 조정
+            }
+            cssCode += ` }\n`;
+
+            cssCodeElement.textContent = cssCode;
+
+            // 코드 표시 영역 및 헤더 표시 (기존 로직 유지)
+            const codeHeader = document.querySelector('.code-header');
+            if (codeHeader) codeHeader.style.display = 'flex';
+            cssCodeElement.style.display = 'block';
+        }
+
+        // 코드 복사 버튼 관련 UI 업데이트 (generateCSS 호출 시)
+        // showCopyButton 함수를 수정하여 코드를 버튼 옆에 표시
+        function showCopyButton() {
+            // 기존 코드 영역 참조
+            const codeDisplay = document.getElementById('cssCode');
+            
+            // 버전 정보 영역의 버튼 컨테이너 참조
+            const versionInfo = document.querySelector('.version-info');
+            const buttonContainer = document.querySelector('.preview-action-buttons');
+            
+            if (!buttonContainer || !versionInfo) return;
+            
+            // 기존 코드 표시 영역 숨기기 (에디터 패널의 코드 영역)
+            const oldCodeHeader = codeDisplay.previousElementSibling;
+            if (oldCodeHeader && oldCodeHeader.classList.contains('code-header')) {
+                oldCodeHeader.style.display = 'none';
+            }
+            codeDisplay.style.display = 'none';
+            
+            // 이미 생성된 인라인 코드 창이 있으면 제거
+            const existingCodeContainer = document.querySelector('.inline-code-container');
+            if (existingCodeContainer) {
+                existingCodeContainer.remove();
+            }
+            
+            // 버전 정보 영역 옆에 코드 컨테이너 생성
+            const inlineCodeContainer = document.createElement('div');
+            inlineCodeContainer.className = 'inline-code-container';
+            inlineCodeContainer.style.cssText = `
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: 400px;
+                background-color: var(--bg-primary);
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                margin-top: 5px;
+                display: flex;
+                flex-direction: column;
+            `;
+            
+            // 코드 헤더 생성
+            const codeHeader = document.createElement('div');
+            codeHeader.className = 'code-header';
+            codeHeader.style.cssText = `
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px;
+                border-bottom: 1px solid var(--border-color);
+            `;
+            codeHeader.innerHTML = `
+                <span class="code-title">생성된 CSS 코드 (${currentVersion})</span>
+                <button class="copy-button" onclick="copyCode()">복사</button>
+            `;
+            
+            // 코드 내용 컨테이너
+            const codeContent = document.createElement('div');
+            codeContent.className = 'code-content';
+            codeContent.style.cssText = `
+                padding: 12px;
+                max-height: 300px;
+                overflow-y: auto;
+                white-space: pre-wrap;
+                font-family: monospace;
+                font-size: 13px;
+                color: var(--text-primary);
+            `;
+            codeContent.textContent = codeDisplay.textContent;
+            
+            // 구조 조립
+            inlineCodeContainer.appendChild(codeHeader);
+            inlineCodeContainer.appendChild(codeContent);
+            
+            // 버전 정보 영역에 추가
+            versionInfo.style.position = 'relative';
+            versionInfo.appendChild(inlineCodeContainer);
+            
+            // 닫기 버튼 추가
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '×';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: none;
+                border: none;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 0 5px;
+                color: var(--text-secondary);
+            `;
+            closeBtn.onclick = function() {
+                inlineCodeContainer.remove();
+            };
+            codeHeader.appendChild(closeBtn);
+            
+            // 복사 버튼 스타일 조정
+            const copyButton = codeHeader.querySelector('.copy-button');
+            copyButton.style.cssText = `
+                font-size: 12px;
+                padding: 4px 8px;
+                background-color: var(--accent-color);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-right: 25px;
+            `;
+        }
+
+        // copyCode 함수도 수정
+        function copyCode() {
+            // 인라인 코드 컨테이너가 있으면 그 내용을 복사
+            const inlineCodeContent = document.querySelector('.inline-code-container .code-content');
+            let cssCode;
+            
+            if (inlineCodeContent) {
+                cssCode = inlineCodeContent.textContent;
+            } else {
+                // 기존 방식 백업
+                cssCode = document.getElementById('cssCode').textContent;
+            }
+            
+            navigator.clipboard.writeText(cssCode).then(() => {
+                alert('CSS 코드가 클립보드에 복사되었습니다.');
+            }, (err) => {
+                alert('코드 복사에 실패했습니다.');
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        function saveCustomPreset() {
+            // 현재 선택된 프리셋이 custom인 경우에만 저장
+            if (localStorage.getItem('currentPreset') === 'custom') {
+                // 현재 colorData를 커스텀 프리셋으로 저장
+                presets.custom = { ...colorData };
+                localStorage.setItem('customPreset', JSON.stringify(presets.custom));
+                console.log("Custom preset saved");
+            }
+        }
+
+        // generateCSS 함수 호출 시 복사 버튼 관련 UI도 업데이트하도록 수정
+        function generateCSSAndShowButton() {
+            generateCSS(); // 기존 CSS 생성 로직 호출
+            showCopyButton(); // 복사 버튼 표시/업데이트
+        }
+
+
+        // 사용자 정의 테마 관련 함수
+        function saveCurrentTheme() {
+            const themeName = document.getElementById('themeName').value.trim();
+            if (!themeName) {
+                alert('테마 이름을 입력해주세요.');
+                return;
+            }
+            
+            // 로컬 스토리지에서 기존 테마 불러오기
+            let savedThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+
+            // 이름 중복 확인
+            if (savedThemes.hasOwnProperty(themeName)) {
+                // 덮어쓰기 여부 확인
+                if (confirm(`"${themeName}" 테마가 이미 존재합니다. 덮어쓰시겠습니까?`)) {
+                    // 덮어쓰기 진행
+                    console.log(`Overwriting theme: "${themeName}"`);
+                } else {
+                    // 취소 시 저장 중단
+                    return;
+                }
+            }
+            
+            // 현재 테마 정보 저장
+            savedThemes[themeName] = { ...colorData }; // 모든 색상 데이터와 토글 상태 저장
+            
+            // 로컬 스토리지에 저장
+            localStorage.setItem('userThemes', JSON.stringify(savedThemes));
+            
+            // UI 갱신
+            document.getElementById('themeName').value = '';
+            loadSavedThemes();
+            
+            alert(`"${themeName}" 테마가 저장되었습니다.`);
+        }
+
+        // CSS 임포트 함수
+        function importCSS() {
+            const cssText = document.getElementById('cssImportArea').value.trim();
+
+            if (!cssText) {
+                showImportStatus('임포트할 CSS 코드를 입력해주세요.', false);
+                return;
+            }
+    
+            try {
+                // CSS 코드에서 컬러 값 추출
+                const extractedColors = parseCSSColors(cssText);
+
+                if (Object.keys(extractedColors).length === 0 || !extractedColors.backgroundColor) { // backgroundColor가 없으면 유효하지 않음
+                    showImportStatus('유효한 테마 CSS 코드를 찾을 수 없습니다.', false);
+                    return;
+                }
+        
+                // 추출된 색상 및 설정 적용 (colorData 업데이트)
+                for (const [property, value] of Object.entries(extractedColors)) {
+                    if (colorData.hasOwnProperty(property) && value !== null) {
+                        colorData[property] = value;
+                    }
+                }
+
+        // --- UI 컨트롤 수동 업데이트 (colorData 기준) ---
+        Object.keys(colorData).forEach(property => {
+            const valueToSet = colorData[property];
+            const element = document.getElementById(property);
+            const textElement = document.getElementById(property + 'Text');
+            // ... (UI 업데이트 로직, 위 applyPreset 함수 내부의 2번 항목과 동일하게 복사) ...
+             if (typeof valueToSet === 'boolean') {
+                if (element && element.type === 'checkbox') element.checked = valueToSet;
+            } else if (typeof valueToSet === 'number') {
+                if (element && (element.type === 'range' || element.type === 'text' || element.type === 'number')) element.value = valueToSet;
+                const inputElement = document.getElementById(property + 'Input');
+                if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number')) inputElement.value = valueToSet;
+            } else { // string (color) or null
+                if (element && element.type === 'color') element.value = valueToSet && /^#[0-9a-f]{6}$/i.test(valueToSet) ? valueToSet : '#000000';
+                if (textElement && textElement.type === 'text') textElement.value = valueToSet || '';
+            }
+        });
+        // UI 상태 업데이트 (토글, 비활성화 등)
+        const useQuote2Bg = colorData.useQuote2Bg;
+        const useQuote2Border = colorData.useQuote2Border;
+        document.getElementById('quote2BgToggle').checked = useQuote2Bg;
+        document.getElementById('quote2BorderToggle').checked = useQuote2Border;
+        document.getElementById('quote2BgColor').disabled = !useQuote2Bg;
+        document.getElementById('quote2BgColorText').disabled = !useQuote2Bg;
+        document.getElementById('quote2BorderColor').disabled = !useQuote2Border;
+        document.getElementById('quote2BorderColorText').disabled = !useQuote2Border;
+        const useGradient = colorData.useGradient;
+        document.getElementById('gradientToggle').checked = useGradient;
+        document.getElementById('gradientEndContainer').style.display = useGradient ? 'flex' : 'none';
+        document.getElementById('gradientAngleContainer').style.display = useGradient ? 'block' : 'none';
+        updateBackgroundColorLabel();
+        // --- UI 컨트롤 수동 업데이트 끝 ---
+
+        // 테마 미리보기 적용
+        applyColors();
+
+        // --- presetStates 업데이트 ---
+        presetStates['custom'] = { ...colorData };
+        console.log("State saved for preset: custom (after import)");
+        // --- 업데이트 끝 ---
+
+        // 커스텀 테마 데이터 저장 (localStorage - 이건 유지해도 됨)
+        presets.custom = { ...colorData };
+        localStorage.setItem('customPreset', JSON.stringify(presets.custom));
+        localStorage.setItem('currentPreset', 'custom'); // 현재 프리셋을 'custom'으로 설정
+
+        // 'custom' 버튼 활성화 (applyPreset 호출 없이)
+        document.querySelectorAll('.preset-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const customButton = document.querySelector(`.preset-button[onclick*="applyPreset('custom')"]`);
+        if (customButton) {
+            customButton.classList.add('active');
+        }
+
+        showImportStatus('테마를 성공적으로 임포트했습니다!', true);
+
+    } catch (error) {
+        console.error('CSS 임포트 오류:', error);
+        showImportStatus(`CSS 코드 임포트 중 오류가 발생했습니다: ${error.message}`, false);
+    }
+}
+        // CSS 코드 파싱 함수
+        function parseCSSColors(cssText) {
+            const extractedColors = {};
+            // 기본값 설정
+            extractedColors.useGradient = false;
+            extractedColors.gradientAngle = 135; // 기본 각도
+            extractedColors.backgroundColorEnd = null; // 기본값 null
+            
+            // 1. 그라데이션 배경 추출 시도
+            let gradientMatch = cssText.match(
+                /\.GH_VEX_Div_[UC]\s*{\s*background:\s*linear-gradient\((\d+)deg,\s*(#[0-9a-fA-F]{6}),\s*(#[0-9a-fA-F]{6})\);/
+            );
+            if (gradientMatch) {
+                extractedColors.useGradient = true;
+                extractedColors.gradientAngle = parseInt(gradientMatch[1]);
+                extractedColors.backgroundColor = gradientMatch[2];
+                extractedColors.backgroundColorEnd = gradientMatch[3];
+                console.log("Gradient background found:", extractedColors);
+            } else {
+                // 2. 그라데이션이 없으면 단색 배경 추출 시도
+                let solidMatch = cssText.match(
+                    /\.GH_VEX_Div_[UC]\s*{\s*background-color:\s*(#[0-9a-fA-F]{6});/
+                );
+                if (solidMatch) {
+                    extractedColors.backgroundColor = solidMatch[1];
+                    extractedColors.useGradient = false; // 명시적으로 false 설정
+                    console.log("Solid background found:", extractedColors.backgroundColor);
+                } else {
+                    console.log("Background color not found in CSS.");
+                }
+            }
+            
+            // 구분선 색상 추출
+            match = cssText.match(/\.GH_VEX_Div_[UC]\s+hr\s*{\s*[^}]*background-color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.hrColor = match[1];
+            }
+            
+            // 제목 색상 추출
+            match = cssText.match(/\.GH_VEX_Head_[UC]2\s*{\s*[^}]*color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.headerColor = match[1];
+            }
+            
+            // 제목 라인 색상 추출
+            match = cssText.match(/\.GH_VEX_Head_[UC]1::before,\s*\.GH_VEX_Head_[UC]1::after[^{]*{\s*[^}]*background-color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.headerLineColor = match[1];
+            }
+            
+            // 일반 문장 색상 추출
+            match = cssText.match(/\.GH_VEX_Div_[UC]\s+p,\s*\.GH_VEX_Div_[UC]\s+li\s*{\s*[^}]*color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.textColor = match[1];
+            }
+            
+            // 볼드체 문장 색상 추출 - h1, h2, h3, strong
+            match = cssText.match(/\.GH_VEX_Div_[UC]\s+(?:strong|h1|h2|h3)[^{]*{\s*[^}]*color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.strongColor = match[1];
+            }
+            
+            // 이탤릭 문장 색상 추출
+            match = cssText.match(/\.GH_VEX_Div_[UC]\s+em[^{]*{\s*[^}]*color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.emColor = match[1];
+            }
+            
+            // 인용1 색상 추출
+            match = cssText.match(/\.GH_VEX_Div_[UC]\s+mark\[risu-mark="quote1"\]\s*{\s*[^}]*color:\s*(#[0-9a-fA-F]{6});/);
+            if (match) {
+                extractedColors.quote1Color = match[1];
+            }
+            
+            // 인용2 색상 및 스타일 추출
+            const quote2Regex = /\.GH_VEX_Div_[UC]\s+mark\[risu-mark="quote2"\]\s*{([^}]*)}/;
+            match = cssText.match(quote2Regex);
+            
+            if (match) {
+                const quote2Styles = match[1];
+                
+                // 인용2 텍스트 색상
+                const colorMatch = quote2Styles.match(/color:\s*(#[0-9a-fA-F]{6});/);
+                if (colorMatch) {
+                    extractedColors.quote2Color = colorMatch[1];
+                }
+                
+                // 인용2 배경색
+                const bgMatch = quote2Styles.match(/background-color:\s*(#[0-9a-fA-F]{6});/);
+                if (bgMatch) {
+                    extractedColors.quote2BgColor = bgMatch[1];
+                    extractedColors.useQuote2Bg = true;
+                } else {
+                    extractedColors.useQuote2Bg = false;
+                }
+                
+                // 인용2 테두리 색상
+                const borderMatch = quote2Styles.match(/border-left:\s*[\d.]+px\s+\w+\s+(#[0-9a-fA-F]{6});/);
+                if (borderMatch) {
+                    extractedColors.quote2BorderColor = borderMatch[1];
+                    extractedColors.useQuote2Border = true;
+                } else {
+                    extractedColors.useQuote2Border = false;
+                }
+            }
+            
+            return extractedColors;
+        }
+
+        // 임포트 영역 초기화
+        function clearImportArea() {
+            document.getElementById('cssImportArea').value = '';
+            hideImportStatus();
+        }
+
+        // 임포트 상태 메시지 표시
+        function showImportStatus(message, isSuccess) {
+            // 기존 상태 메시지 제거
+            const existingStatus = document.querySelector('.import-status');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+            
+            // 새 상태 메시지 생성
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `import-status ${isSuccess ? 'status-success' : 'status-error'}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            
+            // 상태 메시지 추가
+            const importActions = document.querySelector('.import-actions');
+            importActions.parentNode.insertBefore(statusDiv, importActions.nextSibling);
+            
+            // 일정 시간 후 메시지 숨김
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                statusDiv.style.transition = 'opacity 0.5s';
+                setTimeout(() => statusDiv.remove(), 500);
+            }, 5000);
+        }
+
+        // 임포트 상태 메시지 숨김
+        function hideImportStatus() {
+            const statusDiv = document.querySelector('.import-status');
+            if (statusDiv) {
+                statusDiv.remove();
+            }
+        }
+
+        function applyTheme(themeName, themeData) {
+            console.log(`Applying theme "${themeName}"`, themeData); // 디버깅용 로그
+            
+            // 테마 데이터를 현재 설정에 적용
+            Object.keys(themeData).forEach(property => {
+                if (colorData.hasOwnProperty(property) && property !== 'fontFamily') {
+                    colorData[property] = themeData[property];
+                }
+            });
+            
+            // UI 요소 업데이트
+            Object.keys(colorData).forEach(property => {
+                const valueToSet = colorData[property];
+                const element = document.getElementById(property);
+                const textElement = document.getElementById(property + 'Text');
+                
+                if (typeof valueToSet === 'boolean') {
+                    if (element && element.type === 'checkbox') element.checked = valueToSet;
+                } else if (typeof valueToSet === 'number') {
+                    if (element && (element.type === 'range' || element.type === 'text' || element.type === 'number')) {
+                        element.value = valueToSet;
+                    }
+                    
+                    // 그라데이션 각도 관련 요소들 업데이트
+                    if (property === 'gradientAngle') {
+                        const angleInput = document.getElementById('gradientAngleInput');
+                        const angleSlider = document.getElementById('gradientAngleSlider');
+                        
+                        if (angleInput) angleInput.value = valueToSet;
+                        if (angleSlider) angleSlider.value = valueToSet;
+                    }
+                } else { // string (color) or null
+                    if (element && element.type === 'color') {
+                        element.value = valueToSet && /^#[0-9a-f]{6}$/i.test(valueToSet) 
+                            ? valueToSet 
+                            : '#000000';
+                    }
+                    if (textElement && textElement.type === 'text') {
+                        textElement.value = valueToSet || '';
+                    }
+                }
+            });
+            
+            // 글꼴 선택기 업데이트
+            if (themeData.fontFamily) {
+                const fontSelect = document.getElementById('fontFamily');
+                if (fontSelect) fontSelect.value = themeData.fontFamily;
+            }
+            
+            // 그라데이션 토글 상태 업데이트
+            const gradientToggle = document.getElementById('gradientToggle');
+            if (gradientToggle) gradientToggle.checked = colorData.useGradient;
+            
+            // 그라데이션 관련 UI 요소 표시/숨김 업데이트
+            const gradientEndContainer = document.getElementById('gradientEndContainer');
+            const gradientAngleContainer = document.getElementById('gradientAngleContainer');
+            
+            if (gradientEndContainer) 
+                gradientEndContainer.style.display = colorData.useGradient ? 'flex' : 'none';
+            if (gradientAngleContainer)
+                gradientAngleContainer.style.display = colorData.useGradient ? 'block' : 'none';
+            
+            // 배경색 라벨 업데이트
+            updateBackgroundColorLabel();
+            
+            // 인용2 스타일 토글 업데이트
+            const quote2BgToggle = document.getElementById('quote2BgToggle');
+            const quote2BorderToggle = document.getElementById('quote2BorderToggle');
+            
+            if (quote2BgToggle) quote2BgToggle.checked = colorData.useQuote2Bg;
+            if (quote2BorderToggle) quote2BorderToggle.checked = colorData.useQuote2Border;
+            
+            // 입력 필드 활성화/비활성화 상태 업데이트
+            const quote2BgColor = document.getElementById('quote2BgColor');
+            const quote2BgColorText = document.getElementById('quote2BgColorText');
+            const quote2BorderColor = document.getElementById('quote2BorderColor');
+            const quote2BorderColorText = document.getElementById('quote2BorderColorText');
+            
+            if (quote2BgColor) quote2BgColor.disabled = !colorData.useQuote2Bg;
+            if (quote2BgColorText) quote2BgColorText.disabled = !colorData.useQuote2Bg;
+            if (quote2BorderColor) quote2BorderColor.disabled = !colorData.useQuote2Border;
+            if (quote2BorderColorText) quote2BorderColorText.disabled = !colorData.useQuote2Border;
+            
+            // 색상 적용
+            applyColors();
+            
+            alert(`"${themeName}" 테마를 적용했습니다.`);
+        }
+
+        function deleteTheme(themeName) {
+            if (!confirm(`"${themeName}" 테마를 삭제하시겠습니까?`)) {
+                return;
+            }
+            
+            // 로컬 스토리지에서 불러오기
+            let savedThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+            
+            // 테마 삭제
+            delete savedThemes[themeName];
+            
+            // 로컬 스토리지에 저장
+            localStorage.setItem('userThemes', JSON.stringify(savedThemes));
+            
+            // UI 갱신
+            loadSavedThemes();
+            
+            alert(`"${themeName}" 테마가 삭제되었습니다.`);
+        }
+
+
+        // 에디터 테마 관련 기능
+        let editorTheme = localStorage.getItem('editorTheme') || 'light';
+
+        function toggleEditorTheme() {
+            editorTheme = editorTheme === 'light' ? 'dark' : 'light';
+            applyEditorTheme();
+            localStorage.setItem('editorTheme', editorTheme);
+        }
+
+        function applyEditorTheme() {
+            if (editorTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggleIcon').textContent = '☀️';
+                document.getElementById('themeToggleText').textContent = '라이트 모드';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                document.getElementById('themeToggleIcon').textContent = '🌙';
+                document.getElementById('themeToggleText').textContent = '다크 모드';
+            }
+        }
+
+        // 토글 처리 함수 추가
+        function toggleQuote2Style(styleType) {
+            const bgToggle = document.getElementById('quote2BgToggle');
+            const borderToggle = document.getElementById('quote2BorderToggle');
+            
+            if (styleType === 'bg') {
+                colorData.useQuote2Bg = bgToggle.checked;
+                
+                // 미리보기에서 배경 클래스 토글
+                document.querySelectorAll('.GH_VEX_Div_U .quote2, .GH_VEX_Div_C .quote2').forEach(el => {
+                    el.classList.toggle('no-bg', !colorData.useQuote2Bg);
+                });
+            } else if (styleType === 'border') {
+                colorData.useQuote2Border = borderToggle.checked;
+                
+                // 미리보기에서 테두리 클래스 토글
+                document.querySelectorAll('.GH_VEX_Div_U .quote2, .GH_VEX_Div_C .quote2').forEach(el => {
+                    el.classList.toggle('no-border', !colorData.useQuote2Border);
+                });
+            }
+            
+            // UI 업데이트
+            document.getElementById('quote2BgColor').disabled = !colorData.useQuote2Bg;
+            document.getElementById('quote2BgColorText').disabled = !colorData.useQuote2Bg;
+            document.getElementById('quote2BorderColor').disabled = !colorData.useQuote2Border;
+            document.getElementById('quote2BorderColorText').disabled = !colorData.useQuote2Border;
+            
+            // 커스텀 프리셋 자동 저장 추가
+            saveCustomPreset();
+            
+            // 미리보기 업데이트
+            applyColors();
+            updatePresetState();
+        }
+
+        function cancelThemeRename(originalName, nameElement) {
+            if (!nameElement) return;
+            console.log(`[cancelThemeRename] Cancelling rename for: ${originalName}`); // 취소 시작 로그
+
+            nameElement.classList.remove('editing');
+            nameElement.innerHTML = ''; // 내부 요소(input 등) 제거
+            nameElement.textContent = originalName; // 원래 텍스트 복원
+
+            // 툴팁 다시 추가
+            const tooltipSpan = document.createElement('span');
+            tooltipSpan.className = 'theme-tooltip';
+            tooltipSpan.textContent = originalName;
+            nameElement.appendChild(tooltipSpan);
+
+            // 원래 클릭 핸들러 복원 (applyTheme 호출)
+            nameElement.onclick = function(e) {
+                // 편집 중 클릭 방지 (이중 확인)
+                if (this.classList.contains('editing')) {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+                if (confirm(`"${originalName}" 테마를 적용하시겠습니까?`)) {
+                    const currentThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+                    if (currentThemes[originalName]) {
+                        applyTheme(originalName, currentThemes[originalName]);
+                    } else {
+                        console.error("[cancelThemeRename] Failed to find theme data for applying:", originalName);
+                    }
+                }
+            };
+            console.log(`[cancelThemeRename] Rename cancelled and click handler restored for: ${originalName}`); // 취소 완료 로그
+        }
+
+        // 테마 이름 변경 함수
+        function renameTheme(themeName) {
+            console.log(`[renameTheme] Called for: ${themeName}`);
+
+            const themeElement = document.querySelector(`.saved-theme[data-theme-name="${themeName}"]`);
+            const nameElement = themeElement?.querySelector('.saved-theme-name');
+            if (!themeElement || !nameElement) {
+                console.error(`[renameTheme] Theme or name element not found for: ${themeName}`);
+                return;
+            }
+
+            if (nameElement.classList.contains('editing')) {
+                console.log(`[renameTheme] In editing mode for: ${themeName}. Attempting save.`);
+
+                const input = nameElement.querySelector('input');
+                if (!input) {
+                     console.error(`[renameTheme] Input element not found while saving for: ${themeName}`);
+                     if (nameElement.classList.contains('editing')) {
+                         cancelThemeRename(themeName, nameElement);
+                     }
+                     return;
+                }
+
+                const newName = input.value.trim();
+                console.log(`[renameTheme] New name entered: "${newName}"`);
+
+                if (!newName || newName === themeName) {
+                    console.log(`[renameTheme] New name is empty or unchanged. Cancelling rename.`);
+                    cancelThemeRename(themeName, nameElement);
+                    return;
+                }
+
+                try {
+                    console.log(`[renameTheme] Proceeding with save logic for ${themeName} -> ${newName}`);
+                    const savedThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+
+                    if (savedThemes.hasOwnProperty(newName) && newName !== themeName) {
+                        console.warn(`[renameTheme] Duplicate name detected: "${newName}". Alerting user.`);
+                        alert(`"${newName}" 테마가 이미 존재합니다. 다른 이름을 사용하세요.`);
+                        setTimeout(() => {
+                            const currentInput = nameElement.querySelector('input');
+                            if (currentInput) {
+                                console.log(`[renameTheme] Refocusing input after duplicate alert.`);
+                                currentInput.focus();
+                                currentInput.select();
+                            } else {
+                                console.warn(`[renameTheme] Input element disappeared before refocus could happen.`);
+                            }
+                        }, 0);
+                        return;
+                    }
+
+                    console.log(`[renameTheme] Renaming theme in localStorage: ${themeName} -> ${newName}`);
+
+                    // --- localStorage 업데이트 ---
+                    const themeDataToKeep = savedThemes[themeName];
+                    if (!themeDataToKeep) {
+                         console.error(`[renameTheme] Original theme data for "${themeName}" not found in localStorage.`);
+                         cancelThemeRename(themeName, nameElement);
+                         return;
+                    }
+                    savedThemes[newName] = themeDataToKeep;
+                    if (newName !== themeName) {
+                        delete savedThemes[themeName];
+                    }
+                    localStorage.setItem('userThemes', JSON.stringify(savedThemes));
+                    console.log(`[renameTheme] localStorage updated successfully.`);
+                    // --- localStorage 업데이트 끝 ---
+
+                    // --- DOM 업데이트: 직접 수정하여 위치 유지 ---
+                    console.log(`[renameTheme] Updating DOM elements directly for ${themeName} -> ${newName}`);
+
+                    // 1. data-theme-name 속성 업데이트
+                    themeElement.setAttribute('data-theme-name', newName);
+
+                    // 2. 이름 표시 업데이트 및 편집 모드 종료
+                    nameElement.classList.remove('editing');
+                    nameElement.innerHTML = ''; // input 제거
+                    nameElement.textContent = newName; // 새 이름 표시
+
+                    // 3. 툴팁 업데이트
+                    const tooltipSpan = document.createElement('span');
+                    tooltipSpan.className = 'theme-tooltip';
+                    tooltipSpan.textContent = newName;
+                    nameElement.appendChild(tooltipSpan);
+
+                    // 4. 클릭 핸들러 업데이트 (applyTheme)
+                    nameElement.onclick = function(e) {
+                        if (this.classList.contains('editing')) {
+                            e.preventDefault(); e.stopPropagation(); return false;
+                        }
+                        if (confirm(`"${newName}" 테마를 적용하시겠습니까?`)) {
+                            // localStorage에서 최신 데이터 사용
+                            const currentThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+                            if (currentThemes[newName]) {
+                                applyTheme(newName, currentThemes[newName]);
+                            } else {
+                                console.error("[renameTheme] Failed to find updated theme data for applying:", newName);
+                            }
+                        }
+                    };
+
+                    // 5. 이름 변경 버튼 핸들러 업데이트
+                    const renameButton = themeElement.querySelector('.theme-rename');
+                    if (renameButton) {
+                        renameButton.onclick = (e) => {
+                            e.stopPropagation();
+                            renameTheme(newName); // 새 이름으로 renameTheme 호출
+                        };
+                    }
+
+                    // 6. 삭제 버튼 핸들러 업데이트
+                    const deleteButton = themeElement.querySelector('.theme-delete');
+                    if (deleteButton) {
+                        deleteButton.onclick = (e) => {
+                            e.stopPropagation();
+                            deleteTheme(newName); // 새 이름으로 deleteTheme 호출
+                        };
+                    }
+
+                    console.log(`[renameTheme] DOM updated successfully for ${newName}`);
+                    // --- DOM 업데이트 끝 ---
+
+                    // --- loadSavedThemes() 호출 제거 ---
+                    // loadSavedThemes(); // 목록을 다시 로드하지 않음
+                    // --- 호출 제거 끝 ---
+
+                } catch (error) {
+                    console.error('[renameTheme] Error during theme saving:', error);
+                    alert('테마 이름 변경 중 오류가 발생했습니다.');
+                    if (nameElement.classList.contains('editing')) {
+                         cancelThemeRename(themeName, nameElement);
+                    }
+                }
+                return;
+
+            } else {
+                // --- 편집 모드 시작 로직 (기존과 동일) ---
+                console.log(`[renameTheme] Starting edit mode for: ${themeName}`);
+
+                const otherEditingElement = document.querySelector('.saved-theme-name.editing');
+                if (otherEditingElement && otherEditingElement !== nameElement) {
+                    const otherThemeName = otherEditingElement.closest('.saved-theme')?.dataset.themeName;
+                    if (otherThemeName) {
+                        console.log(`[renameTheme] Cancelling edit for other theme: ${otherThemeName}`);
+                        cancelThemeRename(otherThemeName, otherEditingElement);
+                    }
+                }
+
+                nameElement.classList.add('editing');
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = themeName;
+                input.className = 'theme-name-input';
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        console.log(`[renameTheme] Enter key pressed for: ${themeName}`);
+                        e.preventDefault(); e.stopPropagation();
+                        input.blur();
+                    } else if (e.key === 'Escape') {
+                        console.log(`[renameTheme] Escape key pressed for: ${themeName}`);
+                        e.preventDefault(); e.stopPropagation();
+                        cancelThemeRename(themeName, nameElement);
+                    }
+                });
+
+                input.addEventListener('click', function(e) { e.stopPropagation(); });
+
+                input.addEventListener('blur', function() {
+                    setTimeout(() => {
+                        if (document.body.contains(input) && nameElement.classList.contains('editing')) {
+                            console.log(`[renameTheme] Blur event triggered for: ${themeName}. Calling renameTheme to save.`);
+                            renameTheme(themeName);
+                        } else {
+                             console.log(`[renameTheme] Blur event ignored for: ${themeName} (element removed or edit cancelled).`);
+                        }
+                    }, 150);
+                });
+
+                nameElement.innerHTML = '';
+                nameElement.appendChild(input);
+
+                setTimeout(() => {
+                    input.focus();
+                    input.select();
+                    console.log(`[renameTheme] Input focused and selected for: ${themeName}`);
+                }, 0);
+            }
+        }
+
+        function loadSavedThemes() {
+            const savedThemesContainer = document.getElementById('savedThemes');
+            if (!savedThemesContainer) {
+                console.error("Saved themes container (#savedThemes) not found!");
+                return; // 컨테이너 없으면 중단
+            }
+            savedThemesContainer.innerHTML = ''; // 기존 테마 목록 초기화
+
+            let savedThemes;
+            try {
+                // localStorage에서 테마 데이터 로드 및 파싱
+                const themesString = localStorage.getItem('userThemes');
+                savedThemes = JSON.parse(themesString || '{}');
+
+                // 데이터 유효성 검사 (객체인지 확인)
+                if (typeof savedThemes !== 'object' || savedThemes === null) {
+                    console.warn("Invalid userThemes data in localStorage, resetting to empty object.", savedThemes);
+                    savedThemes = {};
+                    localStorage.setItem('userThemes', '{}'); // 유효하지 않으면 초기화
+                }
+            } catch (e) {
+                console.error("Error parsing userThemes from localStorage:", e);
+                savedThemes = {}; // 오류 발생 시 빈 객체로 초기화
+                localStorage.setItem('userThemes', '{}'); // 손상된 데이터 제거 시도
+            }
+
+            // 저장된 테마가 없는 경우 메시지 표시
+            if (Object.keys(savedThemes).length === 0) {
+                savedThemesContainer.innerHTML = '<div class="no-themes">저장된 테마가 없습니다.</div>';
+                // --- 토글 상태 복원 (테마 없을 때도 필요) ---
+                restoreToggleState();
+                // --- 토글 상태 복원 끝 ---
+                return; // 테마 없으면 여기서 종료
+            }
+
+            // 각 테마에 대해 요소 생성
+            for (const themeName in savedThemes) {
+                // hasOwnProperty 체크 추가 (프로토타입 체인 방지)
+                if (!savedThemes.hasOwnProperty(themeName)) continue;
+
+                const themeData = savedThemes[themeName];
+
+                // 테마 데이터 유효성 검사 (객체인지 확인)
+                if (typeof themeData !== 'object' || themeData === null) {
+                    console.warn(`Skipping theme "${themeName}" due to invalid data:`, themeData);
+                    continue; // 유효하지 않은 데이터는 건너뜀
+                }
+
+                // --- 미리보기 색상 계산 (기본값 포함) ---
+                const bgColor = themeData.backgroundColor || '#ffffff';
+                const textColor = themeData.textColor || '#333333';
+                const headerColor = themeData.headerColor || '#cccccc'; 
+                const strongColor = themeData.strongColor || '#000000'; 
+                // --- 계산 끝 ---
+
+                // 테마 요소 생성
+                const themeElement = document.createElement('div');
+                themeElement.className = 'saved-theme';
+                themeElement.setAttribute('draggable', 'true');
+                themeElement.setAttribute('data-theme-name', themeName);
+
+                // 드래그 이벤트 리스너 추가
+                themeElement.addEventListener('dragstart', handleDragStart);
+                themeElement.addEventListener('dragover', handleDragOver);
+                themeElement.addEventListener('dragenter', handleDragEnter);
+                themeElement.addEventListener('dragleave', handleDragLeave);
+                themeElement.addEventListener('drop', handleDrop);
+                themeElement.addEventListener('dragend', handleDragEnd);
+
+                // 테마 이름 요소
+                const nameElement = document.createElement('div');
+                nameElement.className = 'saved-theme-name';
+                nameElement.setAttribute('data-theme', themeName);
+                nameElement.textContent = themeName;
+                nameElement.title = themeName; // 기본 툴팁
+
+                // 커스텀 툴팁
+                const tooltipSpan = document.createElement('span');
+                tooltipSpan.className = 'theme-tooltip';
+                tooltipSpan.textContent = themeName;
+                nameElement.appendChild(tooltipSpan);
+
+                // 이름 클릭 시 테마 적용
+                nameElement.onclick = function(e) {
+                    if (this.classList.contains('editing')) {
+                        e.preventDefault(); e.stopPropagation(); return false;
+                    }
+                    if (confirm(`"${themeName}" 테마를 적용하시겠습니까?`)) {
+                        applyTheme(themeName, themeData);
+                    }
+                };
+                themeElement.appendChild(nameElement);
+
+                // 색상 미리보기 요소
+                const previewElement = document.createElement('div');
+                previewElement.className = 'saved-theme-preview';
+                [bgColor, textColor, headerColor, strongColor].forEach(color => {
+                    const colorDiv = document.createElement('div');
+                    colorDiv.className = 'preview-color';
+                    // --- 추가: 유효한 색상값인지 확인 후 적용 ---
+                    colorDiv.style.backgroundColor = color && /^#[0-9a-f]{6}$/i.test(color) ? color : '#cccccc'; // 유효하지 않으면 회색 표시
+                    previewElement.appendChild(colorDiv);
+                });
+                themeElement.appendChild(previewElement);
+
+                // 액션 버튼 컨테이너
+                const actionsContainer = document.createElement('div');
+                actionsContainer.className = 'theme-actions-btn';
+
+                // 이름 변경 버튼
+                const renameButton = document.createElement('button');
+                renameButton.className = 'theme-btn theme-rename';
+                renameButton.title = '테마 이름 변경';
+                renameButton.innerHTML = '✎';
+                renameButton.onclick = (e) => {
+                    e.stopPropagation();
+                    renameTheme(themeName); // renameTheme 호출
+                };
+                actionsContainer.appendChild(renameButton);
+
+                // 삭제 버튼
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'theme-btn theme-delete';
+                deleteButton.textContent = '×';
+                deleteButton.title = '테마 삭제';
+                deleteButton.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteTheme(themeName); // deleteTheme 호출
+                };
+                actionsContainer.appendChild(deleteButton);
+
+                themeElement.appendChild(actionsContainer);
+
+                // 생성된 테마 요소를 컨테이너에 추가
+                savedThemesContainer.appendChild(themeElement);
+            }
+
+            // --- 토글 상태 복원 ---
+            restoreToggleState();
+            // --- 토글 상태 복원 끝 ---
+
+            console.log("Saved themes loaded successfully."); // 성공 로그
+        }
+
+        // --- 토글 상태 복원 함수 ---
+        function restoreToggleState() {
+            const isCollapsed = localStorage.getItem('savedThemesCollapsed') === 'true';
+            const savedThemesContent = document.getElementById('savedThemesContent');
+            const toggleIcon = document.getElementById('toggleSavedThemesIcon');
+
+            if (savedThemesContent) {
+                savedThemesContent.classList.toggle('collapsed', isCollapsed);
+                console.log(`Restored collapsed state: ${isCollapsed}`);
+            } else {
+                console.warn("Saved themes content wrapper (#savedThemesContent) not found for restoring state.");
+            }
+
+            if (toggleIcon) {
+                toggleIcon.textContent = isCollapsed ? '▼' : '▲';
+            } else {
+                console.warn("Toggle icon (#toggleSavedThemesIcon) not found for restoring state.");
+            }
+        }        
+
+        function checkSavedThemesElements() {
+            const themes = document.querySelectorAll('.saved-theme');
+            console.log(`저장된 테마 요소 수: ${themes.length}`);
+            
+            themes.forEach((theme, index) => {
+                const preview = theme.querySelector('.saved-theme-preview');
+                console.log(`테마 ${index + 1} 미리보기 요소: ${preview ? '존재함' : '없음'}`);
+                
+                if (preview) {
+                const colors = preview.querySelectorAll('.preview-color');
+                console.log(`테마 ${index + 1} 색상 요소 수: ${colors.length}`);
+                }
+            });
+            }
+
+        // 사용자 테마 목록 토글 함수
+        function toggleSavedThemes() {
+            const savedThemesContent = document.getElementById('savedThemesContent'); // 내용 래퍼 참조
+            const toggleIcon = document.getElementById('toggleSavedThemesIcon');
+            if (!savedThemesContent || !toggleIcon) {
+                console.error("Toggle elements not found!");
+                return;
+            }
+            const isCollapsed = savedThemesContent.classList.toggle('collapsed'); // 래퍼에 클래스 토글
+
+            // 아이콘 변경
+            toggleIcon.textContent = isCollapsed ? '▼' : '▲';
+
+            // 상태 저장
+            localStorage.setItem('savedThemesCollapsed', isCollapsed);
+            console.log("Toggled saved themes content. Collapsed:", isCollapsed);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 에디터 테마 적용
+            applyEditorTheme();
+
+            // --- 저장된 이미지 위치 로드 ---
+            const savedImagePositions = localStorage.getItem('imagePositions');
+            if (savedImagePositions) {
+                try {
+                    const parsedPositions = JSON.parse(savedImagePositions);
+                    // 저장된 값이 유효한지 간단히 확인
+                    if (parsedPositions && parsedPositions.wide && parsedPositions.vertical) {
+                        imagePositions = parsedPositions;
+                        console.log("Loaded image positions from localStorage:", imagePositions);
+                    } else {
+                        console.warn("Invalid image positions data in localStorage.");
+                        localStorage.removeItem('imagePositions'); // 유효하지 않으면 제거
+                    }
+                } catch (e) {
+                    console.error("Error parsing saved image positions:", e);
+                    localStorage.removeItem('imagePositions'); // 손상된 데이터 제거
+                }
+            }
+
+            // 저장된 레이아웃 모드 로드
+            const savedLayoutMode = localStorage.getItem('editorLayoutMode') || 'wide';
+            // 저장된 와이드 모드 이미지 표시 상태 로드
+            const savedShowImageInWideMode = localStorage.getItem('showImageInWideMode');
+            // 전역 변수 showImageInWideMode 설정
+            window.showImageInWideMode = savedShowImageInWideMode === null ? true : (savedShowImageInWideMode === 'true');
+
+            // 와이드 모드 이미지 토글 체크박스 상태 설정
+            document.getElementById('wideModeImageToggle').checked = window.showImageInWideMode;
+
+            const savedFontFamily = localStorage.getItem('globalFontFamily');
+            const fontSelect = document.getElementById('fontFamily');
+
+            if (savedFontFamily) {
+                globalFontFamily = savedFontFamily;
+                
+                // 폰트 선택기 UI 업데이트 및 스타일 적용
+                if (fontSelect) {
+                    fontSelect.value = savedFontFamily;
+                    // --- 페이지 로드 시 select 요소에 폰트 적용 ---
+                    fontSelect.style.fontFamily = savedFontFamily;
+                    // --- 적용 끝 ---
+                }
+            } else {
+                // 저장된 폰트가 없을 경우, 기본 폰트를 select 요소에 적용
+                if (fontSelect) {
+                    fontSelect.style.fontFamily = fontSelect.value; // 기본 선택된 옵션의 폰트 적용
+                }
+            }
+
+            // 폰트 선택 옵션에 스타일 적용 함수 호출
+            applyFontStylesToOptions();
+
+            // 글꼴 크기와 줄간격 설정 불러오기
+            const savedFontSize = localStorage.getItem('globalFontSize');
+            if (savedFontSize) {
+                globalFontSize = savedFontSize;
+                const sizeValue = parseInt(savedFontSize);
+                if (!isNaN(sizeValue)) {
+                    document.getElementById('fontSizeSlider').value = sizeValue;
+                    document.getElementById('fontSizeInput').value = sizeValue;
+                }
+            }
+            
+            const savedLineHeight = localStorage.getItem('globalLineHeight');
+            if (savedLineHeight) {
+                globalLineHeight = savedLineHeight;
+                const heightValue = parseFloat(savedLineHeight);
+                if (!isNaN(heightValue)) {
+                    document.getElementById('lineHeightSlider').value = heightValue;
+                    document.getElementById('lineHeightInput').value = heightValue;
+                }
+            }
+
+            // 저장된 커스텀 프리셋 로드
+            const savedCustomPreset = localStorage.getItem('customPreset');
+            if (savedCustomPreset) {
+                try {
+                    presets.custom = JSON.parse(savedCustomPreset);
+                } catch (e) {
+                    console.error("Error parsing saved custom preset:", e);
+                    localStorage.removeItem('customPreset'); // 손상된 데이터 제거
+                }
+            }
+
+            // 이전에 선택한 프리셋 가져오기
+            const lastSelectedPreset = localStorage.getItem('currentPreset') || 'original';
+
+            // --- 마지막 프리셋 상태 로드 ---
+            let initialStateToApply;
+            // (선택 사항) 로컬 스토리지에서 presetStates 로드
+            // const savedPresetStates = localStorage.getItem('presetStates');
+            // if (savedPresetStates) { presetStates = JSON.parse(savedPresetStates); }
+
+            if (presetStates[lastSelectedPreset]) {
+                initialStateToApply = presetStates[lastSelectedPreset];
+                console.log(`Applying saved state for initial preset "${lastSelectedPreset}".`);
+            } else {
+                initialStateToApply = presets[lastSelectedPreset];
+                presetStates[lastSelectedPreset] = { ...initialStateToApply }; // 상태 저장
+                console.log(`Applying default state for initial preset "${lastSelectedPreset}".`);
+            }
+
+            // 초기 상태를 colorData에 로드
+            Object.keys(initialStateToApply).forEach(property => {
+                if (colorData.hasOwnProperty(property)) {
+                    colorData[property] = initialStateToApply[property];
+                }
+                
+            // 마지막으로 색상 적용
+            console.log("Applying initial colors");
+            applyColors();
+            
+            console.log("=== Initialization complete ===");
+        });
+
+            // UI 컨트롤 업데이트 (applyPreset 내부 로직과 동일)
+            Object.keys(colorData).forEach(property => {
+                const valueToSet = colorData[property];
+                const element = document.getElementById(property);
+                const textElement = document.getElementById(property + 'Text');
+                // ... (UI 업데이트 로직 복사) ...
+                if (typeof valueToSet === 'boolean') {
+                    if (element && element.type === 'checkbox') element.checked = valueToSet;
+                } else if (typeof valueToSet === 'number') {
+                    if (element && (element.type === 'range' || element.type === 'text' || element.type === 'number')) element.value = valueToSet;
+                    const inputElement = document.getElementById(property + 'Input');
+                    if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number')) inputElement.value = valueToSet;
+                } else { // string (color) or null
+                    if (element && element.type === 'color') element.value = valueToSet && /^#[0-9a-f]{6}$/i.test(valueToSet) ? valueToSet : '#000000';
+                    if (textElement && textElement.type === 'text') textElement.value = valueToSet || '';
+                }
+            });
+            // UI 상태 업데이트 (토글 등)
+            const useQuote2Bg = colorData.useQuote2Bg;
+            const useQuote2Border = colorData.useQuote2Border;
+            document.getElementById('quote2BgToggle').checked = useQuote2Bg;
+            document.getElementById('quote2BorderToggle').checked = useQuote2Border;
+            // ... (disabled 속성 설정) ...
+            document.getElementById('quote2BgColor').disabled = !useQuote2Bg;
+            document.getElementById('quote2BgColorText').disabled = !useQuote2Bg;
+            document.getElementById('quote2BorderColor').disabled = !useQuote2Border;
+            document.getElementById('quote2BorderColorText').disabled = !useQuote2Border;
+            const useGradient = colorData.useGradient;
+            document.getElementById('gradientToggle').checked = useGradient;
+            // ... (display 속성 설정) ...
+            document.getElementById('gradientEndContainer').style.display = useGradient ? 'flex' : 'none';
+            document.getElementById('gradientAngleContainer').style.display = useGradient ? 'block' : 'none';
+            updateBackgroundColorLabel();
+
+            // 미리보기 적용
+            applyColors();
+
+            // 활성 버튼 설정
+            const activeButton = document.querySelector(`.preset-button[onclick*="applyPreset('${lastSelectedPreset}')"], .preset-button[onclick*='applyPreset("${lastSelectedPreset}")']`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            // 레이아웃 모드 초기화 (applyPreset 이후 호출)
+            switchLayoutMode(savedLayoutMode);
+
+            // 이미지 높이 입력 필드 초기화 (data-last-valid 설정)
+            const imageHeightInput = document.getElementById('imageHeightInput');
+            if (imageHeightInput) {
+                imageHeightInput.setAttribute('data-last-valid', imageHeightInput.value || 250);
+            }
+
+            // 코드 표시 영역 초기 상태 숨기기
+            const codeDisplay = document.getElementById('cssCode');
+            const editorCodeHeader = document.querySelector('.editor-panel .code-header'); // 에디터 패널 내 코드 헤더 명시
+            if (codeDisplay) codeDisplay.style.display = 'none';
+            if (editorCodeHeader) editorCodeHeader.style.display = 'none';
+
+            // 이미지 위치 조정 (초기 로드 시)
+            setTimeout(() => {
+                 const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
+                 if (activeImage) {
+                     // 이미지가 로드되었는지 확인 후 조정
+                     if (activeImage.complete && activeImage.naturalHeight !== 0) {
+                         adjustImagePosition(activeImage);
+                     } else {
+                         // 로드 이벤트 리스너 추가 (한 번만 실행되도록)
+                         activeImage.onload = () => {
+                             adjustImagePosition(activeImage);
+                             activeImage.onload = null; // 핸들러 제거
+                         };
+                         // 로드 실패 대비
+                         activeImage.onerror = () => {
+                             console.error("Initial image load failed for", activeImage.id);
+                             activeImage.onerror = null;
+                         };
+                         // 이미 src가 설정되어 로드가 진행 중일 수 있으므로,
+                         // complete 상태를 다시 확인 (경쟁 상태 방지)
+                         if (activeImage.complete && activeImage.naturalHeight !== 0) {
+                             adjustImagePosition(activeImage);
+                             activeImage.onload = null;
+                         }
+                     }
+                 }
+            }, 150);
+
+            // 창 크기 변경 이벤트 리스너
+            window.addEventListener('resize', debounce(function() {
+                console.log("Window resized - adjusting images");
+                const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
+                if (activeImage) {
+                    adjustImagePosition(activeImage);
+                }
+            }, 250));
+                        
+            // 저장된 테마 목록 로드
+            loadSavedThemes();
+
+            // 테마 이름 입력 필드 Enter 키 이벤트
+            const themeNameInput = document.getElementById('themeName');
+            if (themeNameInput) {
+                // 기존 이벤트 리스너 제거 (중복 방지)
+                themeNameInput.removeEventListener('keydown', handleThemeNameEnter); 
+                // 새 이벤트 리스너 추가
+                themeNameInput.addEventListener('keydown', handleThemeNameEnter);
+            }
+
+            // 테마 이름 입력 필드 Enter 키 처리 함수
+            function handleThemeNameEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // 기본 동작(폼 제출 등) 방지
+                    saveCurrentTheme(); // 저장 함수 호출
+                }
+            }
+
+            // 버튼 이동 함수 정의 및 호출
+            function moveButtonsToHeader() {
+            const actionButtons = document.querySelector('.action-buttons');
+            if (actionButtons) actionButtons.style.display = 'none';
+
+            const versionInfo = document.querySelector('.version-info');
+            const existingButtonContainer = versionInfo.querySelector('.preview-action-buttons');
+            
+            // 버튼 컨테이너가 이미 있으면 재사용, 없으면 새로 생성
+            const buttonContainer = existingButtonContainer || document.createElement('div');
+            if (!existingButtonContainer) {
+                buttonContainer.className = 'preview-action-buttons';
+                versionInfo.appendChild(buttonContainer);
+            }
+
+            // 기존 버튼 제거
+            buttonContainer.innerHTML = '';
+
+            const generateBtn = document.createElement('button');
+            generateBtn.textContent = 'CSS 코드 생성';
+            generateBtn.onclick = generateCSSAndShowButton;
+
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = '초기화';
+            resetBtn.onclick = resetColors;
+
+            buttonContainer.appendChild(generateBtn);
+            buttonContainer.appendChild(resetBtn);
+        }
+
+            moveButtonsToHeader();
+
+            // 프리셋 적용 및 UI 초기화 후, 마지막으로 폰트 적용
+            setTimeout(() => {
+                applyFontStyles();
+            }, 100);          
+        });
+    </script>
+</body>
+</html>
