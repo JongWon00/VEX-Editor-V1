@@ -2276,31 +2276,139 @@
         localStorage.setItem('currentPreset', presetName);
     }
 
-        function switchVersion(version) {
+    function switchVersion(version) {
         currentVersion = version;
         const isU = (version === "U");
 
+        // 1. 기존 코드 유지: 적절한 div 표시/숨김 처리
         document.querySelector(".GH_VEX_Div_U").style.display = isU ? "block" : "none";
         document.querySelector(".GH_VEX_Div_C").style.display = isU ? "none" : "block";
-        
-        // 버전 버튼 활성화 상태 업데이트
+
+        // 2. 버튼 활성화 상태 업데이트 (기존 코드 유지)
         document.getElementById("versionU").classList.toggle("active", isU);
         document.getElementById("versionC").classList.toggle("active", !isU);
 
-        // 이전 currentVersionLabel을 사용하지 않음
-        // document.getElementById("currentVersionLabel").textContent = isU ? "User (U) 버전" : "Char (C) 버전";
+        // 3. 현재 레이아웃 모드에 따른 특별한 처리
+        if (currentLayoutMode === "vertical") {
+            // 버티컬 모드일 때, 현재 활성화된 버전의 구조 확인 및 필요시 구조 조정
+            ensureCorrectVerticalStructure(version);
+        }
 
-        applyColors(); // 색상 재적용
-        // 버전 전환 시 이미지 위치가 이상할 수 있으므로 재조정
-        adjustImagePosition(isU ? previewImageU : previewImageC);
+        // 4. 색상 재적용
+        applyColors();
+
+        // 5. 이미지 위치 재조정
+        const activeImage = isU ? previewImageU : previewImageC;
+        if (activeImage) { // 활성 이미지가 있는지 확인
+            adjustImagePosition(activeImage);
+        }
     }
+
+    // text-content 래퍼를 생성하고 내용물을 감싸는 헬퍼 함수
+    function wrapContentInTextContent(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        const previewContent = container.querySelector(".preview-content");
+        
+        if (!previewContent) {
+            console.error(`Preview content not found in ${containerSelector}`);
+            return;
+        }
+        
+        // 이미지 컨테이너는 그대로 두고 나머지 모든 요소를 text-content에 넣음
+        const imageContainer = previewContent.querySelector(".image-container");
+        const textContent = document.createElement("div");
+        textContent.className = "text-content";
+        
+        // 임시로 모든 자식 요소 복사
+        const childNodes = Array.from(previewContent.childNodes);
+        
+        // image-container를 제외한 모든 요소를 text-content로 이동
+        childNodes.forEach(node => {
+            // 이미지 컨테이너가 아니면 text-content로 이동
+            if (node !== imageContainer) {
+                textContent.appendChild(node);
+            }
+        });
+        
+        // text-content를 preview-content에 추가 (이미지 컨테이너 뒤에)
+        if (imageContainer) {
+            previewContent.insertBefore(textContent, imageContainer.nextSibling);
+        } else {
+            previewContent.appendChild(textContent);
+        }
+        
+        console.log(`Created text-content wrapper in ${containerSelector}`);
+    }
+
+        // 버티컬 모드에서 올바른 구조를 보장하는 함수 (수정)
+        function ensureCorrectVerticalStructure(version) {
+            const containerSelector = `.GH_VEX_Div_${version}`;
+            const container = document.querySelector(containerSelector);
+            if (!container) {
+                console.error(`[ensureCorrectVerticalStructure] Container not found: ${containerSelector}`);
+                return;
+            }
+            console.log(`[ensureCorrectVerticalStructure] Checking structure for ${containerSelector}`);
+
+            const previewContent = container.querySelector(".preview-content");
+            if (!previewContent) {
+                console.error(`[ensureCorrectVerticalStructure] Preview content not found in ${containerSelector}`);
+                return;
+            }
+
+            const imageContainer = previewContent.querySelector(".image-container");
+            const existingTextContent = previewContent.querySelector(".text-content");
+
+            // .text-content 요소가 이미 있으면 구조가 올바르다고 가정하고 종료
+            if (existingTextContent) {
+                console.log(`[ensureCorrectVerticalStructure] .text-content already exists in ${containerSelector}. Structure assumed correct.`);
+                return;
+            }
+
+            // .text-content 요소가 없으면 생성 및 요소 이동
+            console.log(`[ensureCorrectVerticalStructure] .text-content missing in ${containerSelector}. Creating and moving elements.`);
+            const newTextContent = document.createElement("div");
+            newTextContent.className = "text-content";
+
+            // 이미지 컨테이너를 제외한 모든 직접 자식 요소를 임시 배열에 저장
+            const elementsToMove = [];
+            let currentNode = previewContent.firstChild;
+            while (currentNode) {
+                // 이미지 컨테이너가 아니고, 빈 텍스트 노드가 아니면 이동 목록에 추가
+                if (currentNode !== imageContainer && !(currentNode instanceof Text && currentNode.textContent.trim() === '')) {
+                    elementsToMove.push(currentNode);
+                }
+                currentNode = currentNode.nextSibling;
+            }
+
+            // 식별된 요소들을 새 text-content로 이동 (DOM에서 직접 이동)
+            elementsToMove.forEach(node => {
+                console.log(`[ensureCorrectVerticalStructure] Moving node:`, node.nodeName, node.className || node.textContent.substring(0, 10));
+                newTextContent.appendChild(node); // 직접 이동 (복제 아님)
+            });
+
+            // 새 text-content를 preview-content에 추가 (이미지 컨테이너 뒤에)
+            if (imageContainer) {
+                // 이미지 컨테이너가 마지막 요소가 아닐 경우 그 다음에 삽입
+                if (imageContainer.nextSibling) {
+                    previewContent.insertBefore(newTextContent, imageContainer.nextSibling);
+                } else {
+                    previewContent.appendChild(newTextContent);
+                }
+                console.log(`[ensureCorrectVerticalStructure] Appended .text-content after image container in ${containerSelector}`);
+            } else {
+                // 이미지 컨테이너가 없으면 그냥 추가
+                previewContent.appendChild(newTextContent);
+                console.log(`[ensureCorrectVerticalStructure] Appended .text-content (no image container) in ${containerSelector}`);
+            }
+        }
 
         function switchLayoutMode(mode) {
             console.log(`Switching layout mode from ${currentLayoutMode} to ${mode}`);
 
             // 현재 모드를 먼저 업데이트
             currentLayoutMode = mode;
-            
+
             const isWide = (mode === "wide");
             const isVertical = (mode === "vertical");
 
@@ -2323,21 +2431,25 @@
                 if (imageContainerC) imageContainerC.style.removeProperty('height');
                 if (imageContainerU) imageContainerU.style.removeProperty('min-height');
                 if (imageContainerC) imageContainerC.style.removeProperty('min-height');
+
+                // 버티컬 모드로 전환 시 두 버전 모두에 대해 구조 확인
+                ensureCorrectVerticalStructure('U'); // User 버전 구조 확인
+                ensureCorrectVerticalStructure('C'); // Char 버전 구조 확인
             }
 
-            // 이미지 뷰 및 컨트롤 상태 업데이트 (currentLayoutMode가 업데이트된 후 호출됨)
+            // 이미지 뷰 및 컨트롤 상태 업데이트
             updateImageViewAndControls();
 
             localStorage.setItem('editorLayoutMode', mode); // 변경 시 저장
             console.log(`Layout mode switched to: ${mode}`);
         }
 
-        // 와이드 모드 이미지 토글 처리
-        function toggleWideModeImage() {
-            showImageInWideMode = document.getElementById('wideModeImageToggle').checked;
-            localStorage.setItem('showImageInWideMode', showImageInWideMode); // 상태 저장
-            updateImageViewAndControls(); // 뷰 및 컨트롤 상태 업데이트
-        }
+            // 와이드 모드 이미지 토글 처리
+            function toggleWideModeImage() {
+                showImageInWideMode = document.getElementById('wideModeImageToggle').checked;
+                localStorage.setItem('showImageInWideMode', showImageInWideMode); // 상태 저장
+                updateImageViewAndControls(); // 뷰 및 컨트롤 상태 업데이트
+            }
 
         // 이미지 뷰 및 관련 컨트롤 상태 업데이트 함수
         function updateImageViewAndControls() {
@@ -4115,6 +4227,29 @@
 
             console.log("Saved themes loaded successfully."); // 성공 로그
         }
+
+        // 모든 테마 삭제 함수
+        function deleteAllThemes() {
+            // 저장된 테마가 없으면 알림
+            const savedThemes = JSON.parse(localStorage.getItem('userThemes') || '{}');
+            if (Object.keys(savedThemes).length === 0) {
+                alert('삭제할 저장된 테마가 없습니다.');
+                return;
+            }
+
+            // 삭제 여부 확인
+            if (!confirm('모든 저장된 테마를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.')) {
+                return;
+            }
+
+            // localStorage에서 userThemes 제거
+            localStorage.setItem('userThemes', '{}');
+            
+            // UI 갱신
+            loadSavedThemes();
+            
+            alert('모든 테마가 삭제되었습니다.');
+        }        
 
         // --- 토글 상태 복원 함수 ---
         function restoreToggleState() {
