@@ -1181,21 +1181,15 @@
         /* 버전 정보 영역 스타일 강화 */
 
         .version-selector {
-            display: flex;
-            flex-direction: row; /* 가로 방향으로 정렬되도록 명시적 설정 */
-            gap: 10px;
-            flex-shrink: 0; 
-            margin-right: 10px; /* 오른쪽 버튼과의 간격 */
-            align-items: center; /* 수직 중앙 정렬 */
+            justify-content: center;
+            width: 100%;
+            margin-right: 0;
         }
 
         .version-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 5px 0;
-            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
         }
 
         /* 섹션 헤더 스타일 */
@@ -1607,7 +1601,82 @@
             padding: 0 12px;
             min-width: 30px;
         }
+
+        /* 버전 정보 영역 모바일 최적화 */
+        .version-info {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            padding: 8px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
+        
+        .version-selector {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-right: 0;
+            gap: 8px;
+        }
+        
+        .version-info .version-btn {
+            flex: 1;
+            padding: 10px 5px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: none;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+        
+        .version-info .version-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            transform: none;
+            box-shadow: 0 2px 4px rgba(var(--accent-color-rgb), 0.3);
+        }
+        
+        /* CSS 생성/초기화 버튼 개선 */
+        .preview-action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            gap: 8px;
+            margin: 0;
+        }
+        
+        .preview-action-buttons button {
+            padding: 12px 5px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: -0.2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .preview-action-buttons button:first-child {
+            background-color: var(--accent-color);
+        }
+        
+        .preview-action-buttons button:last-child {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .preview-action-buttons button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+    }
 
         /* 모바일에서 코드 표시 스타일 */
         @media (max-width: 576px) {
@@ -1790,7 +1859,7 @@
                 position: absolute;
                 left: 0;
                 right: 0;
-                height: 10px;
+                height: 20px;
                 background-color: var(--accent-color);
                 cursor: ns-resize;
                 z-index: 10;
@@ -1799,19 +1868,27 @@
             }
             
             .split-handle::after {
-                content: '═══';
+                content: '══════'; 
                 display: block;
                 text-align: center;
                 color: white;
-                line-height: 10px;
-                font-size: 8px;
-                letter-spacing: 2px;
+                line-height: 20px;  /* 높이에 맞게 조정 */
+                font-size: 10px;    /* 폰트 크기 증가 */
+                letter-spacing: 3px;  /* 글자 간격 증가 */
             }
             
+            /* 핸들 높이 변경에 따른 패널 위치 조정 */
+            body.split-view .editor-panel {
+                top: calc(40vh + 20px); /* 핸들 높이 고려 - 수정됨 */
+                bottom: 0;
+                height: auto;
+                z-index: 4;
+            }
+
             body.resizing * {
                 user-select: none;
             }
-            }        
+        }        
 
     </style>
 </head>
@@ -4776,9 +4853,8 @@
             // --- 핸들 생성 끝 ---
 
             // --- 초기 높이 및 위치 계산 (핸들 생성 후) ---
-            const initialPreviewHeight = window.innerHeight * 0.4; // 예: 40%
-            const handleHeight = 10; // CSS와 일치
-            // --- 계산 끝 ---
+            const initialPreviewHeight = window.innerHeight * 0.4;
+            const handleHeight = 20;
 
             // --- 초기 위치/높이 설정 (계산된 값 사용) ---
             if (previewPanel) {
@@ -5111,6 +5187,7 @@
                 // setupMobileTabs(); // 여기서 탭 설정 불필요
             }
             // --- 수정 끝 ---
+            moveButtonsToHeader();
 
             // 이미지 위치 조정 등은 유지
             const activeImage = currentVersion === 'U' ? previewImageU : previewImageC;
@@ -5428,7 +5505,7 @@
             const versionInfo = document.querySelector('.version-info');
             const existingButtonContainer = versionInfo.querySelector('.preview-action-buttons');
             
-            // 버튼 컨테이너가 이미 있으면 재사용, 없으면 새로 생성
+            // 기존 컨테이너 있으면 재사용, 없으면 새로 생성
             const buttonContainer = existingButtonContainer || document.createElement('div');
             if (!existingButtonContainer) {
                 buttonContainer.className = 'preview-action-buttons';
@@ -5448,6 +5525,49 @@
 
             buttonContainer.appendChild(generateBtn);
             buttonContainer.appendChild(resetBtn);
+            
+            // 모바일 환경일 때 버전 정보 영역 개선
+            if (window.innerWidth <= 576) {
+                versionInfo.style.flexDirection = 'column';
+                versionInfo.style.alignItems = 'stretch';
+                buttonContainer.style.marginLeft = '0';
+                
+                // 버전 선택기 스타일링 - 간격 적용
+                const versionSelector = versionInfo.querySelector('.version-selector');
+                if (versionSelector) {
+                    versionSelector.style.width = '100%';
+                    versionSelector.style.marginRight = '0';
+                    
+                    // 버전 버튼 디자인 터치 영역 개선
+                    const versionBtns = versionSelector.querySelectorAll('.version-btn');
+                    versionBtns.forEach(btn => {
+                        btn.style.minHeight = '44px';
+                        btn.style.display = 'flex';
+                        btn.style.alignItems = 'center';
+                        btn.style.justifyContent = 'center';
+                    });
+                }
+                
+                // 액션 버튼 개선
+                const actionBtns = buttonContainer.querySelectorAll('button');
+                actionBtns.forEach(btn => {
+                    btn.style.minHeight = '44px';
+                    btn.style.display = 'flex';
+                    btn.style.alignItems = 'center';
+                    btn.style.justifyContent = 'center';
+                });
+            } else {
+                // 데스크탑 환경일 때는 기본 가로 배치 유지
+                versionInfo.style.removeProperty('flex-direction');
+                versionInfo.style.removeProperty('align-items');
+                buttonContainer.style.removeProperty('margin-left');
+                
+                const versionSelector = versionInfo.querySelector('.version-selector');
+                if (versionSelector) {
+                    versionSelector.style.removeProperty('width');
+                    versionSelector.style.removeProperty('margin-right');
+                }
+            }
         }
 
             moveButtonsToHeader();
