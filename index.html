@@ -4984,14 +4984,45 @@
             const deltaY = currentY - startY;
             const deltaX = currentX - startX;
             
-            // 레이아웃 모드에 따라 적절한 이동 적용
+            // 컨테이너 및 이미지 치수 얻기
+            const container = draggedImage.parentElement;
+            if (!container) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+            
+            // 이미지가 스타일링된 치수 계산 (현재 크기)
+            const imgWidth = draggedImage.offsetWidth;
+            const imgHeight = draggedImage.offsetHeight;
+            
+            // 새 위치 계산 (초기값 + 드래그 델타)
+            let newTop = initialTop + deltaY;
+            let newLeft = initialLeft + deltaX;
+            
+            // 위치 제한 계산
+            // 이미지가 컨테이너보다 크면 이미지를 완전히 컨테이너 밖으로 빼지 않도록 제한
+            // 이미지가 컨테이너보다 작으면 항상 컨테이너 내부에 유지
+            
+            // Y축 제한
+            const minTop = Math.min(0, containerHeight - imgHeight); // 이미지가 더 크면 음수, 작으면 0
+            const maxTop = Math.max(0, containerHeight - imgHeight); // 이미지가 더 크면 0, 작으면 양수
+            newTop = Math.max(minTop, Math.min(maxTop, newTop));
+            
+            // X축 제한 (레이아웃 모드에 따라 적용)
             if (currentLayoutMode === 'vertical') {
-                // 버티컬 모드: X축 Y축 모두 이동 가능
-                draggedImage.style.top = `${initialTop + deltaY}px`;
-                draggedImage.style.left = `${initialLeft + deltaX}px`;
+                const minLeft = Math.min(0, containerWidth - imgWidth); // 이미지가 더 크면 음수, 작으면 0
+                const maxLeft = Math.max(0, containerWidth - imgWidth); // 이미지가 더 크면 0, 작으면 양수
+                newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
+                
+                // 제한된 위치 적용
+                draggedImage.style.top = `${newTop}px`;
+                draggedImage.style.left = `${newLeft}px`;
             } else {
-                // 와이드 모드: Y축만 이동 가능 (X축 중앙 고정)
-                draggedImage.style.top = `${initialTop + deltaY}px`;
+                // 와이드 모드: Y축만 이동, X축은 중앙 고정
+                draggedImage.style.top = `${newTop}px`;
+                // X축 중앙 정렬 유지
+                draggedImage.style.left = `${(containerWidth - imgWidth) / 2}px`;
             }
             
             // 다른 이미지도 동기화
