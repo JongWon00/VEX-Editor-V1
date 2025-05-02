@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24SsurroundAir/Cafe24SsurroundAir.css" type="text/css"/>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[뷰어 익스텐션] 테마 에디터 V1.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[뷰어 익스텐션] 테마 에디터 V1</title>
     <style>
         @font-face {font-family: '리디바탕';src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');font-weight: normal;font-style: normal;}
         @font-face {font-family: '레페리포인트'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-BlackA.woff') format('woff'); font-weight: normal; font-style: normal;}
@@ -534,24 +534,6 @@
             background: var(--text-secondary);
         }
 
-        /* 모바일 반응형 지원 */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                overflow: auto;
-            }
-            
-            .editor-panel {
-                width: 100%;
-                height: auto;
-                max-height: 50vh;
-            }
-            
-            .preview-panel {
-                height: auto;
-            }
-        }
-
         /* 액션 버튼 영역 */
         .action-buttons {
             display: flex;
@@ -873,24 +855,6 @@
             border-left: none;
             padding-left: 0;
             margin-left: 0;
-        }
-
-        /* 모바일 반응형 지원 */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                overflow: auto;
-            }
-            
-            .editor-panel {
-                width: 100%;
-                height: auto;
-                max-height: 50vh;
-            }
-            
-            .preview-panel {
-                height: auto;
-            }
         }
 
         /* 와이드 모드에서 이미지 숨김 시 스타일 추가 */
@@ -1507,12 +1471,205 @@
             min-width: 20px;
         }
 
+        /* 모바일 지원 */
+        @media (max-width: 992px) {
+        body {
+            flex-direction: column;
+            overflow: auto;
+        }
+        
+        .editor-panel {
+            width: 100%;
+            max-height: none;
+            height: auto;
+            padding: 15px;
+            overflow-y: visible;
+        }
+        
+        .preview-panel {
+            height: auto;
+            padding: 15px;
+        }
+        }
+
+        @media (max-width: 576px) {
+        .color-picker {
+            flex-wrap: wrap;
+        }
+        
+        .color-picker label {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .preset-buttons {
+            grid-template-columns: repeat(2, 1fr); /* 더 적은 열로 변경 */
+        }
+    }
+
+        /* 탭 네비게이션 스타일 */
+        .mobile-tabs {
+        display: none;
+        width: 100%;
+        background-color: var(--bg-primary);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-tabs .tab {
+        padding: 12px;
+        text-align: center;
+        flex: 1;
+        cursor: pointer;
+        }
+
+        .mobile-tabs .tab.active {
+        background-color: var(--accent-color);
+        color: white;
+        }
+
+        /* 모바일 화면에서 탭 표시 */
+        @media (max-width: 992px) {
+        .mobile-tabs {
+            display: flex;
+        }
+        
+        .editor-panel, .preview-panel {
+            /* 초기 상태는 에디터 표시 */
+            display: none;
+        }
+        
+        .editor-panel.active {
+            display: block;
+        }
+    }
+
+        /* 버튼, 입력 필드, 컨트롤 크기 조정 */
+        @media (max-width: 576px) {
+        button, 
+        input[type="text"],
+        input[type="color"],
+        .theme-name-input,
+        .version-btn,
+        .preset-button {
+            min-height: 44px; /* 터치 타겟 크기 확보 */
+        }
+        
+        button {
+            padding: 12px 15px; /* 버튼 내부 여백 증가 */
+        }
+        
+        /* 색상 피커의 입력 필드 크기 조정 */
+        .color-picker input[type="color"] {
+            width: 50px;
+            height: 40px;
+        }
+        
+        .color-picker input[type="text"] {
+            width: 100%;
+            margin: 5px 0 0;
+        }
+        
+        /* 슬라이더 높이 증가 */
+        input[type="range"] {
+            height: 10px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* 저장된 테마 항목 높이 증가 */
+        .saved-theme {
+            min-height: 48px;
+        }
+        
+        .saved-theme-name {
+            padding: 15px;
+        }
+        
+        .theme-btn {
+            padding: 0 12px;
+            min-width: 30px;
+        }
+        }
+
+        /* 모바일에서 코드 표시 스타일 */
+        @media (max-width: 576px) {
+        .inline-code-container {
+            position: fixed !important; /* 뷰포트 기준 위치 */
+            top: 50% !important;
+            left: 5% !important;
+            right: 5% !important;
+            width: 90% !important;
+            transform: translateY(-50%);
+            max-height: 80vh;
+            z-index: 2000;
+        }
+        
+        .inline-code-container .code-content {
+            max-height: 60vh;
+        }
+        
+        /* 코드 표시 시 오버레이 추가 */
+        .code-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+        }
+        }
+
+        /* 아코디언 섹션 스타일 */
+        .accordion-header {
+        cursor: pointer;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
+        .accordion-header h3 {
+        margin: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+        }
+
+        .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        }
+
+        .accordion-content.open {
+        max-height: 2000px; /* 충분히 큰 값 */
+        }
+
+        .accordion-icon {
+        transition: transform 0.3s;
+        }
+
+        .accordion-header.open .accordion-icon {
+        transform: rotate(180deg);
+        }
+
     </style>
 </head>
 <body>
+    <!-- 모바일 탭 네비게이션 -->
+    <div class="mobile-tabs">
+        <div class="tab active" data-tab="editor">에디터</div>
+        <div class="tab" data-tab="preview">미리보기</div>
+    </div>
     <div class="editor-panel">
         <div class="editor-header">
-            <h2 class="editor-title">테마 에디터 V1.1</h2>
+            <h2 class="editor-title">테마 에디터 V1</h2>
             <div class="theme-toggle" onclick="toggleEditorTheme()">
                 <span id="themeToggleIcon">🌙</span>
                 <span id="themeToggleText">다크 모드</span>
@@ -3314,6 +3471,17 @@
                 flex-direction: column;
             `;
             
+            // 모바일 환경에서 오버레이 추가
+            if (window.innerWidth <= 576) {
+                const overlay = document.createElement('div');
+                overlay.className = 'code-overlay';
+                overlay.onclick = function() {
+                    inlineCodeContainer.remove();
+                    overlay.remove();
+                };
+                document.body.appendChild(overlay);
+            }
+
             // 코드 헤더 생성
             const codeHeader = document.createElement('div');
             codeHeader.className = 'code-header';
@@ -4304,6 +4472,186 @@
             console.log("Toggled saved themes content. Collapsed:", isCollapsed);
         }
 
+        // 탭 전환 기능 
+        function setupMobileTabs() {
+            const tabs = document.querySelectorAll('.mobile-tabs .tab');
+            const editorPanel = document.querySelector('.editor-panel');
+            const previewPanel = document.querySelector('.preview-panel');
+            
+            if (!tabs.length || !editorPanel || !previewPanel) return;
+            
+            // 초기 상태 설정
+            editorPanel.classList.add('active');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // 활성 탭 스타일 변경
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // 패널 표시/숨김
+                if (targetTab === 'editor') {
+                    editorPanel.classList.add('active');
+                    editorPanel.style.display = 'flex';
+                    previewPanel.style.display = 'none';
+                } else {
+                    editorPanel.classList.remove('active');
+                    editorPanel.style.display = 'none';
+                    previewPanel.style.display = 'block';
+                    
+                    // 미리보기로 전환 시 이미지 위치 조정
+                    setTimeout(() => {
+                    const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
+                    if (activeImage) adjustImagePosition(activeImage);
+                    }, 50);
+                }
+                });
+            });
+        }
+
+            // 이미지 드래그 로직 개선
+            function startDrag(e) {
+            draggedImage = e.target;
+            if (!draggedImage || draggedImage.tagName !== 'IMG') return;
+
+            isDragging = true;
+            draggedImage.classList.add('dragging');
+            
+            // 터치 이벤트와 마우스 이벤트 모두 처리
+            startY = e.pageY || (e.touches && e.touches[0].pageY) || 0;
+            startX = e.pageX || (e.touches && e.touches[0].pageX) || 0;
+            
+            initialTop = parseFloat(draggedImage.style.top) || 0;
+            initialLeft = parseFloat(draggedImage.style.left) || 0;
+            
+            // 이벤트 리스너 추가
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+            
+            // 터치 이벤트일 경우 기본 동작 방지 (스크롤 방지)
+            if (e.type === 'touchstart') {
+                e.preventDefault();
+            }
+            }
+
+            function onDrag(e) {
+            if (!isDragging || !draggedImage) return;
+            
+            // 이벤트 종류에 따라 좌표 추출
+            const currentY = e.pageY || (e.touches && e.touches[0].pageY) || 0;
+            const currentX = e.pageX || (e.touches && e.touches[0].pageX) || 0;
+            
+            // 나머지 드래그 로직 유지...
+            
+            // 터치 이벤트일 경우 기본 동작 방지 (스크롤 방지)
+            if (e.type === 'touchmove') {
+                e.preventDefault();
+            }
+        }
+
+        // 아코디언 메뉴 구현
+        function setupAccordions() {
+        // 모바일 뷰에서만 아코디언 적용
+        if (window.innerWidth > 992) return;
+        
+        // 각 섹션을 아코디언으로 변환
+        const sections = document.querySelectorAll('.editor-panel h3');
+        
+        sections.forEach(section => {
+            // 현재 제목 이후부터 다음 제목 전까지를 콘텐츠로 결정
+            const content = [];
+            let nextElement = section.nextElementSibling;
+            
+            while (nextElement && nextElement.tagName !== 'H3') {
+            content.push(nextElement);
+            nextElement = nextElement.nextElementSibling;
+            }
+            
+            // 제목 요소를 아코디언 헤더로 변환
+            const header = document.createElement('div');
+            header.className = 'accordion-header';
+            section.parentNode.insertBefore(header, section);
+            header.appendChild(section);
+            
+            // 아이콘 추가
+            const icon = document.createElement('span');
+            icon.className = 'accordion-icon';
+            icon.textContent = '▼';
+            header.appendChild(icon);
+            
+            // 콘텐츠 래퍼 생성
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'accordion-content';
+            header.after(contentWrapper);
+            
+            // 콘텐츠 이동
+            content.forEach(el => {
+            contentWrapper.appendChild(el);
+            });
+            
+            // 첫 번째 섹션은 기본적으로 열려있게 설정
+            if (section === sections[0]) {
+            contentWrapper.classList.add('open');
+            header.classList.add('open');
+            }
+            
+            // 클릭 이벤트 추가
+            header.addEventListener('click', () => {
+            contentWrapper.classList.toggle('open');
+            header.classList.toggle('open');
+            });
+        });
+        }
+
+        // 이미지 크기 최적화 함수
+        function optimizeImagesForMobile() {
+        // 모바일에서는 작은 이미지 사용
+        if (window.innerWidth <= 576) {
+            const defaultImageUrl = 'https://picsum.photos/450/200'; // 더 작은 크기
+            
+            if (previewImageU.src.includes('picsum.photos/650/250')) {
+            previewImageU.src = defaultImageUrl;
+            }
+            
+            if (previewImageC.src.includes('picsum.photos/650/250')) {
+            previewImageC.src = defaultImageUrl;
+            }
+        }
+        }
+
+        // 컬러 피커 최적화 - 진입 지연 설정
+        function optimizeColorPickers() {
+        const colorPickers = document.querySelectorAll('.color-picker input[type="color"]');
+        
+        colorPickers.forEach(picker => {
+            // 터치 디바이스에서는 클릭 이벤트만 감지
+            if ('ontouchstart' in window) {
+            const originalInput = picker.oninput;
+            
+            // oninput 핸들러 제거 및 클릭 핸들러로 대체
+            picker.oninput = null;
+            picker.addEventListener('change', function() {
+                if (originalInput) {
+                originalInput.call(this);
+                }
+            });
+            }
+        });
+        }
+
+        window.addEventListener('resize', debounce(function() {
+        // 기존 리사이즈 핸들러...
+        
+        // 모바일 뷰로 전환될 때 아코디언 설정
+        if (window.innerWidth <= 992) {
+            setupAccordions();
+        }
+        }, 250));
+
         document.addEventListener('DOMContentLoaded', function() {
             
             // 에디터 테마 적용
@@ -4575,6 +4923,10 @@
             setTimeout(() => {
                 applyFontStyles();
             }, 100);          
+            setupMobileTabs();
+            setupAccordions();
+            optimizeImagesForMobile();
+            optimizeColorPickers();
         });
     </script>
 </body>
