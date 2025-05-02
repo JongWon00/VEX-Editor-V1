@@ -1888,6 +1888,54 @@
             body.resizing * {
                 user-select: none;
             }
+
+            .preview-panel .image-container {
+                position: relative;
+            }
+            
+            .preview-panel .image-container::before {
+                content: '↔ 드래그하여 위치 조정';
+                position: absolute;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                z-index: 5;
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+            }
+            
+            /* 이미지에 터치 시작하면 힌트 표시 */
+            .preview-panel .image-container:active::before {
+                opacity: 1;
+            }
+            
+            /* 이미지 드래그 중에는 전체 페이지 스크롤 방지 */
+            body.image-dragging {
+                overflow: hidden;
+                touch-action: none;
+            }
+            
+            /* 드래그 중인 이미지에 시각적 피드백 */
+            .preview-panel .image-container img.dragging {
+                opacity: 0.8;
+                filter: brightness(1.2);
+            }
+            
+            /* 이미지가 드래그 가능함을 나타내는 커서 */
+            .preview-panel .image-container img {
+                cursor: move;
+                cursor: grab;
+            }
+            
+            .preview-panel .image-container img:active {
+                cursor: grabbing;
+            }            
         }        
 
     </style>
@@ -3088,88 +3136,6 @@
         // --- 이미지 드래그 로직 ---
         let isDragging = false;
         let draggedImage = null; // 현재 드래그 중인 이미지 요소
-
-        function startDrag(e) {
-            draggedImage = e.target; // 드래그 시작된 이미지
-            if (!draggedImage || draggedImage.tagName !== 'IMG') return;
-
-            isDragging = true;
-            draggedImage.classList.add('dragging');
-            
-            // 세로/가로 방향 모두 시작점 저장
-            startY = e.pageY || e.touches[0].pageY;
-            startX = e.pageX || e.touches[0].pageX;
-
-            // 세로/가로 방향 모두 초기 위치 저장
-            initialTop = parseFloat(draggedImage.style.top) || 0;
-            initialLeft = parseFloat(draggedImage.style.left) || 0;
-
-            // 이벤트 리스너 추가...
-            document.addEventListener('mousemove', onDrag);
-            document.addEventListener('touchmove', onDrag, { passive: false });
-            document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchend', endDrag);
-
-            e.preventDefault();
-        }
-
-            // onDrag: 레이아웃 모드에 따라 드래그 방향 처리
-            function onDrag(e) {
-                if (!isDragging) return;
-
-                const currentY = e.clientY || e.touches[0].clientY;
-                const deltaY = currentY - initialY;
-
-                // 새로운 미리보기 높이 계산 (최소/최대 제한 포함)
-                const newHeight = Math.max(100, dragStartHeight + deltaY);
-                const maxHeight = window.innerHeight - 100; // 에디터 최소 100px 확보
-                const constrainedHeight = Math.min(newHeight, maxHeight); // 최종 미리보기 높이
-
-                // --- 핸들 높이 수정 ---
-                const handleHeight = 10; // CSS의 height: 10px 와 일치시킴
-
-                // 미리보기 패널 높이 설정
-                previewPanel.style.height = constrainedHeight + 'px';
-
-                // --- 에디터 패널 높이 계산 및 설정 수정 ---
-                const editorNewTop = constrainedHeight + handleHeight;
-                const editorNewHeight = window.innerHeight - editorNewTop;
-
-                editorPanel.style.top = `${editorNewTop}px`;
-                // calc() 대신 직접 계산된 픽셀 높이 사용
-                editorPanel.style.height = `${editorNewHeight}px`;
-                // --- 수정 끝 ---
-
-                // --- 분할 핸들 위치 업데이트 수정 ---
-                // clientHeight 대신 계산된 높이 사용
-                splitHandle.style.top = constrainedHeight + 'px';
-                // --- 수정 끝 ---
-
-                e.preventDefault();
-            }
-
-            function endDrag() {
-            if (!isDragging) return;
-            isDragging = false;
-            if(draggedImage) {
-                draggedImage.classList.remove('dragging');
-
-                // --- 현재 모드에 맞는 위치 저장 ---
-                const currentMode = currentLayoutMode; // 'wide' or 'vertical'
-                imagePositions[currentMode].top = parseFloat(draggedImage.style.top) || 0;
-                imagePositions[currentMode].left = parseFloat(draggedImage.style.left) || 0;
-                console.log(`Saved position for ${currentMode}:`, imagePositions[currentMode]); // 디버그 로그
-
-                // LocalStorage에도 저장 (페이지 새로고침 대비)
-                localStorage.setItem('imagePositions', JSON.stringify(imagePositions));
-            }
-            draggedImage = null;
-
-            document.removeEventListener('mousemove', onDrag);
-            document.removeEventListener('touchmove', onDrag);
-            document.removeEventListener('mouseup', endDrag);
-            document.removeEventListener('touchend', endDrag);
-        }
 
         // 이미지 위치 조정 (컨테이너 크기 변경 시 호출)
         function adjustImagePosition(imgElement) {
@@ -4959,17 +4925,32 @@
 
         } // addResizableSplitView 끝
 
-            // 이미지 드래그 로직 개선
-            function startDrag(e) {
+        // 이미지 드래그 로직 개선
+        function startDrag(e) {
+            // 이미지 요소 참조 얻기
             draggedImage = e.target;
             if (!draggedImage || draggedImage.tagName !== 'IMG') return;
 
             isDragging = true;
             draggedImage.classList.add('dragging');
             
-            // 터치 이벤트와 마우스 이벤트 모두 처리
-            startY = e.pageY || (e.touches && e.touches[0].pageY) || 0;
-            startX = e.pageX || (e.touches && e.touches[0].pageX) || 0;
+            // 드래그 중 페이지 스크롤 방지를 위한 클래스 추가
+            document.body.classList.add('image-dragging');
+            
+            // 터치 이벤트와 마우스 이벤트 구분하여 처리
+            if (e.type === 'touchstart') {
+                // 터치 이벤트인 경우
+                if (e.touches && e.touches[0]) {
+                    startY = e.touches[0].clientY;
+                    startX = e.touches[0].clientX;
+                }
+                // 터치 이벤트 기본 동작(스크롤) 방지
+                e.preventDefault();
+            } else {
+                // 마우스 이벤트인 경우
+                startY = e.clientY;
+                startX = e.clientX;
+            }
             
             initialTop = parseFloat(draggedImage.style.top) || 0;
             initialLeft = parseFloat(draggedImage.style.left) || 0;
@@ -4979,27 +4960,73 @@
             document.addEventListener('touchmove', onDrag, { passive: false });
             document.addEventListener('mouseup', endDrag);
             document.addEventListener('touchend', endDrag);
-            
-            // 터치 이벤트일 경우 기본 동작 방지 (스크롤 방지)
-            if (e.type === 'touchstart') {
-                e.preventDefault();
-            }
-            }
+        }
 
-            function onDrag(e) {
+        function onDrag(e) {
             if (!isDragging || !draggedImage) return;
             
-            // 이벤트 종류에 따라 좌표 추출
-            const currentY = e.pageY || (e.touches && e.touches[0].pageY) || 0;
-            const currentX = e.pageX || (e.touches && e.touches[0].pageX) || 0;
+            let currentY, currentX;
             
-            // 나머지 드래그 로직 유지...
-            
-            // 터치 이벤트일 경우 기본 동작 방지 (스크롤 방지)
+            // 터치 이벤트와 마우스 이벤트 구분하여 처리
             if (e.type === 'touchmove') {
+                if (e.touches && e.touches[0]) {
+                    currentY = e.touches[0].clientY;
+                    currentX = e.touches[0].clientX;
+                }
+                // 터치 이벤트에서 스크롤 방지
                 e.preventDefault();
+            } else {
+                currentY = e.clientY;
+                currentX = e.clientX;
+            }
+            
+            // 이동 거리 계산
+            const deltaY = currentY - startY;
+            const deltaX = currentX - startX;
+            
+            // 레이아웃 모드에 따라 적절한 이동 적용
+            if (currentLayoutMode === 'vertical') {
+                // 버티컬 모드: X축 Y축 모두 이동 가능
+                draggedImage.style.top = `${initialTop + deltaY}px`;
+                draggedImage.style.left = `${initialLeft + deltaX}px`;
+            } else {
+                // 와이드 모드: Y축만 이동 가능 (X축 중앙 고정)
+                draggedImage.style.top = `${initialTop + deltaY}px`;
+            }
+            
+            // 다른 이미지도 동기화
+            const otherImage = (draggedImage === previewImageU) ? previewImageC : previewImageU;
+            if (otherImage) {
+                otherImage.style.top = draggedImage.style.top;
+                otherImage.style.left = draggedImage.style.left;
             }
         }
+
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // 스크롤 방지 클래스 제거
+            document.body.classList.remove('image-dragging');
+            
+            if (draggedImage) {
+                draggedImage.classList.remove('dragging');
+                
+                // --- 현재 모드에 맞는 위치 저장 ---
+                const currentMode = currentLayoutMode; // 'wide' or 'vertical'
+                imagePositions[currentMode].top = parseFloat(draggedImage.style.top) || 0;
+                imagePositions[currentMode].left = parseFloat(draggedImage.style.left) || 0;
+                
+                // LocalStorage에도 저장
+                localStorage.setItem('imagePositions', JSON.stringify(imagePositions));
+            }
+            draggedImage = null;
+
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchend', endDrag);
+        }       
 
         // 아코디언 메뉴 구현
         function setupAccordions() {
