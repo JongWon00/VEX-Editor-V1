@@ -1748,7 +1748,7 @@
             <button onclick="saveCurrentTheme()">저장</button>
         </div>
 
-        <div class="toggle-button-container"> <!-- 새 컨테이너 -->
+        <div class="toggle-button-container">
             <button id="toggleSavedThemesBtn" class="toggle-section-btn" onclick="toggleSavedThemes()">
                 <span id="toggleSavedThemesIcon">▲</span> 저장 목록 접기/펼치기
             </button>
@@ -1969,6 +1969,7 @@
         let globalFontFamily = "'Pretendard Variable', 'Segoe UI', sans-serif";
         let globalFontSize = '16px';
         let globalLineHeight = '1.5';
+        let accordionsSetup = false;
         let imagePositions = {
         wide: { top: 0, left: 0 },
         vertical: { top: 0, left: 0 }
@@ -4456,17 +4457,20 @@
 
         // 사용자 테마 목록 토글 함수
         function toggleSavedThemes() {
-            const savedThemesContent = document.getElementById('savedThemesContent'); // 내용 래퍼 참조
+            const savedThemesContent = document.getElementById('savedThemesContent');
             const toggleIcon = document.getElementById('toggleSavedThemesIcon');
+            
             if (!savedThemesContent || !toggleIcon) {
                 console.error("Toggle elements not found!");
                 return;
             }
-            const isCollapsed = savedThemesContent.classList.toggle('collapsed'); // 래퍼에 클래스 토글
-
-            // 아이콘 변경
+            
+            // 내용 토글
+            const isCollapsed = savedThemesContent.classList.toggle('collapsed');
+            
+            // 아이콘 텍스트만 변경, 요소 자체는 건드리지 않음
             toggleIcon.textContent = isCollapsed ? '▼' : '▲';
-
+            
             // 상태 저장
             localStorage.setItem('savedThemesCollapsed', isCollapsed);
             console.log("Toggled saved themes content. Collapsed:", isCollapsed);
@@ -4555,56 +4559,137 @@
 
         // 아코디언 메뉴 구현
         function setupAccordions() {
-        // 모바일 뷰에서만 아코디언 적용
-        if (window.innerWidth > 992) return;
-        
-        // 각 섹션을 아코디언으로 변환
-        const sections = document.querySelectorAll('.editor-panel h3');
-        
-        sections.forEach(section => {
-            // 현재 제목 이후부터 다음 제목 전까지를 콘텐츠로 결정
-            const content = [];
-            let nextElement = section.nextElementSibling;
+            // 모바일 뷰가 아니면 중단 (이미 설정된 경우 플래그는 resize 핸들러에서 처리)
+            if (window.innerWidth > 992) return;
             
-            while (nextElement && nextElement.tagName !== 'H3') {
-            content.push(nextElement);
-            nextElement = nextElement.nextElementSibling;
+            // 이미 설정되었다면 중단 (중복 실행 방지)
+            if (accordionsSetup) {
+                console.log("Accordions already set up, skipping.");
+                return;
             }
             
-            // 제목 요소를 아코디언 헤더로 변환
-            const header = document.createElement('div');
-            header.className = 'accordion-header';
-            section.parentNode.insertBefore(header, section);
-            header.appendChild(section);
+            console.log("Setting up accordions..."); // 설정 시작 로그
             
-            // 아이콘 추가
-            const icon = document.createElement('span');
-            icon.className = 'accordion-icon';
-            icon.textContent = '▼';
-            header.appendChild(icon);
+            // 각 섹션을 아코디언으로 변환
+            const sections = document.querySelectorAll('.editor-panel h3');
             
-            // 콘텐츠 래퍼 생성
-            const contentWrapper = document.createElement('div');
-            contentWrapper.className = 'accordion-content';
-            header.after(contentWrapper);
-            
-            // 콘텐츠 이동
-            content.forEach(el => {
-            contentWrapper.appendChild(el);
+            sections.forEach(section => {
+                // 이미 아코디언 헤더의 자식인 경우 건너뜀 (중복 방지)
+                if (section.parentNode.classList.contains('accordion-header')) {
+                    return;
+                }
+                
+                // 현재 제목 이후부터 다음 제목 전까지를 콘텐츠로 결정
+                const content = [];
+                let nextElement = section.nextElementSibling;
+                
+                while (nextElement && nextElement.tagName !== 'H3') {
+                    content.push(nextElement);
+                    nextElement = nextElement.nextElementSibling; 
+                }
+                
+                // 제목 요소를 아코디언 헤더로 변환
+                const header = document.createElement('div');
+                header.className = 'accordion-header';
+                section.parentNode.insertBefore(header, section);
+                header.appendChild(section); // h3를 header 안으로 이동
+                
+                // --- 아이콘 중복 생성 방지 ---
+                // 기존 아이콘이 있는지 확인
+                let icon = header.querySelector('.accordion-icon');
+                if (!icon) {
+                    // 아이콘이 없으면 새로 생성
+                    icon = document.createElement('span');
+                    icon.className = 'accordion-icon';
+                    header.appendChild(icon); // 헤더에 아이콘 추가
+                    console.log("Created new accordion icon for:", section.textContent.trim());
+                }
+                // 아이콘 내용 설정 (열림/닫힘 상태 반영은 클릭 핸들러에서)
+                icon.textContent = '▼'; // 기본 닫힘 아이콘
+                // --- 아이콘 중복 생성 방지 끝 ---
+                
+                // 콘텐츠 래퍼 생성
+                const contentWrapper = document.createElement('div');
+                contentWrapper.className = 'accordion-content';
+                header.after(contentWrapper); // 헤더 다음에 콘텐츠 래퍼 추가
+                
+                // 콘텐츠 이동
+                content.forEach(el => {
+                    contentWrapper.appendChild(el);
+                });
+                
+                // 첫 번째 섹션은 기본적으로 열려있게 설정
+                if (section === sections[0]) {
+                    contentWrapper.classList.add('open');
+                    header.classList.add('open');
+                    icon.textContent = '▲'; // 열림 아이콘
+                }
+                
+                // 클릭 이벤트 추가 (기존 핸들러 제거 후 추가 - 중복 방지)
+                header.removeEventListener('click', toggleAccordionContent); // 기존 핸들러 제거
+                header.addEventListener('click', toggleAccordionContent); // 새 핸들러 추가
             });
             
-            // 첫 번째 섹션은 기본적으로 열려있게 설정
-            if (section === sections[0]) {
-            contentWrapper.classList.add('open');
-            header.classList.add('open');
+            accordionsSetup = true; // 설정 완료 플래그
+            console.log("Accordions setup complete."); // 설정 완료 로그
+        }
+
+        // 아코디언 토글 로직 분리
+        function toggleAccordionContent() {
+            const header = this; // 클릭된 헤더
+            const contentWrapper = header.nextElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+
+            if (!contentWrapper || !contentWrapper.classList.contains('accordion-content') || !icon) {
+                console.error("Accordion structure error on click.");
+                return;
             }
-            
-            // 클릭 이벤트 추가
-            header.addEventListener('click', () => {
-            contentWrapper.classList.toggle('open');
-            header.classList.toggle('open');
+
+            const isOpen = contentWrapper.classList.toggle('open');
+            header.classList.toggle('open', isOpen);
+            icon.textContent = isOpen ? '▲' : '▼';
+        }
+
+        // 아코디언 구조 제거 함수
+        function removeAccordions() {
+            if (!accordionsSetup) { // 아코디언이 설정되지 않았으면 제거할 필요 없음
+                console.log("Accordions not set up, skipping removal.");
+                return;
+            }
+            console.log("Removing accordions..."); // 제거 시작 로그
+
+            const headers = document.querySelectorAll('.accordion-header');
+            headers.forEach(header => {
+                const section = header.querySelector('h3');
+                const contentWrapper = header.nextElementSibling;
+                const icon = header.querySelector('.accordion-icon');
+
+                if (section && contentWrapper && contentWrapper.classList.contains('accordion-content')) {
+                    // 1. 콘텐츠를 원래 위치로 이동
+                    const parent = header.parentNode;
+                    const contentNodes = Array.from(contentWrapper.childNodes);
+                    contentNodes.forEach(node => {
+                        parent.insertBefore(node, contentWrapper); // 콘텐츠 래퍼 앞으로 이동
+                    });
+                    contentWrapper.remove(); // 콘텐츠 래퍼 제거
+
+                    // 2. h3를 원래 위치로 이동
+                    parent.insertBefore(section, header); // 헤더 앞으로 이동
+
+                    // 3. 아이콘 제거 (존재하는 경우)
+                    if (icon) {
+                        icon.remove();
+                    }
+
+                    // 4. 헤더 래퍼 제거
+                    header.remove();
+                } else {
+                    console.warn("Could not properly remove accordion structure for:", section ? section.textContent.trim() : 'Unknown header');
+                }
             });
-        });
+
+            accordionsSetup = false; // 설정 해제 플래그
+            console.log("Accordions removal complete."); // 제거 완료 로그
         }
 
         // 이미지 크기 최적화 함수
@@ -4644,12 +4729,25 @@
         }
 
         window.addEventListener('resize', debounce(function() {
-        // 기존 리사이즈 핸들러...
-        
-        // 모바일 뷰로 전환될 때 아코디언 설정
-        if (window.innerWidth <= 992) {
-            setupAccordions();
-        }
+            const isMobileView = window.innerWidth <= 992;
+
+            if (isMobileView && !accordionsSetup) {
+                // 모바일 뷰로 전환 + 아코디언 미설정 상태 -> 아코디언 설정
+                setupAccordions();
+            } else if (!isMobileView && accordionsSetup) {
+                // 데스크톱 뷰로 전환 + 아코디언 설정 상태 -> 아코디언 제거
+                removeAccordions();
+            }
+            // 다른 경우는 상태 유지 (이미 모바일인데 설정됨, 이미 데스크톱인데 미설정됨)
+
+            // --- 기존 이미지 조정 로직 유지 ---
+            console.log("Window resized - adjusting images");
+            const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
+            if (activeImage) {
+                adjustImagePosition(activeImage);
+            }
+            // --- 이미지 조정 로직 끝 ---
+
         }, 250));
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -4674,6 +4772,10 @@
                     console.error("Error parsing saved image positions:", e);
                     localStorage.removeItem('imagePositions'); // 손상된 데이터 제거
                 }
+            }
+
+            if (window.innerWidth <= 992) {
+                setupAccordions(); // 페이지 로드 시 모바일 뷰면 아코디언 설정
             }
 
             // 저장된 레이아웃 모드 로드
