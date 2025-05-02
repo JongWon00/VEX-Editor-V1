@@ -3471,17 +3471,6 @@
                 display: flex;
                 flex-direction: column;
             `;
-            
-            // 모바일 환경에서 오버레이 추가
-            if (window.innerWidth <= 576) {
-                const overlay = document.createElement('div');
-                overlay.className = 'code-overlay';
-                overlay.onclick = function() {
-                    inlineCodeContainer.remove();
-                    overlay.remove();
-                };
-                document.body.appendChild(overlay);
-            }
 
             // 코드 헤더 생성
             const codeHeader = document.createElement('div');
@@ -3553,7 +3542,6 @@
             `;
         }
 
-        // copyCode 함수도 수정
         function copyCode() {
             // 인라인 코드 컨테이너가 있으면 그 내용을 복사
             const inlineCodeContent = document.querySelector('.inline-code-container .code-content');
