@@ -1471,42 +1471,6 @@
             min-width: 20px;
         }
 
-        /* 모바일 지원 */
-        @media (max-width: 992px) {
-        body {
-            flex-direction: column;
-            overflow: auto;
-        }
-        
-        .editor-panel {
-            width: 100%;
-            max-height: none;
-            height: auto;
-            padding: 15px;
-            overflow-y: visible;
-        }
-        
-        .preview-panel {
-            height: auto;
-            padding: 15px;
-        }
-        }
-
-        @media (max-width: 576px) {
-        .color-picker {
-            flex-wrap: wrap;
-        }
-        
-        .color-picker label {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-        
-        .preset-buttons {
-            grid-template-columns: repeat(2, 1fr); /* 더 적은 열로 변경 */
-        }
-    }
-
         /* 탭 네비게이션 스타일 */
         .mobile-tabs {
         display: none;
@@ -1530,47 +1494,95 @@
         color: white;
         }
 
-        /* 모바일 화면에서 탭 표시 */
-        @media (max-width: 992px) {
-        .mobile-tabs {
-            display: flex;
-        }
-        
-        .editor-panel, .preview-panel {
-            /* 초기 상태는 에디터 표시 */
-            display: none;
-        }
-        
-        .editor-panel.active {
-            display: block;
-        }
-    }
-
         /* 버튼, 입력 필드, 컨트롤 크기 조정 */
         @media (max-width: 576px) {
-        button, 
-        input[type="text"],
-        input[type="color"],
-        .theme-name-input,
-        .version-btn,
-        .preset-button {
-            min-height: 44px; /* 터치 타겟 크기 확보 */
-        }
+            /* min-height 대신 padding으로 높이 조절 */
+            button, 
+            input[type="text"],
+            input[type="color"],
+            .theme-name-input,
+            .version-btn, /* .version-btn 포함 */
+            .preset-button {
+                /* min-height: 44px; */ /* 이 줄 제거 또는 주석 처리 */
+                padding-top: 12px;    /* 충분한 상하 패딩으로 터치 영역 확보 */
+                padding-bottom: 12px; /* 충분한 상하 패딩으로 터치 영역 확보 */
+            }
         
-        button {
-            padding: 12px 15px; /* 버튼 내부 여백 증가 */
-        }
+            /* 일반 버튼의 좌우 패딩은 별도 유지 */
+            button {
+                padding-left: 15px; 
+                padding-right: 15px;
+            }
+
+            /* .version-btn 및 .preset-button 좌우 패딩 조정 (필요 시) */
+            .version-btn,
+            .preset-button {
+                 padding-left: 5px;
+                 padding-right: 5px;
+            }
         
-        /* 색상 피커의 입력 필드 크기 조정 */
-        .color-picker input[type="color"] {
-            width: 50px;
-            height: 40px;
-        }
-        
-        .color-picker input[type="text"] {
-            width: 100%;
-            margin: 5px 0 0;
-        }
+            .color-picker {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 20px;
+                padding: 12px;
+                border-radius: 8px;
+                background-color: var(--bg-secondary);
+                transition: background-color 0.2s;
+            }
+            
+            .color-picker:hover {
+                background-color: var(--bg-tertiary);
+            }
+            
+            .color-picker label {
+                margin-bottom: 8px;
+                font-weight: bold;
+                color: var(--text-primary);
+                font-size: 14px;
+            }
+            
+            .color-picker .color-input-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .color-picker input[type="color"] {
+                width: 60px;
+                height: 60px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            .color-picker .color-code-wrapper {
+                flex: 1;
+                position: relative;
+            }
+            
+            .color-picker input[type="text"] {
+                width: 100%;
+                padding: 12px;
+                padding-left: 35px;
+                font-size: 16px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                background-color: var(--input-bg);
+                color: var(--text-primary);
+            }
+            
+            .color-picker .color-preview {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: 1px solid var(--border-color);
+            }
         
         /* 슬라이더 높이 증가 */
         input[type="range"] {
@@ -1600,14 +1612,18 @@
         /* 모바일에서 코드 표시 스타일 */
         @media (max-width: 576px) {
         .inline-code-container {
-            position: fixed !important; /* 뷰포트 기준 위치 */
-            top: 50% !important;
-            left: 5% !important;
-            right: 5% !important;
-            width: 90% !important;
-            transform: translateY(-50%);
-            max-height: 80vh;
-            z-index: 2000;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 400px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* 기존 z-index를 더 높은 값으로 변경 */
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
         }
         
         .inline-code-container .code-content {
@@ -1652,12 +1668,150 @@
         }
 
         .accordion-icon {
-        transition: transform 0.3s;
         }
 
         .accordion-header.open .accordion-icon {
-        transform: rotate(180deg);
         }
+
+        /* --- 모바일 버튼 레이아웃 조정 --- */
+        /* 레이아웃 모드 및 버전 토글 버튼 컨테이너 공통 스타일 */
+        .layout-toggle,
+        .version-selector { 
+            display: flex;
+            gap: 8px; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: center; /* 세로 중앙 정렬 유지 */
+        }
+
+        /* 개별 버튼 스타일 */
+        .version-btn {
+            flex-basis: calc(50% - 4px); /* 기본 너비 유지 (두 줄 배치 시도) */
+            min-width: 120px; /* 최소 너비 유지 */
+            text-align: center; 
+            padding: 10px 5px; /* 기본 패딩 유지 */
+            box-sizing: border-box; 
+            /* min-height 제거 또는 주석 처리 */
+            /* min-height: 44px; */ 
+        }
+
+        /* 아주 좁은 화면 (예: 360px 이하) 대응 */
+        @media (max-width: 360px) {
+            .version-btn {
+                flex-basis: 100%; /* 한 줄에 하나씩 */
+                min-width: unset; 
+            }
+        }
+
+        /* 576px 이하 미디어 쿼리 */
+        @media (max-width: 576px) {
+
+            /* 버튼 최소 높이 제거하고 패딩으로 조절 */
+            button, 
+            input[type="text"],
+            input[type="color"],
+            .theme-name-input,
+            .version-btn, /* .version-btn 포함 */
+            .preset-button {
+                padding-top: 12px;    /* 충분한 상하 패딩으로 터치 영역 확보 */
+                padding-bottom: 12px; /* 충분한 상하 패딩으로 터치 영역 확보 */
+            }
+
+            /* 기존 버튼 패딩 재정의 (필요 시) */
+            button {
+                padding: 12px 15px; /* 일반 버튼 패딩 */
+            }
+            /* .version-btn 패딩 재정의 확인 */
+            .version-btn {
+                padding: 12px 5px; /* 576px 이하에서 적용될 패딩 (상하 12px, 좌우 5px) */
+            }
+            .preset-button {
+                padding: 12px 5px; /* 프리셋 버튼 패딩 */
+            }
+            
+            /* 레이아웃/버전 토글 컨테이너 마진 조정 - 변경 없음 */
+            .layout-toggle,
+            .version-selector { 
+                margin-bottom: 15px; 
+            }
+        }              
+
+        @media (max-width: 992px) {
+            /* 기본 모바일 탭 스타일 */
+            .mobile-tabs {
+                display: flex; /* 기본값: 탭 표시 */
+                /* ... 기존 스타일 ... */
+            }
+
+            .editor-panel, .preview-panel {
+                display: none; /* 기본값: 패널 숨김 */
+            }
+
+            .editor-panel.active, .preview-panel.active { /* .active 클래스로 표시 제어 */
+                display: block;
+            }
+
+            /* --- 분할 뷰 활성화 시 스타일 --- */
+            body.split-view .mobile-tabs {
+                display: none !important; /* 분할 뷰 시 탭 강제 숨김 */
+            }
+
+            body.split-view .editor-panel,
+            body.split-view .preview-panel {
+                display: block !important; /* 분할 뷰 시 패널 강제 표시 */
+                position: absolute; /* 절대 위치 유지 */
+                /* .active 클래스 의존성 제거 */
+                /* ... 기존 position, width, overflow 등 스타일 유지 ... */
+                width: 100%;
+                left: 0;
+                right: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: 15px;
+                box-sizing: border-box;
+            }
+
+            /* 분할 뷰 패널 위치/크기 설정 (JS에서 덮어씀) */
+            body.split-view .preview-panel {
+                top: 0;
+                height: 40vh; /* 초기 높이 */
+                z-index: 5;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            body.split-view .editor-panel {
+                top: calc(40vh + 10px); /* 핸들 높이 고려 */
+                bottom: 0; /* 추가: 하단에 붙도록 */
+                height: auto; /* 변경: bottom과 top으로 높이 자동 계산 */
+                z-index: 4; /* preview보다 낮게 */
+            }
+
+            .split-handle {
+                position: absolute;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background-color: var(--accent-color);
+                cursor: ns-resize;
+                z-index: 10;
+                touch-action: none;
+                opacity: 0.7;
+            }
+            
+            .split-handle::after {
+                content: '═══';
+                display: block;
+                text-align: center;
+                color: white;
+                line-height: 10px;
+                font-size: 8px;
+                letter-spacing: 2px;
+            }
+            
+            body.resizing * {
+                user-select: none;
+            }
+            }        
 
     </style>
 </head>
@@ -1738,9 +1892,7 @@
             <button class="preset-button custom-preset" onclick="applyPreset('custom')">커스텀 테마</button>
         </div>
 
-        <div class="section-header"> <!-- 헤더 래퍼 추가 -->
             <h3>사용자 테마</h3>
-        </div>
 
         <div class="theme-save">
             <input type="text" id="themeName" placeholder="테마 이름 입력" class="theme-name-input">
@@ -1749,7 +1901,7 @@
         </div>
 
         <div class="toggle-button-container">
-            <button id="toggleSavedThemesBtn" class="toggle-section-btn" onclick="toggleSavedThemes()">
+            <button id="toggleSavedThemesBtn" class="toggle-section-btn">
                 <span id="toggleSavedThemesIcon">▲</span> 저장 목록 접기/펼치기
             </button>
         </div>
@@ -2884,70 +3036,40 @@
             e.preventDefault();
         }
 
-        // onDrag: 레이아웃 모드에 따라 드래그 방향 처리
-        function onDrag(e) {
-            if (!isDragging || !draggedImage) return;
+            // onDrag: 레이아웃 모드에 따라 드래그 방향 처리
+            function onDrag(e) {
+                if (!isDragging) return;
 
-            e.preventDefault(); // 스크롤 등 기본 동작 방지
+                const currentY = e.clientY || e.touches[0].clientY;
+                const deltaY = currentY - initialY;
 
-            const currentY = e.pageY || e.touches[0].pageY;
-            const currentX = e.pageX || e.touches[0].pageX;
-            
-            let deltaY = currentY - startY;
-            let deltaX = currentX - startX;
-            
-            const container = draggedImage.parentElement;
-            const containerHeight = container.clientHeight;
-            const containerWidth = container.clientWidth;
-            const imageHeight = draggedImage.clientHeight;
-            const imageWidth = draggedImage.clientWidth;
-            
-            // 레이아웃 모드에 따라 드래그 방향 결정
-            if (currentLayoutMode === 'vertical') {
-                // 버티컬 모드에서는 좌우 드래그만 허용
-                let newLeft = initialLeft + deltaX;
-                
-                // 이미지가 컨테이너보다 넓을 때만 좌우 이동 제한
-                if (imageWidth > containerWidth) {
-                    const minLeft = containerWidth - imageWidth; // 최대 왼쪽으로 이동 가능한 값 (음수)
-                    const maxLeft = 0; // 최대 오른쪽으로 이동 가능한 값
-                    newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
-                } else {
-                    newLeft = 0; // 이미지가 컨테이너보다 작거나 같으면 이동 없음
-                }
-                
-                draggedImage.style.left = `${newLeft}px`;
-                currentImageLeftOffset = newLeft; // 현재 가로 위치 저장
-                
-                // 세로 위치는 그대로 유지
-                draggedImage.style.top = `${initialTop}px`;
-            } else {
-                // 와이드 모드에서는 상하 드래그만 허용 (기존 로직)
-                let newTop = initialTop + deltaY;
-                
-                // 이미지가 컨테이너보다 클 때만 수직 이동 가능
-                if (imageHeight > containerHeight) {
-                    const minTop = containerHeight - imageHeight; // 최대 내릴 수 있는 값 (음수)
-                    const maxTop = 0; // 최대 올릴 수 있는 값
-                    newTop = Math.max(minTop, Math.min(maxTop, newTop));
-                } else {
-                    newTop = 0; // 이미지가 컨테이너보다 작거나 같으면 이동 없음
-                }
-                
-                draggedImage.style.top = `${newTop}px`;
-                currentImageTopOffset = newTop; // 현재 세로 위치 저장
-                
-                // 가로 위치는 그대로 유지
-                draggedImage.style.left = `${initialLeft}px`;
+                // 새로운 미리보기 높이 계산 (최소/최대 제한 포함)
+                const newHeight = Math.max(100, dragStartHeight + deltaY);
+                const maxHeight = window.innerHeight - 100; // 에디터 최소 100px 확보
+                const constrainedHeight = Math.min(newHeight, maxHeight); // 최종 미리보기 높이
+
+                // --- 핸들 높이 수정 ---
+                const handleHeight = 10; // CSS의 height: 10px 와 일치시킴
+
+                // 미리보기 패널 높이 설정
+                previewPanel.style.height = constrainedHeight + 'px';
+
+                // --- 에디터 패널 높이 계산 및 설정 수정 ---
+                const editorNewTop = constrainedHeight + handleHeight;
+                const editorNewHeight = window.innerHeight - editorNewTop;
+
+                editorPanel.style.top = `${editorNewTop}px`;
+                // calc() 대신 직접 계산된 픽셀 높이 사용
+                editorPanel.style.height = `${editorNewHeight}px`;
+                // --- 수정 끝 ---
+
+                // --- 분할 핸들 위치 업데이트 수정 ---
+                // clientHeight 대신 계산된 높이 사용
+                splitHandle.style.top = constrainedHeight + 'px';
+                // --- 수정 끝 ---
+
+                e.preventDefault();
             }
-            
-            // 다른 버전의 이미지도 동기화
-            const otherImage = (draggedImage === previewImageU) ? previewImageC : previewImageU;
-            if (otherImage) {
-                otherImage.style.top = draggedImage.style.top;
-                otherImage.style.left = draggedImage.style.left;
-            }
-        }
 
             function endDrag() {
             if (!isDragging) return;
@@ -3441,7 +3563,7 @@
             
             if (!buttonContainer || !versionInfo) return;
             
-            // 기존 코드 표시 영역 숨기기 (에디터 패널의 코드 영역)
+            // 기존 코드 표시 영역 숨기기
             const oldCodeHeader = codeDisplay.previousElementSibling;
             if (oldCodeHeader && oldCodeHeader.classList.contains('code-header')) {
                 oldCodeHeader.style.display = 'none';
@@ -3454,22 +3576,43 @@
                 existingCodeContainer.remove();
             }
             
+            // 오버레이 제거 (기존 것이 있다면)
+            const existingOverlay = document.querySelector('.code-overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+            
+            // 반투명 오버레이 생성 (전체 화면 덮기)
+            const overlay = document.createElement('div');
+            overlay.className = 'code-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 99998; /* 매우 높은 z-index 값 */
+            `;
+            
             // 버전 정보 영역 옆에 코드 컨테이너 생성
             const inlineCodeContainer = document.createElement('div');
             inlineCodeContainer.className = 'inline-code-container';
             inlineCodeContainer.style.cssText = `
-                position: absolute;
-                top: 100%;
-                right: 0;
-                width: 400px;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80%;
+                max-width: 600px;
                 background-color: var(--bg-primary);
                 border: 1px solid var(--border-color);
-                border-radius: 4px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                z-index: 1000;
-                margin-top: 5px;
+                border-radius: 8px;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+                z-index: 99999; /* 오버레이보다 더 높은 z-index */
                 display: flex;
                 flex-direction: column;
+                max-height: 80vh;
             `;
 
             // 코드 헤더 생성
@@ -3479,8 +3622,10 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 8px 12px;
+                padding: 12px 15px;
                 border-bottom: 1px solid var(--border-color);
+                background-color: var(--bg-secondary);
+                border-radius: 8px 8px 0 0;
             `;
             codeHeader.innerHTML = `
                 <span class="code-title">생성된 CSS 코드 (${currentVersion})</span>
@@ -3491,13 +3636,14 @@
             const codeContent = document.createElement('div');
             codeContent.className = 'code-content';
             codeContent.style.cssText = `
-                padding: 12px;
-                max-height: 300px;
+                padding: 15px;
+                max-height: calc(80vh - 60px);
                 overflow-y: auto;
                 white-space: pre-wrap;
                 font-family: monospace;
-                font-size: 13px;
+                font-size: 14px;
                 color: var(--text-primary);
+                background-color: var(--bg-primary);
             `;
             codeContent.textContent = codeDisplay.textContent;
             
@@ -3505,9 +3651,9 @@
             inlineCodeContainer.appendChild(codeHeader);
             inlineCodeContainer.appendChild(codeContent);
             
-            // 버전 정보 영역에 추가
-            versionInfo.style.position = 'relative';
-            versionInfo.appendChild(inlineCodeContainer);
+            // 문서에 오버레이와 코드 컨테이너 추가
+            document.body.appendChild(overlay);
+            document.body.appendChild(inlineCodeContainer);
             
             // 닫기 버튼 추가
             const closeBtn = document.createElement('button');
@@ -3518,27 +3664,41 @@
                 right: 5px;
                 background: none;
                 border: none;
-                font-size: 16px;
+                font-size: 20px;
+                font-weight: bold;
                 cursor: pointer;
-                padding: 0 5px;
+                padding: 0 8px;
                 color: var(--text-secondary);
+                z-index: 2; /* 헤더 내에서 최상위 */
             `;
             closeBtn.onclick = function() {
+                overlay.remove();
                 inlineCodeContainer.remove();
             };
             codeHeader.appendChild(closeBtn);
             
+            // 오버레이 클릭 시 창 닫기
+            overlay.addEventListener('click', function() {
+                overlay.remove();
+                inlineCodeContainer.remove();
+            });
+            
+            // 코드 창 클릭 시 버블링 방지 (오버레이 클릭 이벤트 발생 방지)
+            inlineCodeContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
             // 복사 버튼 스타일 조정
             const copyButton = codeHeader.querySelector('.copy-button');
             copyButton.style.cssText = `
-                font-size: 12px;
-                padding: 4px 8px;
+                font-size: 13px;
+                padding: 6px 12px;
                 background-color: var(--accent-color);
                 color: white;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
-                margin-right: 25px;
+                margin-right: 30px;
             `;
         }
 
@@ -4408,25 +4568,60 @@
             alert('모든 테마가 삭제되었습니다.');
         }        
 
+        // 토글 버튼을 위한 직접 호출 함수 (인라인 onclick 속성에서 호출됨)
+        function toggleSavedThemesDirectly() {
+            console.log("toggleSavedThemesDirectly called");
+            
+            // DOM 요소 직접 참조
+            const content = document.getElementById('savedThemesContent');
+            const icon = document.getElementById('toggleSavedThemesIcon');
+            
+            if (!content || !icon) {
+                console.error("Required toggle elements not found");
+                return;
+            }
+            
+            // 현재 접힌 상태 확인
+            const isCurrentlyCollapsed = content.classList.contains('collapsed');
+            
+            // 상태 전환 (토글)
+            if (isCurrentlyCollapsed) {
+                // 현재 접혀있으면 펼치기
+                content.classList.remove('collapsed');
+                icon.textContent = '▲';
+                console.log("Content expanded, icon set to: ▲");
+            } else {
+                // 현재 펼쳐있으면 접기
+                content.classList.add('collapsed');
+                icon.textContent = '▼';
+                console.log("Content collapsed, icon set to: ▼");
+            }
+            
+            // 상태 저장
+            localStorage.setItem('savedThemesCollapsed', !isCurrentlyCollapsed);
+        }
+
         // --- 토글 상태 복원 함수 ---
         function restoreToggleState() {
-            const isCollapsed = localStorage.getItem('savedThemesCollapsed') === 'true';
             const savedThemesContent = document.getElementById('savedThemesContent');
             const toggleIcon = document.getElementById('toggleSavedThemesIcon');
 
-            if (savedThemesContent) {
-                savedThemesContent.classList.toggle('collapsed', isCollapsed);
-                console.log(`Restored collapsed state: ${isCollapsed}`);
-            } else {
-                console.warn("Saved themes content wrapper (#savedThemesContent) not found for restoring state.");
+            // 요소가 존재하는지 먼저 확인
+            if (!savedThemesContent || !toggleIcon) {
+                console.warn("Toggle elements (#savedThemesContent or #toggleSavedThemesIcon) not found for restoring state.");
+                return;
             }
 
-            if (toggleIcon) {
-                toggleIcon.textContent = isCollapsed ? '▼' : '▲';
-            } else {
-                console.warn("Toggle icon (#toggleSavedThemesIcon) not found for restoring state.");
-            }
-        }        
+            const isCollapsed = localStorage.getItem('savedThemesCollapsed') === 'true';
+
+            // 클래스 설정 (두 번째 인자로 boolean 값을 주어 상태를 명시적으로 설정)
+            savedThemesContent.classList.toggle('collapsed', isCollapsed);
+
+            // 아이콘 텍스트 설정
+            toggleIcon.textContent = isCollapsed ? '▼' : '▲';
+
+            console.log(`Restored collapsed state: ${isCollapsed}, Icon set to: ${toggleIcon.textContent}`); // 로그 추가
+        }     
 
         function checkSavedThemesElements() {
             const themes = document.querySelectorAll('.saved-theme');
@@ -4445,24 +4640,67 @@
 
         // 사용자 테마 목록 토글 함수
         function toggleSavedThemes() {
+            console.log("Toggle function called");
+            
+            // 1. DOM 요소 직접 참조
             const savedThemesContent = document.getElementById('savedThemesContent');
             const toggleIcon = document.getElementById('toggleSavedThemesIcon');
             
             if (!savedThemesContent || !toggleIcon) {
-                console.error("Toggle elements not found!");
+                console.error("Required elements not found:", {
+                    content: savedThemesContent ? "Found" : "Missing",
+                    icon: toggleIcon ? "Found" : "Missing"
+                });
                 return;
             }
             
-            // 내용 토글
-            const isCollapsed = savedThemesContent.classList.toggle('collapsed');
+            // 2. 현재 상태 확인 (명시적 boolean 사용)
+            const isCurrentlyCollapsed = savedThemesContent.classList.contains('collapsed');
+            console.log("Current state:", isCurrentlyCollapsed ? "Collapsed" : "Expanded");
             
-            // 아이콘 텍스트만 변경, 요소 자체는 건드리지 않음
-            toggleIcon.textContent = isCollapsed ? '▼' : '▲';
+            // 3. 상태 변경 전 콘솔에 명확히 기록
+            console.log("Changing state to:", isCurrentlyCollapsed ? "Expanded" : "Collapsed");
             
-            // 상태 저장
-            localStorage.setItem('savedThemesCollapsed', isCollapsed);
-            console.log("Toggled saved themes content. Collapsed:", isCollapsed);
+            // 4. DOM 조작 - classList 메소드 사용
+            if (isCurrentlyCollapsed) {
+                savedThemesContent.classList.remove('collapsed');
+                toggleIcon.textContent = '▲';
+            } else {
+                savedThemesContent.classList.add('collapsed');
+                toggleIcon.textContent = '▼';
+            }
+            
+            // 5. 상태 저장
+            localStorage.setItem('savedThemesCollapsed', !isCurrentlyCollapsed);
+            
+            // 6. 완료 후 상태 확인 및 로깅
+            const newState = savedThemesContent.classList.contains('collapsed');
+            console.log("New state:", newState ? "Collapsed" : "Expanded");
+            console.log("Icon text is now:", toggleIcon.textContent);
         }
+
+        // 토글 버튼 직접 바인딩 함수
+        function bindToggleButton() {
+            const toggleBtn = document.getElementById('toggleSavedThemesBtn');
+            if (!toggleBtn) {
+                console.error("Toggle button not found!");
+                return;
+            }
+            
+            // 이벤트 리스너 연결 전에 기존 리스너 모두 제거
+            const newBtn = toggleBtn.cloneNode(true);
+            toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
+            
+            // 클릭 이벤트 직접 연결
+            newBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Toggle button clicked");
+                toggleSavedThemes(); // 토글 함수 호출
+            });
+            
+            console.log("Toggle button event listener added");
+        }        
 
         // 탭 전환 기능 
         function setupMobileTabs() {
@@ -4502,6 +4740,148 @@
                 });
             });
         }
+
+        function addResizableSplitView() {
+            console.log("addResizableSplitView called");
+            if (window.innerWidth > 992) return;
+
+            const mobileTabs = document.querySelector('.mobile-tabs');
+            const editorPanel = document.querySelector('.editor-panel');
+            const previewPanel = document.querySelector('.preview-panel');
+
+            // --- 패널/탭 표시 상태 설정 ---
+            if (mobileTabs) mobileTabs.style.display = 'none';
+            if (editorPanel) {
+                editorPanel.style.display = 'block';
+                editorPanel.classList.remove('active');
+            }
+            if (previewPanel) {
+                previewPanel.style.display = 'block';
+                previewPanel.classList.remove('active');
+            }
+            // --- 설정 끝 ---
+
+            document.body.classList.add('split-view');
+
+            // --- 분할 핸들 생성 및 추가 (먼저 수행) ---
+            let splitHandle = document.querySelector('.split-handle'); // 기존 핸들 확인
+            if (!splitHandle) { // 핸들이 없으면 새로 생성
+                splitHandle = document.createElement('div');
+                splitHandle.className = 'split-handle';
+                document.body.appendChild(splitHandle);
+                console.log("Split handle created and appended.");
+            } else {
+                console.log("Split handle already exists.");
+            }
+            // --- 핸들 생성 끝 ---
+
+            // --- 초기 높이 및 위치 계산 (핸들 생성 후) ---
+            const initialPreviewHeight = window.innerHeight * 0.4; // 예: 40%
+            const handleHeight = 10; // CSS와 일치
+            // --- 계산 끝 ---
+
+            // --- 초기 위치/높이 설정 (계산된 값 사용) ---
+            if (previewPanel) {
+                previewPanel.style.height = `${initialPreviewHeight}px`;
+            }
+            if (editorPanel) {
+                editorPanel.style.top = `${initialPreviewHeight + handleHeight}px`;
+                // editorPanel.style.height 제거 (CSS의 bottom:0, height:auto 사용)
+            }
+            if (splitHandle) { // 핸들이 존재하는지 확인 후 스타일 설정
+                splitHandle.style.top = `${initialPreviewHeight}px`;
+            }
+            // --- 설정 끝 ---
+
+            // --- 드래그 로직 변수 ---
+            let isSplitDragging = false;
+            let splitInitialY, splitDragStartHeight;
+            // --- 변수 끝 ---
+
+            // --- 이벤트 리스너 연결 (기존 핸들러 제거 후 추가 - 중복 방지) ---
+            if (splitHandle) {
+                 // 기존 리스너 제거
+                 splitHandle.removeEventListener('touchstart', startSplitDrag);
+                 splitHandle.removeEventListener('mousedown', startSplitDrag);
+
+                 // 새 리스너 추가
+                 splitHandle.addEventListener('touchstart', startSplitDrag, { passive: false }); // passive: false 추가 확인
+                 splitHandle.addEventListener('mousedown', startSplitDrag);
+                 console.log("Event listeners added to split handle.");
+            } else {
+                 console.error("Cannot add listeners: Split handle not found!");
+                 return; // 핸들 없으면 함수 종료
+            }
+            // --- 리스너 연결 끝 ---
+
+            // --- 드래그 함수 정의 (startSplitDrag, onSplitDrag, endSplitDrag) ---
+            function startSplitDrag(e) {
+                // 터치 이벤트 기본 스크롤 방지 (필요 시)
+                if (e.type === 'touchstart') {
+                    e.preventDefault();
+                }
+
+                isSplitDragging = true;
+                splitInitialY = e.clientY || e.touches[0].clientY;
+                // clientHeight 대신 getBoundingClientRect().height 사용 (더 정확)
+                splitDragStartHeight = previewPanel.getBoundingClientRect().height;
+
+                document.body.classList.add('resizing');
+
+                document.addEventListener('mousemove', onSplitDrag);
+                document.addEventListener('touchmove', onSplitDrag, { passive: false });
+                document.addEventListener('mouseup', endSplitDrag);
+                document.addEventListener('touchend', endSplitDrag);
+
+                // e.preventDefault(); // mousedown에서는 필요 없을 수 있음
+            }
+
+            function onSplitDrag(e) {
+                if (!isSplitDragging) return;
+
+                // 터치 이벤트 기본 스크롤 방지
+                if (e.type === 'touchmove') {
+                     e.preventDefault();
+                }
+
+                const currentY = e.clientY || e.touches[0].clientY;
+                const deltaY = currentY - splitInitialY;
+
+                const newHeight = Math.max(100, splitDragStartHeight + deltaY);
+                const maxHeight = window.innerHeight - 100;
+                const constrainedHeight = Math.min(newHeight, maxHeight);
+
+                const handleHeight = 10;
+
+                if (previewPanel) previewPanel.style.height = constrainedHeight + 'px';
+
+                const editorNewTop = constrainedHeight + handleHeight;
+                if (editorPanel) editorPanel.style.top = `${editorNewTop}px`;
+
+                if (splitHandle) splitHandle.style.top = constrainedHeight + 'px';
+
+                // e.preventDefault(); // mousemove에서는 필요 없을 수 있음
+            }
+
+            function endSplitDrag() {
+                if (!isSplitDragging) return;
+                isSplitDragging = false;
+                document.body.classList.remove('resizing');
+
+                document.removeEventListener('mousemove', onSplitDrag);
+                document.removeEventListener('touchmove', onSplitDrag);
+                document.removeEventListener('mouseup', endSplitDrag);
+                document.removeEventListener('touchend', endSplitDrag);
+
+                // 이미지 위치 조정 (딜레이 후)
+                setTimeout(() => {
+                    const activeImage = currentVersion === 'U' ? previewImageU : previewImageC;
+                    if (activeImage) adjustImagePosition(activeImage);
+                }, 300);
+            }
+            // --- 함수 정의 끝 ---
+
+        } // addResizableSplitView 끝
 
             // 이미지 드래그 로직 개선
             function startDrag(e) {
@@ -4718,25 +5098,66 @@
 
         window.addEventListener('resize', debounce(function() {
             const isMobileView = window.innerWidth <= 992;
+            const isSplitViewActive = document.body.classList.contains('split-view');
 
-            if (isMobileView && !accordionsSetup) {
-                // 모바일 뷰로 전환 + 아코디언 미설정 상태 -> 아코디언 설정
-                setupAccordions();
-            } else if (!isMobileView && accordionsSetup) {
-                // 데스크톱 뷰로 전환 + 아코디언 설정 상태 -> 아코디언 제거
-                removeAccordions();
+            // --- 수정: 분할 뷰/아코디언 관리 로직 ---
+            if (isMobileView && !isSplitViewActive) { // 모바일 전환 + 분할 뷰 비활성 상태
+                if (!accordionsSetup) setupAccordions(); // 아코디언 설정 (필요 시)
+                addResizableSplitView(); // 분할 뷰 추가
+                // setupMobileTabs(); // 여기서 탭 설정 불필요
+            } else if (!isMobileView && isSplitViewActive) { // 데스크탑 전환 + 분할 뷰 활성 상태
+                if (accordionsSetup) removeAccordions(); // 아코디언 제거 (필요 시)
+                removeSplitView(); // 분할 뷰 제거
+                // setupMobileTabs(); // 여기서 탭 설정 불필요
             }
-            // 다른 경우는 상태 유지 (이미 모바일인데 설정됨, 이미 데스크톱인데 미설정됨)
+            // --- 수정 끝 ---
 
-            // --- 기존 이미지 조정 로직 유지 ---
-            console.log("Window resized - adjusting images");
-            const activeImage = (currentVersion === 'U') ? previewImageU : previewImageC;
-            if (activeImage) {
-                adjustImagePosition(activeImage);
-            }
-            // --- 이미지 조정 로직 끝 ---
+            // 이미지 위치 조정 등은 유지
+            const activeImage = currentVersion === 'U' ? previewImageU : previewImageC;
+            if (activeImage) adjustImagePosition(activeImage);
 
         }, 250));
+
+        // 분할 뷰 제거 함수
+        function removeSplitView() {
+            console.log("removeSplitView called"); // 호출 확인 로그
+            const splitHandle = document.querySelector('.split-handle');
+            if (splitHandle) splitHandle.remove();
+
+            document.body.classList.remove('split-view'); // body 클래스 제거
+
+            // --- 패널 스타일 완전 복원 ---
+            const mobileTabs = document.querySelector('.mobile-tabs');
+            const editorPanel = document.querySelector('.editor-panel');
+            const previewPanel = document.querySelector('.preview-panel');
+
+            // 모바일 탭은 데스크탑에서 필요 없으므로 숨김 (또는 CSS 기본값 따름)
+            if (mobileTabs) mobileTabs.style.display = 'none';
+
+            // 에디터 패널 스타일 복원 (데스크탑 기본값으로)
+            if (editorPanel) {
+                editorPanel.style.removeProperty('display'); // display 제거 (CSS 따름)
+                editorPanel.style.removeProperty('position'); // position 제거
+                editorPanel.style.removeProperty('top');      // top 제거
+                editorPanel.style.removeProperty('height');   // height 제거
+                editorPanel.style.removeProperty('left');     // left 제거 (혹시 모르니)
+                editorPanel.style.removeProperty('right');    // right 제거 (혹시 모르니)
+                editorPanel.classList.remove('active'); // active 클래스 제거
+                // 필요하다면 데스크탑 기본 display 속성 명시 (예: editorPanel.style.display = 'flex';)
+            }
+            // 미리보기 패널 스타일 복원 (데스크탑 기본값으로)
+            if (previewPanel) {
+                previewPanel.style.removeProperty('display'); // display 제거 (CSS 따름)
+                previewPanel.style.removeProperty('position'); // position 제거
+                previewPanel.style.removeProperty('top');      // top 제거
+                previewPanel.style.removeProperty('height');   // height 제거
+                previewPanel.style.removeProperty('left');     // left 제거
+                previewPanel.style.removeProperty('right');    // right 제거
+                previewPanel.classList.remove('active'); // active 클래스 제거
+                // 필요하다면 데스크탑 기본 display 속성 명시 (예: previewPanel.style.display = 'block';)
+            }
+            // --- 스타일 복원 끝 ---
+        }    
 
         document.addEventListener('DOMContentLoaded', function() {
             
@@ -4762,8 +5183,11 @@
                 }
             }
 
+            // --- 수정: 화면 너비에 따라 탭 또는 분할 뷰 초기화 ---
             if (window.innerWidth <= 992) {
-                setupAccordions(); // 페이지 로드 시 모바일 뷰면 아코디언 설정
+                setupAccordions(); // 아코디언은 필요
+                addResizableSplitView(); // 모바일이면 분할 뷰 시작
+            } else {
             }
 
             // 저장된 레이아웃 모드 로드
@@ -4956,6 +5380,25 @@
                     adjustImagePosition(activeImage);
                 }
             }, 250));
+
+            // 토글 버튼 이벤트 리스너
+            const toggleSavedThemesBtn = document.getElementById('toggleSavedThemesBtn');
+            if (toggleSavedThemesBtn) {
+                // 이미 연결된 모든 이벤트 제거를 위해 복제 후 대체
+                const newToggleBtn = toggleSavedThemesBtn.cloneNode(true);
+                toggleSavedThemesBtn.parentNode.replaceChild(newToggleBtn, toggleSavedThemesBtn);
+                
+                // 새 버튼에 클릭 이벤트 연결
+                newToggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // 기본 동작 방지
+                    console.log("토글 버튼 클릭됨 - 깨끗한 상태에서 시작");
+                    toggleSavedThemes(); // 토글 함수 호출
+                });
+                
+                console.log("토글 버튼에 새 이벤트 리스너 추가됨 (#toggleSavedThemesBtn)");
+            } else {
+                console.error("토글 버튼을 찾을 수 없습니다: #toggleSavedThemesBtn");
+            }     
                         
             // 저장된 테마 목록 로드
             loadSavedThemes();
@@ -5017,6 +5460,11 @@
             setupAccordions();
             optimizeImagesForMobile();
             optimizeColorPickers();
+            bindToggleButton();
+
+            if (window.innerWidth <= 992) {  // 모바일 화면에서만 적용
+                addResizableSplitView();  // 분할 뷰 함수 호출
+            }
         });
     </script>
 </body>
